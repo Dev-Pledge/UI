@@ -3,9 +3,7 @@ version: "3.5"
 services:
 
   ui:
-    build:
-      context: .
-      dockerfile: ui.dockerfile
+    image: httpd
     environment:
       docker: "true"
       production: "false"
@@ -13,11 +11,9 @@ services:
     #create a .sentryenv with SENTRY_DSN=...
       - .sentryenv
     volumes:
-      - .:/var/www:cached
-      - ./logs:/var/log:cached
+      - ./app/test/build:/usr/local/apache2/htdocs:cached
     expose:
-      - 9000
-      - 9501
+      - 80
     networks:
       - default
       - sentry_network

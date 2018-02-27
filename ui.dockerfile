@@ -4,4 +4,4 @@ WORKDIR /var/www
 
 COPY ./ /var/www
 
-RUN composer install --prefer-source --no-interaction
+#RUN composer install --prefer-source --no-interaction
