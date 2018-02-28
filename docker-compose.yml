@@ -1,6 +1,14 @@
 version: "3.5"
 
 services:
+  node:
+    image: node
+    volumes:
+      - ./app/test:/home/node/app:cached
+    command: >
+      bash -c "cd /home/node/app
+      && npm install
+      && npm run-script build"
 
   ui:
     image: httpd
