@@ -13,9 +13,9 @@ class App extends Component {
         this.onUpdateUser = this.onUpdateUser.bind(this);
     }
 
-    // componentDidMount() {
-    //     this.props.onApiRequest();
-    // }
+    componentDidMount() {
+        this.props.onApiRequest();
+    }
 
 
     onUpdateUser(event) {

@@ -25,9 +25,12 @@ export function apiRequest() {
     return dispatch => {
         $.ajax(
             {
-                url: 'dev.api.devpledge.com',
-                success() {
+                method: 'POST',
+                url: 'http://dev.auth.devpledge.com/auth/login',
+                data: {'username': 'tom', 'password': 'password'},
+                success(resp) {
                     console.log('SUCCESS');
+                    console.log(resp);
                 },
                 error() {
                     console.log('ERROR');
