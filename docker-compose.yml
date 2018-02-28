@@ -6,6 +6,8 @@ services:
     image: node
     volumes:
       - ./app/test:/home/node/app
+      - ./app/test/node_modules:/home/node/app/node_modules:nocopy
+      - ./app/test/docker_node_modules:/home/node/app/node_modules
     command: >
       bash -c "cd /home/node/app
       && rm -rf build

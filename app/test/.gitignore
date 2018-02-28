@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/docker_node_modules
 
 # testing
 /coverage
