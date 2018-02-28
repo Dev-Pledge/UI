@@ -4,7 +4,7 @@ services:
   node:
     image: node
     volumes:
-      - ./app/test:/home/node/app:cached
+      - ./app/test:/home/node/app
     command: >
       bash -c "cd /home/node/app
       && npm install
