@@ -18,9 +18,11 @@ const allReducers = combineReducers({
     user: userReducer
 });
 
-const allStoreEnhancers = compose(
+const allStoreEnhancers = (window.devToolsExtension) ? compose(
     applyMiddleware(thunk),
     window.devToolsExtension && window.devToolsExtension()
+) : compose(
+    applyMiddleware(thunk)
 );
 
 const store = createStore(
