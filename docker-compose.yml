@@ -6,10 +6,12 @@ services:
     image: node
     volumes:
       - ./app/test:/home/node/app
+      - ./app/test/docker_node_modules:/home/node/app/node_modules
+      - ./app/test/node_modules:/home/node/app/node_modules:nocopy
     command: >
       bash -c "cd /home/node/app
       && npm install
-      && npm run-script build"
+      && npm run build"
 
   ui:
     image: httpd
@@ -37,7 +39,7 @@ services:
     volumes:
      - ./data/mysql:/var/lib/mysql:cached
     ports:
-      - 3314:3306
+      - 3313:3306
 
 networks:
   default:
