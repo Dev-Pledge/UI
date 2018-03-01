@@ -37,7 +37,7 @@ services:
     volumes:
      - ./data/mysql:/var/lib/mysql:cached
     ports:
-      - 3313:3306
+      - 3314:3306
 
 networks:
   default:
