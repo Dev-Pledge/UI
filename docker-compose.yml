@@ -7,7 +7,7 @@ services:
     volumes:
       - ./app/test:/home/node/app
       - ./app/test/docker_node_modules:/home/node/app/node_modules
-      - ./app/test/node_modules:/home/node/app/node_modules:nocopy
+      - ./app/test/node_modules:/home/node/app/external_node_modules
     command: >
       bash -c "cd /home/node/app
       && npm install
