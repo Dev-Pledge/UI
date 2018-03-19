@@ -1,0 +1,30 @@
+@import '../../theme/variables';
+@import '../../theme/default-style';
+
+.FeedList {
+  border: 1px solid lighten($color-primary, 20%);
+
+  .title-bar {
+    background: #e4e4e4;
+    border-bottom: 1px solid lighten($color-primary, 20%);
+
+    h4 {
+      padding: 10px
+    }
+  }
+
+  .feed-item {
+    border-bottom: 1px solid lighten($color-dark, 50%);
+    padding: 10px 0;
+
+    :last-child {
+      border: none;
+    }
+
+    div {
+      padding: 10px;
+    }
+  }
+}
+
+

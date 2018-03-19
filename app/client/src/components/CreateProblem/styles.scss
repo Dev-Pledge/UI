@@ -1,0 +1,35 @@
+@import '../../theme/variables';
+
+.CreateProblem {
+  border: 1px solid lighten($color-primary, 20%);
+  margin-bottom: 10px;
+
+  .title-bar {
+    background: #e4e4e4;
+    border-bottom: 1px solid lighten($color-primary, 20%);
+    cursor: pointer;
+
+    h4 {
+      padding: 10px;
+    }
+  }
+
+  .content {
+    padding: 10px;
+  }
+
+  .dp-btn {
+    display: block;
+    color: $color-white;
+    background: $color-primary;
+    padding: 10px;
+    width: 100%;
+  }
+
+  .dp-input {
+    display: block;
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

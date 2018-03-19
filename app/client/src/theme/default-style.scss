@@ -1,0 +1,167 @@
+@import '../../node_modules/bootstrap/scss/bootstrap-grid.scss';
+@import './variables.scss';
+@import './_helpers.scss';
+
+html, body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+html {
+  font-size: 14px;
+
+  h1 {
+    font-size: 26px;
+    line-height: 1.3em;
+    padding: 0;
+    margin: 0;
+  }
+
+  h2 {
+    font-size: 22px;
+    line-height: 1.3em;
+    padding: 0;
+    margin: 0;
+  }
+
+  h3 {
+    font-size: 19px;
+    line-height: 1.3em;
+    padding: 0;
+    margin: 0;
+  }
+
+  h4 {
+    font-size: 18px;
+    line-height: 1.2em;
+    padding: 0;
+    margin: 0;
+  }
+
+  /** containers **/
+  .content-wrapper {
+    margin-top: 10px;
+  }
+}
+
+@include media-breakpoint-up (sm) {
+  html {
+    font-size: 15px;
+
+    h1 {
+      font-size: 28px;
+    }
+
+    h2 {
+      font-size: 25px;
+      padding: 0;
+      margin: 0;
+    }
+
+    h3 {
+      font-size: 20px;
+      padding: 0;
+      margin: 0;
+    }
+  }
+}
+
+@include media-breakpoint-up(md) {
+  html {
+    font-size: 16px;
+
+    h1 {
+      font-size: 34px;
+    }
+
+    h2 {
+      font-size: 28px;
+      padding: 0;
+      margin: 0;
+    }
+
+    h3 {
+      font-size: 24px;
+      padding: 0;
+      margin: 0;
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  html {
+    font-size: 17px;
+
+    h1 {
+      font-size: 36px;
+    }
+
+    h2 {
+      font-size: 30px;
+      padding: 0;
+      margin: 0;
+    }
+
+    h3 {
+      font-size: 27px;
+      padding: 0;
+      margin: 0;
+    }
+  }
+}
+
+/** end declared font px sizes **/
+
+body {
+  /** using bootstrap fonts settings **/
+  font-family:
+    -apple-system, // Safari for OS X and iOS (San Francisco)
+    system-ui, // Chrome >= 56 for OS X (San Francisco), Windows, Linux and Android
+    BlinkMacSystemFont,  // Chrome < 56 for OS X (San Francisco)
+    'Segoe UI', // Windows
+    'Roboto', // Android
+    'Helvetica Neue', Arial, sans-serif; // Basic web fallback
+
+  line-height: 1.4rem;
+  color: $color-dark;
+
+  p {
+    padding: 0;
+    margin: 5px;
+  }
+
+  .text-lg {
+    font-size: 1.1em;
+  }
+
+  .text-sm {
+    font-size: 0.9em;
+  }
+
+  .text-xs-sm {
+    font-size: 0.8em;
+  }
+
+  /** text color helpers **/
+  .text-white {
+    color: $color-white;
+  }
+
+  .text-muted {
+    color: lighten($color-dark, 30%);
+  }
+
+  .text-primary {
+    color: $color-primary;
+  }
+
+  .text-secondary {
+    color: $color-secondary;
+  }
+
+  .text-tertiary {
+    color: $color-tertiary;
+  }
+}
+
