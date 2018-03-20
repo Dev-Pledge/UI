@@ -19,3 +19,8 @@ node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+#docker build
+docker_node_modules
+external_node_modules
+
