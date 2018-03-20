@@ -1,0 +1,90 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.content-wrapper {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  min-height: calc(100vh - #{$min-nav-height + $min-footer-height});
+}
+
+.content-article {
+  p {
+    margin-bottom: 20px;
+  }
+  p:last-child {
+    margin-bottom: 5px;
+  }
+}
+
+.row { // give some space between cols when they fold 0 -> 544px
+  .col-sm {
+    margin-bottom: 15px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  &.text-center-sm {
+    text-align: center;
+  }
+}
+
+section {
+  width: 100%;
+  margin-bottom: 15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  .row {
+    margin-bottom: 15px;
+    margin-top: 15px;
+  }
+  &.is-paddingless {
+    padding: 0;
+  }
+  &.is-marginless {
+    margin: 0;
+  }
+  &.stop-row-margin {
+    .row {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+  &.is-primary {
+    background: $color-primary;
+  }
+  &.is-light {
+    background: $color-light;
+  }
+  .container-fluid {
+    &.max-width {
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+
+
+@include media-breakpoint-up(md) {
+  .content-wrapper {
+    padding-top: 15px;
+  }
+  .row { // give some space between cols when they fold 0 -> 544px
+    .col-sm {
+      margin-bottom: 0;
+    }
+    &.text-center-sm {
+      text-align: left;
+    }
+  }
+
+  section {
+    width: 100%;
+    margin-bottom: 15px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+}
