@@ -5,13 +5,13 @@ services:
   node:
     image: node
     volumes:
-      - ./app/test:/home/node/app
-      - ./app/test/docker_node_modules:/home/node/app/node_modules
-      - ./app/test/node_modules:/home/node/app/external_node_modules
+      - ./app/app:/home/node/app
+      - ./app/app/docker_node_modules:/home/node/app/node_modules
+      - ./app/app/node_modules:/home/node/app/external_node_modules
     command: >
       bash -c "cd /home/node/app
-      && npm install
-      && npm run build"
+      && yarn
+      && yarn build"
 
   ui:
     container_name: dev_pledge_ui
@@ -23,7 +23,7 @@ services:
     #create a .sentryenv with SENTRY_DSN=...
       - .sentryenv
     volumes:
-      - ./app/test/build:/usr/local/apache2/htdocs:cached
+      - ./app/app/build:/usr/local/apache2/htdocs:cached
     expose:
       - 80
     networks:
