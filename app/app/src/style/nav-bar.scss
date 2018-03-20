@@ -1,0 +1,16 @@
+.nav-bar {
+  background: $color-primary;
+  ul {
+    list-style: none;
+
+    li {
+      display: inline-block;
+      padding: 5px;
+
+      a {
+        color: $color-white;
+        text-decoration: none;
+      }
+    }
+  }
+}
