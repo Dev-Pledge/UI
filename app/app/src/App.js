@@ -3,7 +3,7 @@ import { renderRoutes } from 'react-router-config';
 import { BrowserRouter as Router } from "react-router-dom";
 import route from './routes'
 import Navbar from './components/Navbar'
-import './style/App.scss';
+import './style/App.scss'
 
 const App = () => (
   <div className="App">
@@ -17,6 +17,5 @@ const App = () => (
     </Router>
   </div>
 );
-
 
 export default App;
