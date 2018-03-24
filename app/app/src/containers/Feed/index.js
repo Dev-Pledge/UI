@@ -31,13 +31,13 @@ class Feed extends React.Component {
     return (
       <div className="container-fluid">
         <div className="row">
-          <div className="col-sm-2">
+          <div className="col col-sm-2">
             panel 1
           </div>
-          <div className="col">
+          <div className="col-sm">
             {this.feedList()}
           </div>
-          <div className="col-sm-2">
+          <div className="col col-sm-2">
             panel 2
           </div>
         </div>

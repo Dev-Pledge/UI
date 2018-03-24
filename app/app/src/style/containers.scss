@@ -71,10 +71,49 @@ section {
   ul {
     padding: 0;
     list-style: none;
+    border: 1px solid darken($color-light, 15%);
 
     li {
-      padding: 10px 0;
+      padding: 0;
+      border-bottom: 1px solid darken($color-light, 15%);
+
+      .inner-header {
+        padding: 10px;
+
+        .title {
+          font-size: 1.1em;
+          color: darken($color-dark, 15%);
+        }
+
+        &.is-primary {
+          background: lighten($color-primary, 8%);
+          color: $color-white;
+          .title {
+            color: $color-white;
+          }
+        }
+        &.is-light {
+          background: lighten($color-light, 8%);
+        }
+      }
+
+      .inner {
+        font-size: 0.9em;
+        padding: 0 10px;
+      }
+    }
+  }
+  ul.pledges-list {
+    font-size: 0.9em;
+    border: none;
+    border-left: 1px solid $color-light;
+
+    li {
+      padding: 2px 10px;
       border-bottom: 1px solid $color-light;
+    }
+    li:last-child {
+      border-bottom: none;
     }
   }
 }
