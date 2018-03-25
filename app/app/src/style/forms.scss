@@ -1,0 +1,37 @@
+.dp-button {
+  font-size: inherit;
+  display: block;
+  border-radius: 0;
+  padding: 6px 15px;
+  cursor: pointer;
+  color: $color-dark;
+  border: 1px solid $color-light;
+  background: lighten($color-light, 10%);
+  background: linear-gradient(to bottom, lighten($color-light, 10%) 0%,lighten($color-light, 20%) 50%,lighten($color-light, 15%) 51%,lighten($color-light, 5%) 100%);
+  box-shadow: 3px 3px 0 0 rgba(117,117,117,0.2);
+
+  &.is-primary {
+    border: 1px solid $color-primary;
+    background: lighten($color-primary, 10%);
+    background: linear-gradient(to bottom, lighten($color-primary, 10%) 0%,lighten($color-primary, 20%) 50%,lighten($color-primary, 15%) 51%,lighten($color-primary, 5%) 100%);
+    color: white;
+  }
+
+  &.is-secondary {
+    border: 1px solid $color-secondary;
+    background: lighten($color-secondary, 10%);
+    color: white;
+    background: linear-gradient(to bottom, lighten($color-secondary, 10%) 0%,lighten($color-secondary, 20%) 50%,lighten($color-secondary, 15%) 51%,lighten($color-secondary, 5%) 100%);
+  }
+
+  &.is-tertiary {
+    border: 1px solid $color-tertiary;
+    background: lighten($color-tertiary, 10%);
+    color: white;
+  }
+
+  &.is-inline {
+    display: inline-block;
+    margin-right: 10px;
+  }
+}

@@ -3,21 +3,21 @@ import React from 'react';
 const FeedItemPledge = (props) => {
   const renderCtaPledge = () => {
     if (props.item.hasPledged) {
-      return <button>Pledge</button>
+      return <button className="dp-button is-primary is-inline">Pledge</button>
     }
-    return <button>Pledge some more!</button>
+    return <button className="dp-button is-primary is-inline">Pledge some more!</button>
   }
 
   const renderCtaSolution = () => {
     if (props.item.hasCommitted) {
-      return <button>I'm working on a solution</button>
+      return <button className="dp-button is-secondary is-inline">I'm working on a solution</button>
     }
-    return <span className="text-primary">You are already working on this!</span>
+    return <div className="text-primary">You are already working on this!</div>
   }
 
   return (
     <div className="row">
-      <div className="col-8">
+      <div className="col-12 col-md-8">
         <div className="inner-header is-light">
           <span className="tags with-tags-first">
             {props.item.tags.map(tag => (
@@ -33,7 +33,7 @@ const FeedItemPledge = (props) => {
           {renderCtaPledge()}
         </div>
       </div>
-      <div className="col-4">
+      <div className="col-12 col-md-4">
         <div className="inner-header is-primary">
           <span className="title">Pledges</span>
           <span className="tags is-right">

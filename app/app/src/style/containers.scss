@@ -77,6 +77,15 @@ section {
       padding: 0;
       border-bottom: 1px solid darken($color-light, 15%);
 
+      .row {
+        padding: 0;
+        margin: 0;
+        .col, div[class^="col-"] {
+          padding: 0;
+          margin: 0;
+        }
+      }
+
       .inner-header {
         padding: 10px;
 
