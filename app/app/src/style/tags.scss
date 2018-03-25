@@ -18,6 +18,10 @@
         background: lighten($color-primary, 20%);
         color: $color-white;
       }
+
+      &.is-borderless {
+        border: none;
+      }
     }
 
     &.is-text-white {

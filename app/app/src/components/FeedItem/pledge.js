@@ -21,7 +21,7 @@ const FeedItemPledge = (props) => {
         <div className="inner-header is-light">
           <span className="tags with-tags-first">
             {props.item.tags.map(tag => (
-              <span className="is-primary with-fill">{tag}</span>
+              <span className="is-primary with-fill is-borderless">{tag}</span>
             ))}
           </span>
           <span className="title">{props.item.title}</span>
@@ -37,10 +37,10 @@ const FeedItemPledge = (props) => {
         <div className="inner-header is-primary">
           <span className="title">Pledges</span>
           <span className="tags is-right">
-            <span className="is-primary with-fill">
+            <span className="is-primary with-fill is-borderless">
               {props.item.pledge.totalPledges}
             </span>
-            <span className="is-primary with-fill">
+            <span className="is-primary with-fill is-borderless">
               {props.item.pledge.totalPledgesValue}
             </span>
           </span>
