@@ -1,5 +1,5 @@
 import App from './App';
-import { Home, Feed } from './containers';
+import { Home, Feed, Login, Logout } from './containers';
 
 export default {
   component: App,
@@ -17,6 +17,16 @@ export default {
       isMenu: true,
       name: 'Feed',
       component: Feed // Add your route here
+    },
+    {
+      path: '/login',
+      exact: true,
+      component: Login // Add your route here
+    },
+    {
+      path: '/logout',
+      exact: true,
+      component: Logout // Add your route here
     }
   ]
 };

@@ -21,7 +21,7 @@ const FeedItemPledge = (props) => {
         <div className="inner-header is-light">
           <span className="tags with-tags-first">
             {props.item.tags.map(tag => (
-              <span className="is-primary with-fill is-borderless">{tag}</span>
+              <span key={tag} className="is-primary with-fill is-borderless">{tag}</span>
             ))}
           </span>
           <span className="title">{props.item.title}</span>

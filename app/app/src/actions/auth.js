@@ -3,37 +3,39 @@ import Promise from 'bluebird'
 import axios from 'axios'
 
 // mock
-const token =
+const mockToken =
   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c3ItMTExLTExMS0xMTEtMTExIiwib3JncyI6WyJvcmctMjIyLTIyMi0yMjItMjIyIiwib3JnLTMzMy0zMzMtMzMzLTMzMyJdLCJ1c2VybmFtZSI6IkJpZyBCaWxsIiwidHRsIjoiMTUyMDE5NzgyMCIsInBlcm1zIjp7InJlc291cmNlTmFtZSI6eyJhY3Rpb24iOnsicmVzdHJpY3Rpb25OYW1lIjpbImFsMSIsInZhbDIiXX19fSwianRpIjoiOTc1MTE5ZDctYjViOS00YWIxLWEyZDAtMTAxMTY1NjY0ZTA2IiwiaWF0IjoxNTIxMjM3ODYwLCJleHAiOjE1MjEyNDE0NjB9.GXPrRoh_yIO_UCztFqHYRWGhGq_NDSlOhzZ9ezUVs9Q';
 
-export const login = (user, pass) => {
-  return dispatch => {
-    dispatch({ type: 'AUTH_REQUESTING' });
-    try {
-      // attempt login.  on success set token to headers and data to redux
-      const decoded = setToken(token);
-
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-      dispatch({
-        type: 'AUTH_SUCCESS',
-        payload: {
-          isLoggedIn: true,
-          token,
-          expires: decoded.ttl * 1000,
-          username: decoded.username,
-          decodedToken: decoded
-        }
-      });
-    } catch (err) {
-      // login fail
-      dispatch({
-        type: 'AUTH_FAIL',
-        payload: {
-          err: 'testing face'
-        }
-      })
-    }
-  }
+export const attemptLogin = (email = '', pass = '') => {
+  return dispatch =>
+    new Promise((resolve, reject) => {
+      dispatch({ type: 'AUTH_REQUESTING' });
+      try {
+        // attempt login.  on success set token to headers and data to redux
+        const decoded = setToken(mockToken);
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + mockToken;
+        dispatch({
+          type: 'AUTH_SUCCESS',
+          payload: {
+            isLoggedIn: true,
+            token: mockToken,
+            expires: decoded.ttl * 1000,
+            username: decoded.username,
+            decodedToken: decoded
+          }
+        });
+        return resolve()
+      } catch (err) {
+        // login fail
+        dispatch({
+          type: 'AUTH_FAIL',
+          payload: {
+            err: 'testing face'
+          }
+        })
+        return reject()
+      }
+    });
 };
 
 const setAuth = (data) => {
@@ -58,6 +60,8 @@ export const authUnlocked = () => {
         return resolve()
       }
 
+      const token = getToken();
+
       // could be a page refresh - no redux state but authorised
       if (token) {
         // set default auth on all network requests
@@ -78,7 +82,7 @@ export const authUnlocked = () => {
           })
           // on fail do when real request is in
           // resolve promise for next
-          resolve()
+          return resolve()
         }, 1000)
       } else {
         // all good just not authorised
@@ -87,7 +91,28 @@ export const authUnlocked = () => {
           payload: {}
         });
         // resolve promise for next
-        resolve()
+        return resolve()
       }
     })
 };
+
+
+export const logout = () => {
+  return dispatch =>
+    new Promise(resolve => {
+      removeToken()
+      // may want a network call
+      setAuth({
+        type: 'AUTH_UNAUTHORISED',
+        payload: {
+          readyStatus: 'AUTH_UNAUTHORISED',
+          isLoggedIn: false,
+          token: '',
+          expires: null,
+          username: '',
+          decodedToken: null
+        }
+      });
+      return resolve()
+    })
+}

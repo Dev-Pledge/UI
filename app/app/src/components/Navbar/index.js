@@ -5,12 +5,19 @@ import { connect } from 'react-redux'
 class Navbar extends React.Component {
 
   getUserName() {
-    console.log(this.props.auth)
     const { auth } = this.props
     if (auth.readyStatus === 'AUTH_AUTHORISED') {
       return 'Hi there ' + auth.username
     }
     return 'Hi there'
+  }
+
+  showLogInOut() {
+    const { auth } = this.props
+    if (auth.readyStatus === 'AUTH_AUTHORISED') {
+      return <Link to="/logout">Logout</Link>
+    }
+    return <Link to="/login">Login</Link>
   }
 
   render() {
@@ -33,6 +40,7 @@ class Navbar extends React.Component {
             </div>
             <div className="col-sm has-text-right">
               {this.getUserName()}
+              {this.showLogInOut()}
             </div>
           </div>
         </div>

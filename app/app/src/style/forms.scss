@@ -34,4 +34,22 @@
     display: inline-block;
     margin-right: 10px;
   }
+
+  &.is-block {
+    width: 100%;
+  }
+}
+
+.dp-input {
+  font-size: inherit;
+  display: block;
+  padding: 10px;
+  border: 1px solid lighten($color-dark, 30%)
+}
+
+.dp-form {
+  .dp-input {
+    width: 100%;
+    margin-bottom: 20px;
+  }
 }
