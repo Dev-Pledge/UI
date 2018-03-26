@@ -38,6 +38,12 @@
   &.is-block {
     width: 100%;
   }
+
+  &:focus {
+    outline: none;
+    // todo this needs to be replaced with something that keeps
+    // it clear for accessability
+  }
 }
 
 .dp-input {

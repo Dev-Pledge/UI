@@ -5,13 +5,15 @@ import { connect } from 'react-redux'
 import FeedList from '../../components/FeedList';
 import CreateProblem from '../../components/Problem/createProblem'
 import Promise from 'bluebird'
+import { VelocityTransitionGroup } from 'velocity-react';
 
 class Feed extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      showCreate: false
+      showCreate: false,
+      createButtonText: 'Create Problem'
     }
   }
 
@@ -26,25 +28,15 @@ class Feed extends React.Component {
 
   showCreate = () => {
     this.setState({
-      showCreate: true
-    })
-    this.showHideCreate()
-  }
-
-  hideCreate = () => {
-    this.setState({
-      showCreate: false
-    })
+      showCreate: !this.state.showCreate,
+      createButtonText: this.state.showCreate ? 'Create Problem' : 'Not right now',
+    });
     this.showHideCreate()
   }
 
   showHideCreate = () => {
     if (this.state.showCreate) {
-      return <div className="box">
-        <p>
-          <span className="margin-right">Create a problem</span>
-          <button className="dp-button is-inline" onClick={this.hideCreate}>Not right now</button>
-        </p>
+      return <div className="box is-light">
         <CreateProblem />
       </div>
     }
@@ -70,9 +62,14 @@ class Feed extends React.Component {
           </div>
           <div className="col-sm">
             <div>
-              <button className="dp-button is-primary is-inline" onClick={this.showCreate}>Create problem</button>
+              <button className="dp-button is-primary is-inline" onClick={this.showCreate}>{this.state.createButtonText}</button>
               <button className="dp-button is-secondary is-inline">What are you working on now?</button>
+              <VelocityTransitionGroup
+                enter={{ animation: 'slideDown' }}
+                leave={{ animation: 'slideUp' }}
+              >
               {this.showHideCreate()}
+              </VelocityTransitionGroup>
             </div>
             {this.feedList()}
           </div>

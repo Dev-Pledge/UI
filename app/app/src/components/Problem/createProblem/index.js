@@ -39,7 +39,7 @@ class CreateProblem extends React.Component {
           placeholder="Give your problem a description"
         />
         <button
-          className="dp-button is-primary is-block"
+          className="dp-button is-primary"
           onClick={this.handleCreate}
         >Create
         </button>
