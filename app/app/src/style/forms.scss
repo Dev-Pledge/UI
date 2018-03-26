@@ -8,7 +8,7 @@
   border: 1px solid $color-light;
   background: lighten($color-light, 10%);
   background: linear-gradient(to bottom, lighten($color-light, 10%) 0%,lighten($color-light, 20%) 50%,lighten($color-light, 15%) 51%,lighten($color-light, 5%) 100%);
-  box-shadow: 3px 3px 0 0 rgba(117,117,117,0.2);
+  // box-shadow: 3px 3px 0 0 rgba(117,117,117,0.2);
 
   &.is-primary {
     border: 1px solid $color-primary;

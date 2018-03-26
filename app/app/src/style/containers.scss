@@ -67,6 +67,11 @@ section {
   }
 }
 
+.box {
+  border: 1px solid $color-light;
+  padding: 15px;
+}
+
 .feed-list {
   ul {
     padding: 0;
