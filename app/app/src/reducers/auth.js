@@ -37,7 +37,6 @@ const feed = (state = initialState(), action) => {
     case 'AUTH_UNAUTHORISED':
       return Object.assign({}, state, {
         readyStatus: 'AUTH_UNAUTHORISED',
-        list: action.payload.data.data,
         isLoggedIn: false,
         username: '',
         expires: null,

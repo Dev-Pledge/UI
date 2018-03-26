@@ -102,16 +102,8 @@ export const logout = () => {
     new Promise(resolve => {
       removeToken()
       // may want a network call
-      setAuth({
-        type: 'AUTH_UNAUTHORISED',
-        payload: {
-          readyStatus: 'AUTH_UNAUTHORISED',
-          isLoggedIn: false,
-          token: '',
-          expires: null,
-          username: '',
-          decodedToken: null
-        }
+      dispatch({
+        type: 'AUTH_UNAUTHORISED'
       });
       return resolve()
     })
