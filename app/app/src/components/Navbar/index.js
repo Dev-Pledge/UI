@@ -17,6 +17,9 @@ class Navbar extends React.Component {
     if (auth.readyStatus === 'AUTH_AUTHORISED') {
       return <Link to="/logout">Logout</Link>
     }
+    if (auth.readyStatus === 'AUTH_REQUESTING') {
+      return <span>Spinner</span>
+    }
     return <Link to="/login">Login</Link>
   }
 

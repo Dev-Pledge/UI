@@ -54,9 +54,12 @@ export const authUnlocked = () => {
     new Promise(resolve => {
       // getToken and if exists and set to axios global header
       const { auth } = getState()
+      console.log('looking at auth')
 
       // if redux thinks they are logged in continue
       if (auth.readyStatus === 'AUTH_AUTHORISED') {
+        // double check auth time
+
         return resolve()
       }
 
@@ -64,6 +67,9 @@ export const authUnlocked = () => {
 
       // could be a page refresh - no redux state but authorised
       if (token) {
+
+        // check if valid token
+
         // set default auth on all network requests
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
         const decoded = setToken(token);
@@ -85,10 +91,11 @@ export const authUnlocked = () => {
           return resolve()
         }, 1000)
       } else {
+        console.log('looks like we are not authorised')
         // all good just not authorised
+        axios.defaults.headers.common['Authorization'] = '';
         setAuth({
-          type: 'AUTH_UNAUTHORISED',
-          payload: {}
+          type: 'AUTH_UNAUTHORISED'
         });
         // resolve promise for next
         return resolve()
@@ -100,11 +107,14 @@ export const authUnlocked = () => {
 export const logout = () => {
   return dispatch =>
     new Promise(resolve => {
+      dispatch({ type: 'AUTH_REQUESTING' });
       removeToken()
       // may want a network call
-      dispatch({
-        type: 'AUTH_UNAUTHORISED'
-      });
+      setTimeout(() => {
+        dispatch({
+          type: 'AUTH_UNAUTHORISED'
+        });
+      }, 200)
       return resolve()
     })
 }
