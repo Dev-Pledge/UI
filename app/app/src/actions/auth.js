@@ -1,6 +1,7 @@
 import { getToken, setToken, removeToken } from '../auth'
 import Promise from 'bluebird'
 import axios from 'axios'
+import { payload as authPayload }  from './../api/auth'
 
 // mock
 const mockToken =
@@ -68,10 +69,34 @@ export const authUnlocked = () => {
       // could be a page refresh - no redux state but authorised
       if (token) {
 
-        // check if valid token
-
         // set default auth on all network requests
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+        // check if valid token
+        authPayload().then(res => {
+          console.log(res)
+        }).catch(error => {
+          if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(1, error.response.data);
+            console.log(2, error.response.status);
+            console.log(3, error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(4, error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+          }
+          console.log(error.config);
+        })
+
+
+
+
+
         const decoded = setToken(token);
         // validate auth on auth server.  mock for now
         setTimeout(() => {
