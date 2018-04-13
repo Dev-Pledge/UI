@@ -1,41 +1,41 @@
 import { getToken, setToken, removeToken } from '../auth'
 import Promise from 'bluebird'
 import axios from 'axios'
-import { payload as authPayload }  from './../api/auth'
+import { authPayload, authLogin }  from './../api/auth'
+import { logRequestError } from './../api/utils'
 
 // mock
 const mockToken =
   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c3ItMTExLTExMS0xMTEtMTExIiwib3JncyI6WyJvcmctMjIyLTIyMi0yMjItMjIyIiwib3JnLTMzMy0zMzMtMzMzLTMzMyJdLCJ1c2VybmFtZSI6IkJpZyBCaWxsIiwidHRsIjoiMTUyMDE5NzgyMCIsInBlcm1zIjp7InJlc291cmNlTmFtZSI6eyJhY3Rpb24iOnsicmVzdHJpY3Rpb25OYW1lIjpbImFsMSIsInZhbDIiXX19fSwianRpIjoiOTc1MTE5ZDctYjViOS00YWIxLWEyZDAtMTAxMTY1NjY0ZTA2IiwiaWF0IjoxNTIxMjM3ODYwLCJleHAiOjE1MjEyNDE0NjB9.GXPrRoh_yIO_UCztFqHYRWGhGq_NDSlOhzZ9ezUVs9Q';
 
-export const attemptLogin = (email = '', pass = '') => {
+export const attemptLogin = (username = '', password = '') => {
   return dispatch =>
     new Promise((resolve, reject) => {
       dispatch({ type: 'AUTH_REQUESTING' });
-      try {
-        // attempt login.  on success set token to headers and data to redux
-        const decoded = setToken(mockToken);
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + mockToken;
+      return authLogin({
+        username, password
+      }).then(res => {
+        console.log(res)
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.body.token;
+        const decoded = setToken(res.body.token);
         dispatch({
           type: 'AUTH_SUCCESS',
           payload: {
             isLoggedIn: true,
-            token: mockToken,
+            token: res.body.token,
             expires: decoded.ttl * 1000,
             username: decoded.username,
             decodedToken: decoded
           }
         });
         return resolve()
-      } catch (err) {
-        // login fail
-        dispatch({
-          type: 'AUTH_FAIL',
-          payload: {
-            err: 'testing face'
-          }
-        })
+      }).catch(err => {
+        logRequestError(err, 'auth-login')
+        setAuth({
+          type: 'AUTH_UNAUTHORISED'
+        });
         return reject()
-      }
+      })
     });
 };
 
@@ -72,49 +72,27 @@ export const authUnlocked = () => {
         // set default auth on all network requests
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
         // check if valid token
-        authPayload().then(res => {
+        return authPayload().then(res => {
           console.log(res)
-        }).catch(error => {
-          if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.log(1, error.response.data);
-            console.log(2, error.response.status);
-            console.log(3, error.response.headers);
-          } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-            // http.ClientRequest in node.js
-            console.log(4, error.request);
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('Error', error.message);
-          }
-          console.log(error.config);
-        })
-
-
-
-
-
-        const decoded = setToken(token);
-        // validate auth on auth server.  mock for now
-        setTimeout(() => {
-          // if success
           dispatch({
             type: 'AUTH_AUTHORISED',
             payload: {
               isLoggedIn: true,
               token,
-              expires: decoded.ttl * 1000,
-              username: decoded.username,
-              decodedToken: decoded
+              expires: res.body.ttl * 1000,
+              username: res.body.username,
+              decodedToken: res.body
             }
           })
-          // on fail do when real request is in
-          // resolve promise for next
           return resolve()
-        }, 1000)
+        }).catch(err => {
+          logRequestError(err, 'auth-payload')
+          setAuth({
+            type: 'AUTH_UNAUTHORISED'
+          });
+          return resolve()
+        })
+
       } else {
         console.log('looks like we are not authorised')
         // all good just not authorised
