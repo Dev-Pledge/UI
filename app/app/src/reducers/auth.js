@@ -1,11 +1,14 @@
 const initialState = () => ({
   readyStatus: 'AUTH_INITIAL',
+  err: null,
   isLoggedIn: false,
   username: '',
-  expires: null,
+  ttr: null,
+  ttl: null,
+  name: '',
+  perms: null,
   token: '',
-  decodedToken: null,
-  err: null
+  decodedToken: null
 })
 
 const feed = (state = initialState(), action) => {
@@ -20,17 +23,22 @@ const feed = (state = initialState(), action) => {
         err: action.payload.err,
         isLoggedIn: false,
         username: '',
-        expires: null,
+        ttr: null,
+        ttl: null,
+        name: '',
+        perms: null,
         token: '',
         decodedToken: null
       });
     case 'AUTH_AUTHORISED':
       return Object.assign({}, state, {
+        // todo make default on property not exists.
         readyStatus: 'AUTH_AUTHORISED',
         isLoggedIn: true,
         username: action.payload.username,
-        expires: action.payload.expires,
-        token: action.payload.token,
+        name: action.payload.name,
+        ttr: action.payload.expires,
+        ttl: action.payload.token,
         decodedToken: action.payload.decodedToken,
         err: null
       });
@@ -39,7 +47,10 @@ const feed = (state = initialState(), action) => {
         readyStatus: 'AUTH_UNAUTHORISED',
         isLoggedIn: false,
         username: '',
-        expires: null,
+        ttr: null,
+        ttl: null,
+        name: '',
+        perms: null,
         token: '',
         decodedToken: null
       });

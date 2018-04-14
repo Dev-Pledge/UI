@@ -21,8 +21,11 @@ export const attemptLogin = (username = '', password = '') => {
           payload: {
             isLoggedIn: true,
             token: body.token,
-            expires: decoded.ttr * 1000,
+            ttr: decoded.ttr * 1000,
+            ttl: decoded.ttl * 1000,
+            perms: decoded.data.perms,
             username: decoded.data.username,
+            name: decoded.data.name,
             decodedToken: decoded
           }
         });
@@ -51,57 +54,49 @@ const setAuth = (data) => {
 export const authUnlocked = () => {
   return (dispatch, getState) =>
     new Promise(resolve => {
-      // getToken and if exists and set to axios global header
       const { auth } = getState()
-      console.log('looking at auth')
-
       // if redux thinks they are logged in continue
       if (auth.readyStatus === 'AUTH_AUTHORISED') {
-        // double check auth time
-
         return resolve()
       }
-
       const token = getToken();
-
       // could be a page refresh - no redux state but authorised
-      if (token) {
-
-        // set default auth on all network requests
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-        // check if valid token
-        return authPayload().then(res => {
-          console.log(res)
-          const decoded = setToken(token);  // todo this should be cleaner
-          dispatch({
-            type: 'AUTH_AUTHORISED',
-            payload: {
-              isLoggedIn: true,
-              token,
-              expires: decoded.ttr * 1000,
-              username: decoded.data.username,
-              decodedToken: decoded
-            }
-          })
-          return resolve()
-        }).catch(err => {
-          logRequestError(err, 'auth-payload')
-          setAuth({
-            type: 'AUTH_UNAUTHORISED'
-          });
-          return resolve()
-        })
-
-      } else {
-        console.log('looks like we are not authorised')
+      if (! token) {
         // all good just not authorised
         axios.defaults.headers.common['Authorization'] = '';
         setAuth({
           type: 'AUTH_UNAUTHORISED'
         });
-        // resolve promise for next
         return resolve()
       }
+      // set default auth on all network requests
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+      // check if valid token
+      return authPayload().then(res => {
+        // todo ask tom if is authorised on authPayload - please refresh token
+        // and always return the refreshed jwt
+        const decoded = setToken(token);
+        dispatch({
+          type: 'AUTH_AUTHORISED',
+          payload: {
+            isLoggedIn: true,
+            token,
+            ttr: decoded.ttr * 1000,
+            ttl: decoded.ttl * 1000,
+            perms: decoded.data.perms,
+            username: decoded.data.username,
+            name: decoded.data.name,
+            decodedToken: decoded
+          }
+        })
+        return resolve()
+      }).catch(err => {
+        logRequestError(err, 'auth-payload')
+        setAuth({
+          type: 'AUTH_UNAUTHORISED'
+        });
+        return resolve()
+      })
     })
 };
 
