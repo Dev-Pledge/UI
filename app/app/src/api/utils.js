@@ -13,5 +13,5 @@ export const logRequestError = (err, reference = 'not registered', exludeStatus 
     // Something happened in setting up the request that triggered an Error
     console.log('request-request-error', reference, err.message);
   }
-  // console.log('config', err.config)
+  console.log('config', err.config)
 }

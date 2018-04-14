@@ -4,10 +4,6 @@ import axios from 'axios'
 import { authPayload, authLogin }  from './../api/auth'
 import { logRequestError } from './../api/utils'
 
-// mock
-const mockToken =
-  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c3ItMTExLTExMS0xMTEtMTExIiwib3JncyI6WyJvcmctMjIyLTIyMi0yMjItMjIyIiwib3JnLTMzMy0zMzMtMzMzLTMzMyJdLCJ1c2VybmFtZSI6IkJpZyBCaWxsIiwidHRsIjoiMTUyMDE5NzgyMCIsInBlcm1zIjp7InJlc291cmNlTmFtZSI6eyJhY3Rpb24iOnsicmVzdHJpY3Rpb25OYW1lIjpbImFsMSIsInZhbDIiXX19fSwianRpIjoiOTc1MTE5ZDctYjViOS00YWIxLWEyZDAtMTAxMTY1NjY0ZTA2IiwiaWF0IjoxNTIxMjM3ODYwLCJleHAiOjE1MjEyNDE0NjB9.GXPrRoh_yIO_UCztFqHYRWGhGq_NDSlOhzZ9ezUVs9Q';
-
 export const attemptLogin = (username = '', password = '') => {
   return dispatch =>
     new Promise((resolve, reject) => {
@@ -15,16 +11,18 @@ export const attemptLogin = (username = '', password = '') => {
       return authLogin({
         username, password
       }).then(res => {
-        console.log(res)
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.body.token;
-        const decoded = setToken(res.body.token);
+        console.log('here is the res', res)
+        const body = res.data
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + body.token;
+        const decoded = setToken(body.token);
+        console.log('here is the decoded', decoded)
         dispatch({
           type: 'AUTH_SUCCESS',
           payload: {
             isLoggedIn: true,
-            token: res.body.token,
-            expires: decoded.ttl * 1000,
-            username: decoded.username,
+            token: body.token,
+            expires: decoded.ttr * 1000,
+            username: decoded.data.username,
             decodedToken: decoded
           }
         });
@@ -74,14 +72,15 @@ export const authUnlocked = () => {
         // check if valid token
         return authPayload().then(res => {
           console.log(res)
+          const decoded = setToken(token);  // todo this should be cleaner
           dispatch({
             type: 'AUTH_AUTHORISED',
             payload: {
               isLoggedIn: true,
               token,
-              expires: res.body.ttl * 1000,
-              username: res.body.username,
-              decodedToken: res.body
+              expires: decoded.ttr * 1000,
+              username: decoded.data.username,
+              decodedToken: decoded
             }
           })
           return resolve()
