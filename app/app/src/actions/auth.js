@@ -73,8 +73,11 @@ export const authUnlocked = () => {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
       // check if valid token
       return authPayload().then(res => {
-        // todo ask tom if is authorised on authPayload - please refresh token
+        console.log('here is the res', res)
+        // todo ask tom if is authorised on authPayload - please refresh token.
         // and always return the refreshed jwt
+        // todo ask tom.  Payload is in different format.  No ttl and ttr
+        // payload instead of data.  TBH i prefer the term payload over data
         const decoded = setToken(token);
         dispatch({
           type: 'AUTH_AUTHORISED',

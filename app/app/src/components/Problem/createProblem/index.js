@@ -25,7 +25,7 @@ class CreateProblem extends React.Component {
 
   render () {
     return (
-      <div class="dp-form">
+      <div className="dp-form">
         <input
           className="dp-input"
           value={this.state.title}
