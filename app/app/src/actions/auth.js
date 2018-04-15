@@ -32,10 +32,12 @@ export const attemptLogin = (username = '', password = '') => {
         return resolve()
       }).catch(err => {
         logRequestError(err, 'auth-login')
-        setAuth({
+        dispatch({
           type: 'AUTH_UNAUTHORISED'
         });
-        return reject()
+        // todo we don't want this error to leak back to component - could contain data we don't want to accidently log out
+        // bluebird complains when reject does not have an error object
+        return reject(new Error())
       })
     });
 };
@@ -55,6 +57,7 @@ export const authUnlocked = () => {
   return (dispatch, getState) =>
     new Promise(resolve => {
       const { auth } = getState()
+      console.log('authUnlocked test')
       // if redux thinks they are logged in continue
       if (auth.readyStatus === 'AUTH_AUTHORISED') {
         return resolve()

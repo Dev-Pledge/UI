@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
+import Raven from 'raven-js'
 
 class Home extends Component {
+  /* example of catching raven error on component error */
+  componentDidCatch(error, errorInfo) {
+    Raven.captureException(error, { extra: errorInfo });
+  }
+
   render() {
     return (
       <div className="container-fluid">

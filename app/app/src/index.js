@@ -2,11 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import appConfig from './appConfig'
 // import registerServiceWorker from './registerServiceWorker';
+import Raven from 'raven-js';
 import configureStore from './store'
 import { Provider } from 'react-redux'
 // import { unregister } from './registerServiceWorker';
+
 console.log('here is the environment', process.env.NODE_ENV)
+Raven.config(appConfig.ravenDSN).install()
 const store = configureStore()
 
 ReactDOM.render(
