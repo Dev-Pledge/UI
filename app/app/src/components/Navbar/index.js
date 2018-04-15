@@ -23,27 +23,74 @@ class Navbar extends React.Component {
     return <Link to="/login">Login</Link>
   }
 
+  renderRouteLink (route, name) {
+    /* use this to add class to active */
+    console.log('foo', this.props)
+    return (
+      <Link className="" to={route}>{name}</Link>
+    )
+  }
+
   render() {
     return (
-      <div className="nav-bar">
-        <div className="container-fluid">
-          <div className="row d-flex align-items-center">
-            <div className="col-sm">
-              <h2>DevPledge</h2>
+      <div className="header-bar">
+        <div className="top-bar">
+          <div className="container-fluid">
+            <div className="row d-flex align-items-center">
+              <div className="col-sm">
+                <ul>
+                  <li>
+                    <Link to="/">Explore</Link>
+                  </li>
+                  <li>
+                    <Link to="/feed">Present a problem</Link>
+                  </li>
+                </ul>
+              </div>
+              <div className="col-sm has-text-center">
+                <h1 className="text-white">Devpledge</h1>
+              </div>
+              <div className="col-sm has-text-right">
+                <ul>
+                  <li>
+                    {this.getUserName()}
+                  </li>
+                  <li>
+                    {this.showLogInOut()}
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div className="col-sm">
-              <ul>
-                <li>
-                  <Link to="/">Home</Link>
-                </li>
-                <li>
-                  <Link to="/feed">Feed</Link>
-                </li>
-              </ul>
-            </div>
-            <div className="col-sm has-text-right">
-              {this.getUserName()}
-              {this.showLogInOut()}
+          </div>
+        </div>
+        <div className="nav-bar">
+          <div className="container-fluid">
+            <div className="row d-flex align-items-center">
+              <div className="col-sm">
+                <ul>
+                  <li>
+                    <Link className="active" to="/">Home</Link>
+                  </li>
+                  <li>
+                    {this.renderRouteLink('/feed', 'Feed')}
+                  </li>
+                  <li>
+                    {this.renderRouteLink('/', 'Foo')}
+                  </li>
+                  <li>
+                    {this.renderRouteLink('/feed', 'Bar')}
+                  </li>
+                  <li>
+                    {this.renderRouteLink('/feed', 'Baz')}
+                  </li>
+                </ul>
+              </div>
+              <div className="col-sm">
+                <div className="has-text-right">
+                  <em className="text-xs">Icon</em> Search <em className="text-xs">will expand</em>
+                </div>
+                { /*<input className="dp-input" placeholder="Search" />*/ }
+              </div>
             </div>
           </div>
         </div>
@@ -52,9 +99,10 @@ class Navbar extends React.Component {
   }
 }
 
-function mapStateToProps(store) {
+function mapStateToProps(store, routes) {
   return {
-    auth: store.auth
+    auth: store.auth,
+    location: routes
   }
 }
 
