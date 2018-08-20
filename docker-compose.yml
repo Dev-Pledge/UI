@@ -15,7 +15,7 @@ services:
 
   ui:
     container_name: dev_pledge_ui
-    image: httpd
+    image: php:7.2-apache
     environment:
       docker: "true"
       production: "false"
@@ -23,7 +23,7 @@ services:
     #create a .sentryenv with SENTRY_DSN=...
       - .sentryenv
     volumes:
-      - ./app/app/build:/usr/local/apache2/htdocs:cached
+      - ./app/app/build:/var/www/html:cached
     expose:
       - 80
     networks:
