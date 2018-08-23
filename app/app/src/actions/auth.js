@@ -1,7 +1,7 @@
 import { getToken, setToken, removeToken } from '../auth'
 import Promise from 'bluebird'
 import axios from 'axios'
-import { authPayload, authLogin }  from './../api/auth'
+import { authPayload , authLogin }  from './../api/auth'
 import { logRequestError } from './../api/utils'
 
 export const attemptLogin = (username = '', password = '') => {

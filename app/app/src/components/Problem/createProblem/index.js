@@ -7,7 +7,7 @@ class CreateProblem extends React.Component {
     this.state = {
       title: '',
       description: '',
-      tags: []
+      topics: []
     };
   }
 
