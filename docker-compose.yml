@@ -24,6 +24,7 @@ services:
       - .sentryenv
     volumes:
       - ./app/app/build:/var/www/html:cached
+      - ./api:/var/www/html/api:cached
     expose:
       - 80
     networks:
