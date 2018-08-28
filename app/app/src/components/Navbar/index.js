@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { connect } from 'react-redux'
 
 class Navbar extends React.Component {
@@ -14,13 +14,14 @@ class Navbar extends React.Component {
 
   showLogInOut() {
     const { auth } = this.props
-    if (auth.readyStatus === 'AUTH_AUTHORISED') {
-      return <Link to="/logout">Logout</Link>
-    }
-    if (auth.readyStatus === 'AUTH_REQUESTING') {
-      return <span>Spinner</span>
-    }
-    return <Link to="/login">Login</Link>
+    if (auth.readyStatus === 'AUTH_AUTHORISED') return <Link to="/logout">Logout</Link>
+    if (auth.readyStatus === 'AUTH_REQUESTING') return <span>Spinner</span>
+    return (
+      <span>
+        <Link to="/login">Login</Link>&nbsp;
+        <NavLink activeClassName="active" exact to="/signup">Signup</NavLink>
+      </span>
+    )
   }
 
   renderRouteLink (route, name) {

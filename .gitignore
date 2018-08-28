@@ -8,3 +8,4 @@
 /.smtp-env
 /.stripe-env
 /.sentryenv
+node_modules

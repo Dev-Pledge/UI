@@ -1,7 +1,6 @@
 import React from 'react';
 import Promise from 'bluebird'
 import { VelocityTransitionGroup } from 'velocity-react';
-import SockJS from 'sockjs-client'
 
 import shouldFetchFeed from '../../actions/feed';
 import { authUnlocked } from '../../actions/auth'
@@ -31,7 +30,22 @@ class Feed extends React.Component {
   }
 
   connectToFeed () {
+
+    // const client = Stomp.overWS('ws://dev.feed.devpledge.com:9501');
+
+    const client = new WebSocket('ws://dev.feed.devpledge.com:9501')
+
+    client.onmessage = msg => {
+      console.log('message is here', msg)
+    }
+
+    // const client = Stomp.overTCP('http://dev.feed.devpledge.com', 9501);
+
+    console.log('here is the client', client)
+
+    /*
    var sock = new SockJS('http://dev.feed.devpledge.com:9501');
+   console.log('here is the sock', sock)
    sock.onopen = function() {
      console.log('open');
      sock.send({
@@ -48,6 +62,8 @@ class Feed extends React.Component {
    sock.onclose = function() {
     console.log('close');
    };
+
+   */
   }
 
   showCreate = () => {
