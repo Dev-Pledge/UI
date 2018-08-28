@@ -3,13 +3,13 @@ version: "3.5"
 services:
 
   node:
-    image: node
+    image: kkarczmarczyk/node-yarn:latest
     volumes:
-      - ./app/app:/home/node/app
-      - ./app/app/docker_node_modules:/home/node/app/node_modules
-      - ./app/app/node_modules:/home/node/app/external_node_modules
+    - ./app/app:/workspace
+    - ./app/app/docker_node_modules:/workspace/node_modules
+    - ./app/app/node_modules:/workspace/external_node_modules
     command: >
-      bash -c "cd /home/node/app
+      bash -c "cd /workspace
       && yarn
       && yarn build"
 
