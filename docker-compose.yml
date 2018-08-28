@@ -20,8 +20,8 @@ services:
       docker: "true"
       production: "false"
     env_file:
-    #create a .sentryenv with SENTRY_DSN=...
-      - .sentryenv
+      - .app-dev-env
+      - .sentry-env
     volumes:
       - ./app/app/build:/var/www/html:cached
       - ./api:/var/www/html/api:cached
