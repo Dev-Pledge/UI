@@ -19,6 +19,9 @@
       a {
         color: $color-dark;
         text-decoration: none;
+        &.active {
+          color: $color-white;
+        }
       }
     }
     li:last-child {

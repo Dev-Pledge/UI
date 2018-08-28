@@ -11,25 +11,10 @@ export const attemptLogin = (username = '', password = '') => {
       return authLogin({
         username, password
       }).then(res => {
-        console.log('here is the res', res)
-        const body = res.data
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + body.token;
-        const decoded = setToken(body.token);
-        console.log('here is the decoded', decoded)
-        dispatch({
-          type: 'AUTH_SUCCESS',
-          payload: {
-            isLoggedIn: true,
-            token: body.token,
-            ttr: decoded.ttr * 1000,
-            ttl: decoded.ttl * 1000,
-            perms: decoded.data.perms,
-            username: decoded.data.username,
-            name: decoded.data.name,
-            decodedToken: decoded
-          }
-        });
-        return resolve()
+        console.log(res)
+        return dispatch(loginSuccess(res.data.token)).then(res => {
+          return resolve()
+        })
       }).catch(err => {
         logRequestError(err, 'auth-login')
         dispatch({
@@ -37,10 +22,34 @@ export const attemptLogin = (username = '', password = '') => {
         });
         // todo we don't want this error to leak back to component - could contain data we don't want to accidently log out
         // bluebird complains when reject does not have an error object
-        return reject(new Error())
+        return reject(new Error({
+          message: err.hasOwnProperty('message') ? err.message : 'something went wrong logging in'
+        }))
       })
     });
 };
+
+export const loginSuccess = (token) => {
+  return dispatch =>
+    new Promise((resolve, reject) => {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+      const decoded = setToken(token);
+      dispatch({
+        type: 'AUTH_SUCCESS',
+        payload: {
+          isLoggedIn: true,
+          token: token,
+          ttr: decoded.ttr * 1000,
+          ttl: decoded.ttl * 1000,
+          perms: decoded.data.perms,
+          username: decoded.data.username,
+          name: decoded.data.name,
+          decodedToken: decoded
+        }
+      });
+      return resolve()
+    });
+}
 
 const setAuth = (data) => {
   return dispatch => {

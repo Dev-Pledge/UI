@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Raven from 'raven-js'
-import throttle from 'lodash/throttle'
+import { connect } from 'react-redux'
 
+import { loginSuccess } from '../../actions/auth'
 import { logRequestError } from '../../api/utils'
 import { checkUserNameAvailable, submitSignup } from '../../api/signup'
 
@@ -28,8 +29,7 @@ class Signup extends Component {
     })
   }
 
-  checkUserName () {
-    console.log('we are calling')
+  checkUserName = () => {
     checkUserNameAvailable({
       username: this.state.userName
     }).then(res => {
@@ -42,10 +42,7 @@ class Signup extends Component {
   }
 
   handleUserNameChange = (userName) => {
-    this.setState({ userName }, throttle(() => {
-        console.log('firing debounce')
-        this.checkUserName()
-    }, 1000))
+    this.setState({ userName }, this.checkUserName)
   }
 
   handlePasswordChange = (password) => {
@@ -58,9 +55,12 @@ class Signup extends Component {
       username: this.state.userName,
       password: this.state.password
     }).then(res => {
-      // signup was good.
-      // set token via redux
-      // redirect to feed
+      console.log(res)
+      this.props.dispatch(loginSuccess(res.data.token)).then(res => {
+        return this.props.history.push('/feed')
+      }).catch(err => {
+        logRequestError(err)
+      })
     }).catch(err => {
       logRequestError(err)
     })
@@ -117,4 +117,10 @@ class Signup extends Component {
   }
 }
 
-export default Signup
+function mapStateToProps(store) {
+  return {
+    auth: store.auth
+  }
+}
+
+export default connect(mapStateToProps)(Signup);
