@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const paths = require('./paths');
 
+console.log('dot env 1', paths.dotenv)
 // Make sure that including paths.js after env.js will read .env variables.
 delete require.cache[require.resolve('./paths')];
 
@@ -15,9 +16,11 @@ if (!NODE_ENV) {
 }
 
 // https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use
+
 var dotenvFiles = [
   `${paths.dotenv}.${NODE_ENV}.local`,
   `${paths.dotenv}.${NODE_ENV}`,
+  `${paths.dotenv}.config`,
   // Don't include `.env.local` for `test` environment
   // since normally you expect tests to produce the same
   // results for everyone
@@ -31,7 +34,9 @@ var dotenvFiles = [
 // https://github.com/motdotla/dotenv
 // https://github.com/motdotla/dotenv-expand
 dotenvFiles.forEach(dotenvFile => {
+  console.log(dotenvFile)
   if (fs.existsSync(dotenvFile)) {
+    console.log('exists')
     require('dotenv-expand')(
       require('dotenv').config({
         path: dotenvFile,
@@ -59,12 +64,15 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
 // Grab NODE_ENV and REACT_APP_* environment variables and prepare them to be
 // injected into the application via DefinePlugin in Webpack configuration.
 const REACT_APP = /^REACT_APP_/i;
+const DEVPLEDGE = /^DEVPLEDGE_/i;
 
 function getClientEnvironment(publicUrl) {
+  console.log('pre-process.env', process.env)
   const raw = Object.keys(process.env)
-    .filter(key => REACT_APP.test(key))
+    .filter(key => REACT_APP.test(key) || DEVPLEDGE.test(key))
     .reduce(
       (env, key) => {
+        console.log('here is a key', key)
         env[key] = process.env[key];
         return env;
       },
@@ -72,6 +80,8 @@ function getClientEnvironment(publicUrl) {
         // Useful for determining whether we’re running in production mode.
         // Most importantly, it switches React into the correct mode.
         NODE_ENV: process.env.NODE_ENV || 'development',
+        APP_CONFIG_ENV: {},
+        SENTRY_DSN: '',
         // Useful for resolving the correct path to static assets in `public`.
         // For example, <img src={process.env.PUBLIC_URL + '/img/logo.png'} />.
         // This should only be used as an escape hatch. Normally you would put

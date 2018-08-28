@@ -1,11 +1,14 @@
 import React from 'react';
+import Promise from 'bluebird'
+import { VelocityTransitionGroup } from 'velocity-react';
+import SockJS from 'sockjs-client'
+
 import shouldFetchFeed from '../../actions/feed';
 import { authUnlocked } from '../../actions/auth'
 import { connect } from 'react-redux'
 import FeedList from '../../components/FeedList';
 import CreateProblem from '../../components/Problem/createProblem'
-import Promise from 'bluebird'
-import { VelocityTransitionGroup } from 'velocity-react';
+
 
 class Feed extends React.Component {
 
@@ -23,7 +26,28 @@ class Feed extends React.Component {
         this.props.dispatch(authUnlocked())
       ]).then(() => {
         this.props.dispatch(shouldFetchFeed())
+        this.connectToFeed()
       })
+  }
+
+  connectToFeed () {
+   var sock = new SockJS('http://dev.feed.devpledge.com:9501');
+   sock.onopen = function() {
+     console.log('open');
+     sock.send({
+       origin: 'ui',
+       user_id: ''
+     });
+   };
+
+   sock.onmessage = function(e) {
+     console.log('message', e.data);
+     sock.close();
+   };
+
+   sock.onclose = function() {
+    console.log('close');
+   };
   }
 
   showCreate = () => {
@@ -35,11 +59,11 @@ class Feed extends React.Component {
   }
 
   showHideCreate = () => {
-    if (this.state.showCreate) {
-      return <div className="box is-light">
+    if (this.state.showCreate) return (
+      <div className="box is-light">
         <CreateProblem />
       </div>
-    }
+    )
   }
 
   feedList () {

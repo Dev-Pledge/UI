@@ -10,8 +10,11 @@ import { Provider } from 'react-redux'
 // import { unregister } from './registerServiceWorker';
 
 console.log('here is the environment', process.env.NODE_ENV)
+console.log('here is the environment', process)
 Raven.config(appConfig.ravenDSN).install()
 const store = configureStore()
+
+console.log('here is the process', process)
 
 ReactDOM.render(
   <Provider store={store}><App /></Provider>,
