@@ -12,14 +12,17 @@ export const logRequestError = (err, reference, config = {}) => {
       level: 'info',
       extra: Object.assign({}, { response: err.response, reference }, extraContext)
     });
+    console.log(Object.assign({}, { response: err.response, reference }, extraContext))
   } else if (err.request) {
     Raven.captureMessage(reference + '_5xx', {
       level: 'warning',
       extra: Object.assign({}, { response: err.response, reference }, extraContext)
     });
+    console.log(Object.assign({}, { response: err.response, reference }, extraContext))
   } else {
     // Something happened in setting up the request that triggered an Error
     Raven.captureException(err,  Object.assign({}, { message: err.message, reference }, extraContext));
+    console.log(Object.assign({}, { response: err.message, reference }, extraContext))
   }
   // for dev only todo remove soon
   console.log('config', err.config)

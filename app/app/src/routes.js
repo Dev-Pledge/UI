@@ -1,5 +1,5 @@
 import App from './App';
-import { Home, Feed, Login, Logout } from './containers';
+import { Home, Feed, Login, Logout, Signup } from './containers';
 
 export default {
   component: App,
@@ -27,6 +27,11 @@ export default {
       path: '/logout',
       exact: true,
       component: Logout // Add your route here
+    },
+    {
+      path: '/signup',
+      exact: true,
+      component: Signup // Add your route here
     }
   ]
 };
