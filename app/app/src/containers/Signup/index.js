@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Raven from 'raven-js'
+import throttle from 'lodash/throttle'
 
 import { logRequestError } from '../../api/utils'
 import { checkUserNameAvailable, submitSignup } from '../../api/signup'
@@ -11,7 +12,8 @@ class Signup extends Component {
     this.state = {
       email: '',
       userName: '',
-      password: ''
+      password: '',
+      userNameAvailable: true
     }
   }
 
@@ -27,31 +29,27 @@ class Signup extends Component {
   }
 
   checkUserName () {
+    console.log('we are calling')
     checkUserNameAvailable({
       username: this.state.userName
     }).then(res => {
       this.setState({
-        userNameValid: true
+        userNameAvailable: res.data.available
       })
-      console.log(res)
     }).catch(err => {
       logRequestError(err)
-      this.setState({
-        userNameValid: false
-      })
     })
   }
 
-  handleUserNameChange = (val) => {
-    this.setState({
-      userName: val
-    }, this.checkUserName)
+  handleUserNameChange = (userName) => {
+    this.setState({ userName }, throttle(() => {
+        console.log('firing debounce')
+        this.checkUserName()
+    }, 1000))
   }
 
-  handlePasswordChange = (val) => {
-    this.setState({
-      password: val
-    })
+  handlePasswordChange = (password) => {
+    this.setState({ password })
   }
 
   handleSubmit = () =>  {
@@ -60,10 +58,18 @@ class Signup extends Component {
       username: this.state.userName,
       password: this.state.password
     }).then(res => {
-      console.log(res)
+      // signup was good.
+      // set token via redux
+      // redirect to feed
     }).catch(err => {
       logRequestError(err)
     })
+  }
+
+  renderIsUserNameAvailable () {
+    if (! this.state.userNameAvailable) return (
+      <div>User name is not available</div>
+    )
   }
 
   render () {
@@ -87,7 +93,9 @@ class Signup extends Component {
               value={this.state.userName}
               onChange={e => this.handleUserNameChange(e.target.value)}
             />
+            {this.renderIsUserNameAvailable()}
           </div>
+
           <div className="col">
             <input
               type="password"
