@@ -131,6 +131,9 @@ body {
   .text-danger {
     color: $color-danger;
   }
+  .text-warning {
+    color: $color-warning;
+  }
 }
 
 @include media-breakpoint-up(lg) {
