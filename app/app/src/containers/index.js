@@ -3,5 +3,6 @@ import Feed from './Feed';
 import Login from './Login';
 import Logout from './Logout';
 import Signup from './Signup';
+import CreateProblem from './CreateProblem'
 
-export { Home, Feed, Login, Logout, Signup };
+export { Home, Feed, Login, Logout, Signup, CreateProblem };

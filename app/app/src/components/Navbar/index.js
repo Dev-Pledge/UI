@@ -19,7 +19,7 @@ class Navbar extends React.Component {
     return (
       <span>
         <Link to="/login">Login</Link>&nbsp;
-        <NavLink activeClassName="active" exact to="/signup">Signup</NavLink>
+        <NavLink exact to="/signup">Signup</NavLink>
       </span>
     )
   }
@@ -44,7 +44,7 @@ class Navbar extends React.Component {
                     <Link to="/">Explore</Link>
                   </li>
                   <li>
-                    <Link to="/feed">Present a problem</Link>
+                    <Link to="/create-problem">Present a problem</Link>
                   </li>
                 </ul>
               </div>

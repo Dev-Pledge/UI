@@ -52,7 +52,8 @@ class Signup extends Component {
     this.setState({ password })
   }
 
-  handleSubmit = () =>  {
+  handleSubmit = e =>  {
+    e.preventDefault()
     submitSignup({
       email: this.state.email,
       username: this.state.userName,

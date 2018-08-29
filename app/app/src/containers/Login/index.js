@@ -18,40 +18,37 @@ class Login extends React.Component {
     // if is logged in redirect to home
   }
 
-  handleEmailChange = (event) => {
-    this.setState({email: event.target.value});
+  handleEmailChange = email => {
+    this.setState({email});
   }
 
-  handlePassChange = (event) => {
-    this.setState({password: event.target.value});
+  handlePassChange = password => {
+    this.setState({password});
   }
 
   attemptLoginHandler = (e) => {
     e.preventDefault()
-    this.setState({
-      error: ''
-    })
-    // todo soft validation
+    this.setState({error: ''})
     this.props.dispatch(attemptLogin(this.state.email, this.state.password))
       .then(res => {
-        // we had success
         this.setState({
           email: '',
           password: ''
         })
         return this.props.history.push('/feed')
       })
-      .catch(res => {
-        // we failed login.
-        this.setState({
-          error: 'login failed - try again arse'
-        })
+      .catch(err => {
+        let error = 'login failed'
+        try {
+          error = err.response.data.error
+        } catch(e) {}
+        this.setState({error})
       })
-  };
+  }
 
   renderError = () => {
     if (this.state.error) {
-      return <div className="text-danger has-text-center">{this.state.error}</div>
+      return <p className="text-danger has-text-center">{this.state.error}</p>
     }
   };
 
@@ -60,21 +57,22 @@ class Login extends React.Component {
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-6 offset-md-3">
-            <p>Just hit login for now.  You will be logged in as Big Bill</p>
             <form className="dp-form">
+              <p>Your username</p>
               <input
                 className="dp-input"
                 type="text"
-                placeholder="email address"
+                placeholder="username"
                 value={this.state.email}
-                onChange={this.handleEmailChange}
+                onChange={e => this.handleEmailChange(e.target.value)}
               />
+              <p>Your password</p>
               <input
                 className="dp-input"
                 type="password"
                 placeholder="password"
                 value={this.state.password}
-                onChange={this.handlePassChange}
+                onChange={e => this.handlePassChange(e.target.value)}
               />
               <button className="dp-button is-primary is-block" onClick={this.attemptLoginHandler}>Login</button>
               {this.renderError()}

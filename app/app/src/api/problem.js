@@ -6,7 +6,7 @@ import baseUrls from './config'
  * @param problemId
  * @returns {AxiosPromise<any>}
  */
-export const getProblem = (problemId) => {
+export const getProblem = problemId => {
     return axios.get(baseUrls.api + 'problem/' + problemId)
 }
 /**
@@ -14,7 +14,7 @@ export const getProblem = (problemId) => {
  * @param username
  * @returns {AxiosPromise<any>}
  */
-export const createProblem = (data) => {
+export const createProblem = (data = {}) => {
     return axios.post(baseUrls.api + 'problem/create/', data)
 }
 /**
@@ -24,7 +24,7 @@ export const createProblem = (data) => {
  * @param topicsArray
  * @returns {AxiosPromise<any>}
  */
-export const updateProblem = (problemId, data) => {
+export const updateProblem = (problemId, data = {}) => {
 
     return axios.patch(baseUrls.api + 'problem/' + problemId, data)
 }

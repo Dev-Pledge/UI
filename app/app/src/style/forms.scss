@@ -12,9 +12,9 @@
 
   &.is-primary {
     border: 1px solid $color-primary;
-    background: lighten($color-primary, 10%);
-    background: linear-gradient(to bottom, lighten($color-primary, 10%) 0%,lighten($color-primary, 20%) 50%,lighten($color-primary, 15%) 51%,lighten($color-primary, 5%) 100%);
-    color: white;
+    background: lighten($color-primary, 20%);
+    background: linear-gradient(to bottom, lighten($color-primary, 20%) 0%,lighten($color-primary, 25%) 50%,lighten($color-primary, 20%) 51%,lighten($color-primary, 15%) 100%);
+    color: $color-white;
   }
 
   &.is-secondary {
