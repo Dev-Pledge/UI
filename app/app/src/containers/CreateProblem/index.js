@@ -42,6 +42,7 @@ class CreateProblem extends Component {
   }
 
   handleSubmit = e =>  {
+    console.log('is this working?')
     e.preventDefault()
     postCreateProblem({
       // hidden user details
