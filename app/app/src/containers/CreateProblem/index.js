@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Raven from 'raven-js'
 import { connect } from 'react-redux'
 import {Editor, EditorState} from 'draft-js'
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 // import { FaCheck } from 'react-icons/fa'
 // import { FaTimes } from 'react-icons/fa'
 
@@ -77,7 +76,10 @@ class CreateProblem extends Component {
                 onChange={e => this.handleDescriptionChange(e.target.value)}
               />
               <p>Problem specification (using draft-js need to add buttons and style etc)</p>
-              <Editor editorState={this.state.specification} onChange={this.handleSpecificationChange} />
+              <Editor
+                editorState={this.state.specification}
+                onChange={this.handleSpecificationChange}
+              />
 
               <button
                 className="dp-button is-primary is-block"
