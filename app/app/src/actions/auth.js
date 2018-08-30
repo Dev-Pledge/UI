@@ -63,9 +63,9 @@ const setAuth = (data) => {
  * Returns promise to run before other network requests
  * @returns {function(*=, *)}
  */
-export const authUnlocked = () => {
+export const authUnlocked = (authOnly = false) => {
   return (dispatch, getState) =>
-    new Promise(resolve => {
+    new Promise((resolve, reject) => {
       const { auth } = getState()
       // if redux thinks they are logged in continue
       if (auth.readyStatus === 'AUTH_AUTHORISED') {
@@ -79,6 +79,9 @@ export const authUnlocked = () => {
         setAuth({
           type: 'AUTH_UNAUTHORISED'
         });
+        if (authOnly) {
+          return reject()
+        }
         return resolve()
       }
       // set default auth on all network requests
@@ -94,6 +97,9 @@ export const authUnlocked = () => {
         setAuth({
           type: 'AUTH_UNAUTHORISED'
         });
+        if (authOnly) {
+          return reject()
+        }
         return resolve()
       })
     })

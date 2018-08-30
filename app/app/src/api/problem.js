@@ -15,7 +15,7 @@ export const getProblem = problemId => {
  * @returns {AxiosPromise<any>}
  */
 export const createProblem = (data = {}) => {
-    return axios.post(baseUrls.api + 'problem/create/', data)
+    return axios.post(baseUrls.api + 'problem/create', data)
 }
 /**
  *
