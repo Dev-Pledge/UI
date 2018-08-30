@@ -33,17 +33,18 @@ class Feed extends React.Component {
 
         // const client = Stomp.overWS('ws://dev.feed.devpledge.com:9501');
 
-        const client = new WebSocket('ws://dev.feed.devpledge.com:9501')
+        const client = new WebSocket('ws://dev.feed.devpledge.com:9501');
         client.onopen = () => {
-            client.send(JSON.stringify({user_id: 'usr-test'}));
+            client.send(JSON.stringify({user_id: 'usr-0152f926-496a-4e99-85ec-2f725d3798e5', function: 'get-feed'}));
         }
         client.onmessage = msg => {
             console.log('message is here', msg)
         }
         let self = this;
         setInterval(function () {
-            let t = client.send(JSON.stringify({user_id: (self.props.userId || null)}))
-        }, 15000);
+            let t = client.send(JSON.stringify({
+            }))
+        }, 2000);
 
         // const client = Stomp.overTCP('http://dev.feed.devpledge.com', 9501);
 
