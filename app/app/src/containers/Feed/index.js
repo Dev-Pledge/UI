@@ -1,10 +1,10 @@
 import React from 'react';
 import Promise from 'bluebird'
-import { VelocityTransitionGroup } from 'velocity-react';
-import { connect } from 'react-redux'
+import {VelocityTransitionGroup} from 'velocity-react';
+import {connect} from 'react-redux'
 
 import shouldFetchFeed from '../../actions/feed';
-import { authUnlocked } from '../../actions/auth'
+import {authUnlocked} from '../../actions/auth'
 import FeedList from '../../components/FeedList';
 import CreateProblem from '../../components/Problem/createProblem'
 
@@ -19,7 +19,7 @@ class Feed extends React.Component {
         }
     }
 
-    componentDidMount () {
+    componentDidMount() {
         Promise.all([
             // pre actions
             this.props.dispatch(authUnlocked())
@@ -30,61 +30,18 @@ class Feed extends React.Component {
     }
 
     connectToFeed() {
-<<<<<<< HEAD
-
-        // const client = Stomp.overWS('ws://dev.feed.devpledge.com:9501');
-
-        const client = new WebSocket('ws://dev.feed.devpledge.com:9501');
-        client.onopen = () => {
-            client.send(JSON.stringify({user_id: 'usr-0152f926-496a-4e99-85ec-2f725d3798e5', function: 'get-feed'}));
-=======
         const client = new WebSocket('ws://dev.feed.devpledge.com:9501')
         client.onopen = () => {
-            client.send(JSON.stringify({user_id: this.props.auth.user_id}));
->>>>>>> 2124d5f6ceba83f4a7bb8da20e9b9402cb51a494
+            client.send(JSON.stringify({user_id: this.props.auth.user_id, 'function': 'get-feed'}));
         }
         client.onmessage = msg => {
             console.log('message is here', msg)
         }
-<<<<<<< HEAD
-        let self = this;
-        setInterval(function () {
-            let t = client.send(JSON.stringify({
-            }))
-        }, 2000);
-
-        // const client = Stomp.overTCP('http://dev.feed.devpledge.com', 9501);
-
-        console.log('here is the client', client)
-
-        /*
-       var sock = new SockJS('http://dev.feed.devpledge.com:9501');
-       console.log('here is the sock', sock)
-       sock.onopen = function() {
-         console.log('open');
-         sock.send({
-           origin: 'ui',
-           user_id: ''
-         });
-       };
-
-       sock.onmessage = function(e) {
-         console.log('message', e.data);
-         sock.close();
-       };
-
-       sock.onclose = function() {
-        console.log('close');
-       };
-
-       */
-=======
-        setInterval(() =>  {
+        setInterval(() => {
             client.send(
-              JSON.stringify({user_id: this.props.auth.user_id})
+                JSON.stringify({user_id: this.props.auth.user_id})
             )
         }, 15000)
->>>>>>> 2124d5f6ceba83f4a7bb8da20e9b9402cb51a494
     }
 
     showCreate = () => {
