@@ -11,7 +11,6 @@ export const attemptLogin = (username = '', password = '') => {
       return authLogin({
         username, password
       }).then(res => {
-        console.log(res)
         return dispatch(loginSuccess(res.data.token)).then(res => {
           return resolve()
         })
@@ -35,13 +34,15 @@ export const loginSuccess = (token) => {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
       const decoded = setToken(token);
       dispatch({
-        type: 'AUTH_SUCCESS',
+        type: 'AUTH_AUTHORISED',
         payload: {
           isLoggedIn: true,
           token: token,
           ttr: decoded.ttr * 1000,
           ttl: decoded.ttl * 1000,
           perms: decoded.data.perms,
+          email: decoded.data.email,
+          user_id: decoded.data.user_id,
           username: decoded.data.username,
           name: decoded.data.name,
           decodedToken: decoded
@@ -66,7 +67,6 @@ export const authUnlocked = () => {
   return (dispatch, getState) =>
     new Promise(resolve => {
       const { auth } = getState()
-      console.log('authUnlocked test')
       // if redux thinks they are logged in continue
       if (auth.readyStatus === 'AUTH_AUTHORISED') {
         return resolve()
@@ -85,27 +85,11 @@ export const authUnlocked = () => {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
       // check if valid token
       return authPayload().then(res => {
-        console.log('here is the res', res)
-        // todo ask tom if is authorised on authPayload - please refresh token.
-        // and always return the refreshed jwt
-        // todo ask tom.  Payload is in different format.  No ttl and ttr
-        // payload instead of data.  TBH i prefer the term payload over data
-        const decoded = setToken(token);
-        dispatch({
-          type: 'AUTH_AUTHORISED',
-          payload: {
-            isLoggedIn: true,
-            token,
-            ttr: decoded.ttr * 1000,
-            ttl: decoded.ttl * 1000,
-            perms: decoded.data.perms,
-            username: decoded.data.username,
-            name: decoded.data.name,
-            decodedToken: decoded
-          }
+        return dispatch(loginSuccess(token)).then(res => {
+          return resolve()
         })
-        return resolve()
       }).catch(err => {
+        axios.defaults.headers.common['Authorization'] = '';
         logRequestError(err, 'auth-payload')
         setAuth({
           type: 'AUTH_UNAUTHORISED'

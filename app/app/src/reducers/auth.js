@@ -3,6 +3,8 @@ const initialState = () => ({
   err: null,
   isLoggedIn: false,
   username: '',
+  email: '',
+  user_id: '',
   ttr: null,
   ttl: null,
   name: '',
@@ -37,8 +39,12 @@ const feed = (state = initialState(), action) => {
         isLoggedIn: true,
         username: action.payload.username,
         name: action.payload.name,
-        ttr: action.payload.expires,
-        ttl: action.payload.token,
+        email: action.payload.email,
+        user_id: action.payload.user_id,
+        perms: action.payload.perms,
+        ttr: action.payload.ttr,
+        ttl: action.payload.ttl,
+        token: action.payload.token,
         decodedToken: action.payload.decodedToken,
         err: null
       });
