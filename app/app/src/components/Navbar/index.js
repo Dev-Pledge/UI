@@ -14,21 +14,19 @@ class Navbar extends React.Component {
 
   showLogInOut() {
     const { auth } = this.props
-    if (auth.readyStatus === 'AUTH_AUTHORISED') return <Link to="/logout">Logout</Link>
+    if (auth.readyStatus === 'AUTH_AUTHORISED') return <NavLink activeClassName="active" to="/logout">Logout</NavLink>
     if (auth.readyStatus === 'AUTH_REQUESTING') return <span>Spinner</span>
     return (
       <span>
-        <Link to="/login">Login</Link>&nbsp;
-        <NavLink exact to="/signup">Signup</NavLink>
+        <NavLink activeClassName="active" exact={true} to="/login">Login</NavLink>&nbsp;
+        <NavLink activeClassName="active" exact={true} to="/signup">Signup</NavLink>
       </span>
     )
   }
 
   renderRouteLink (route, name) {
-    /* use this to add class to active */
-    console.log('foo', this.props)
     return (
-      <Link className="" to={route}>{name}</Link>
+      <NavLink activeClassName="active" exact={true} to={route}>{name}</NavLink>
     )
   }
 
@@ -44,7 +42,7 @@ class Navbar extends React.Component {
                     <Link to="/">Explore</Link>
                   </li>
                   <li>
-                    <Link to="/create-problem">Present a problem</Link>
+                    <NavLink activeClassName="active" to="/create-problem">Present a problem</NavLink>
                   </li>
                 </ul>
               </div>
@@ -70,7 +68,7 @@ class Navbar extends React.Component {
               <div className="col-sm">
                 <ul>
                   <li>
-                    <Link className="active" to="/">Home</Link>
+                    <NavLink activeClassName="active" exact={true} to="/">Home</NavLink>
                   </li>
                   <li>
                     {this.renderRouteLink('/feed', 'Feed')}

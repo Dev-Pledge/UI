@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { FaCheck } from 'react-icons/fa'
 import { FaTimes } from 'react-icons/fa'
 
+import Navbar from '../../components/Navbar'
 import { loginSuccess } from '../../actions/auth'
 import { logRequestError } from '../../api/utils'
 import { checkUserNameAvailable, submitSignup } from '../../api/signup'
@@ -16,13 +17,21 @@ class Signup extends Component {
       email: '',
       userName: '',
       password: '',
-      userNameAvailable: true
+      userNameAvailable: true,
+      emailValidationOn: false,
+      userNameValidationOn: false
     }
   }
 
   /* example of catching raven error on component error */
   componentDidCatch(error, errorInfo) {
     Raven.captureException(error, { extra: errorInfo });
+  }
+
+  turnValidationOn (prop) {
+    this.setState({
+      [`${prop}ValidationOn`]: true
+    })
   }
 
   handleEmailChange (email) {
@@ -66,6 +75,7 @@ class Signup extends Component {
   }
 
   renderIsUserNameAvailable () {
+    if (! this.state.userNameValidationOn) return ''
     if (! this.state.userName.length) return ''
     if (! this.state.userNameAvailable && this.state.userName.length > 4) return (
       <span className="text-danger text-sm">
@@ -93,7 +103,7 @@ class Signup extends Component {
           </div>
         </div>
         <div className="row">
-          <div className="col">Contains special char (...*_%-^)</div>
+          <div className="col">Contains special char (*%!^...)</div>
           <div className="col has-text-right">{password.match(/\W+/g)
             ? <FaCheck className="text-primary" />
             : <FaTimes className="text-danger" />}
@@ -118,6 +128,7 @@ class Signup extends Component {
   }
 
   renderLooksValidEmail () {
+    if (! this.state.emailValidationOn) return ''
     if (/\S+@\S+\.\S+/.test(this.state.email)) return <FaCheck className="text-primary" />
     if (this.state.email.length) return <span className="text-sm text-warning">Your email does not look right <FaTimes className="text-danger" /></span>
   }
@@ -125,42 +136,49 @@ class Signup extends Component {
 
   render () {
     return (
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <p>Your email {this.renderLooksValidEmail()}</p>
-            <form className="dp-form">
-              <input
-                type="text"
-                className="dp-input"
-                placeholder="email"
-                value={this.state.email}
-                onChange={e => this.handleEmailChange(e.target.value)}
-              />
-              <p>Your chosen username  {this.renderIsUserNameAvailable()}</p>
-              <input
-                type="text"
-                className="dp-input"
-                placeholder="username"
-                value={this.state.userName}
-                onChange={e => this.handleUserNameChange(e.target.value)}
-              />
-              <p>Your chosen password</p>
-              <input
-                type="password"
-                className="dp-input"
-                placeholder="password"
-                value={this.state.password}
-                onChange={e => this.handlePasswordChange(e.target.value)}
-              />
-              {this.renderIsPasswordAcceptable()}
-              <button
-                className="dp-button is-primary is-block"
-                onClick={this.handleSubmit}
-              >
-                Submit
-              </button>
-            </form>
+      <div>
+        <Navbar />
+        <div className="content-wrapper">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-md-6 offset-md-3">
+                <p>Your email {this.renderLooksValidEmail()}</p>
+                <form className="dp-form">
+                  <input
+                    type="text"
+                    className="dp-input"
+                    placeholder="email"
+                    value={this.state.email}
+                    onBlur={e => this.turnValidationOn('email')}
+                    onChange={e => this.handleEmailChange(e.target.value)}
+                  />
+                  <p>Your chosen username  {this.renderIsUserNameAvailable()}</p>
+                  <input
+                    type="text"
+                    className="dp-input"
+                    placeholder="username"
+                    value={this.state.userName}
+                    onBlur={e => this.turnValidationOn('userName')}
+                    onChange={e => this.handleUserNameChange(e.target.value)}
+                  />
+                  <p>Your chosen password</p>
+                  <input
+                    type="password"
+                    className="dp-input"
+                    placeholder="password"
+                    value={this.state.password}
+                    onChange={e => this.handlePasswordChange(e.target.value)}
+                  />
+                  {this.renderIsPasswordAcceptable()}
+                  <button
+                    className="dp-button is-primary is-block"
+                    onClick={this.handleSubmit}
+                  >
+                    Submit
+                  </button>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>

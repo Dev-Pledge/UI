@@ -2,6 +2,8 @@ import React from 'react';
 import { logout } from '../../actions/auth'
 import { connect } from 'react-redux'
 
+import Navbar from '../../components/Navbar'
+
 class Logout extends React.Component {
 
   componentDidMount () {
@@ -15,10 +17,15 @@ class Logout extends React.Component {
 
   render () {
     return (
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col">
-            <p>Just logging you out and pretending it takes longer than it does</p>
+      <div>
+        <Navbar />
+        <div className="content-wrapper">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col">
+                <p>Just logging you out and pretending it takes longer than it does</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

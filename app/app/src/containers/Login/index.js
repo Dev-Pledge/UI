@@ -3,6 +3,8 @@ import React from 'react';
 import { attemptLogin } from '../../actions/auth'
 import { connect } from 'react-redux'
 
+import Navbar from '../../components/Navbar'
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -54,29 +56,34 @@ class Login extends React.Component {
 
   render () {
     return (
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <form className="dp-form">
-              <p>Your username</p>
-              <input
-                className="dp-input"
-                type="text"
-                placeholder="username"
-                value={this.state.email}
-                onChange={e => this.handleEmailChange(e.target.value)}
-              />
-              <p>Your password</p>
-              <input
-                className="dp-input"
-                type="password"
-                placeholder="password"
-                value={this.state.password}
-                onChange={e => this.handlePassChange(e.target.value)}
-              />
-              <button className="dp-button is-primary is-block" onClick={this.attemptLoginHandler}>Login</button>
-              {this.renderError()}
-            </form>
+      <div>
+        <Navbar />
+        <div className="content-wrapper">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-md-6 offset-md-3">
+                <form className="dp-form">
+                  <p>Your username</p>
+                  <input
+                    className="dp-input"
+                    type="text"
+                    placeholder="username"
+                    value={this.state.email}
+                    onChange={e => this.handleEmailChange(e.target.value)}
+                  />
+                  <p>Your password</p>
+                  <input
+                    className="dp-input"
+                    type="password"
+                    placeholder="password"
+                    value={this.state.password}
+                    onChange={e => this.handlePassChange(e.target.value)}
+                  />
+                  <button className="dp-button is-primary is-block" onClick={this.attemptLoginHandler}>Login</button>
+                  {this.renderError()}
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>

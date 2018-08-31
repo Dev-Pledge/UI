@@ -3,6 +3,7 @@ import Promise from 'bluebird'
 import {VelocityTransitionGroup} from 'velocity-react';
 import {connect} from 'react-redux'
 
+import Navbar from '../../components/Navbar'
 import shouldFetchFeed from '../../actions/feed';
 import {authUnlocked} from '../../actions/auth'
 import FeedList from '../../components/FeedList';
@@ -71,33 +72,46 @@ class Feed extends React.Component {
         return <p>No feed to show - show something else. Give error if applicable</p>
     }
 
-    render() {
-        return (
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col col-sm-2">
-                        panel 1
-                    </div>
-                    <div className="col-sm">
-                        <div>
-                            <button className="dp-button is-primary is-inline"
-                                    onClick={this.showCreate}>{this.state.createButtonText}</button>
-                            <button className="dp-button is-secondary is-inline">What are you working on now?</button>
-                            <VelocityTransitionGroup
-                                enter={{animation: 'slideDown'}}
-                                leave={{animation: 'slideUp'}}
-                            >
-                                {this.showHideCreate()}
-                            </VelocityTransitionGroup>
-                        </div>
-                        {this.feedList()}
-                    </div>
-                    <div className="col col-sm-2">
-                        panel 2
-                    </div>
+  render() {
+    return (
+      <div>
+        <Navbar />
+        <div className="content-wrapper">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col col-sm-2">
+                panel 1
+              </div>
+              <div className="col-sm">
+                <div>
+                  <button
+                    className="dp-button is-primary is-inline"
+                    onClick={this.showCreate}
+                  >
+                    {this.state.createButtonText}
+                  </button>
+                  <button
+                    className="dp-button is-secondary is-inline"
+                  >
+                    What are you working on now?
+                  </button>
+                  <VelocityTransitionGroup
+                    enter={{animation: 'slideDown'}}
+                    leave={{animation: 'slideUp'}}
+                  >
+                    {this.showHideCreate()}
+                  </VelocityTransitionGroup>
                 </div>
+              {this.feedList()}
+              </div>
+                <div className="col col-sm-2">
+                  panel 2
+                </div>
+              </div>
             </div>
-        );
+          </div>
+        </div>
+      )
     }
 }
 
