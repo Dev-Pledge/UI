@@ -10,7 +10,7 @@ const TopicsList = (props) => {
   if (props.topics.length) return (
     <div className="tags">
       {props.topics.map(topic => (
-        <span key={topic.topic_id} className="tag">
+        <span key={topic} className="tag">
           {topic}
         </span>
       ))}
