@@ -74,7 +74,7 @@ class Navbar extends React.Component {
                     {this.renderRouteLink('/feed', 'Feed')}
                   </li>
                   <li>
-                    {this.renderRouteLink('/', 'Foo')}
+                    {this.renderRouteLink('/preferences', 'Preferences')}
                   </li>
                   <li>
                     {this.renderRouteLink('/feed', 'Bar')}

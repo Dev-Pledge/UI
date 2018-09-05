@@ -1,5 +1,5 @@
 import App from './App';
-import { Home, Feed, Login, Logout, Signup, CreateProblem } from './containers';
+import { Home, Feed, Login, Logout, Signup, CreateProblem, Preferences } from './containers';
 
 export default {
   component: App,
@@ -37,6 +37,11 @@ export default {
       path: '/create-problem',
       exact: true,
       component: CreateProblem // Add your route here
+    },
+    {
+      path: '/preferences',
+      exact: true,
+      component: Preferences // Add your route here
     }
   ]
 };
