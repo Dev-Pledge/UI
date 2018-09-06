@@ -19,12 +19,20 @@ class FeedItemProblem extends React.Component {
     return (
       <li>
         <div className="inner-header is-light">
-          <span className="title">Problem type</span>
+          <span className="title">Problem: {this.props.data.title}</span>
         </div>
         <div className="inner">
-          <p>{this.props.data.title} - {this.props.data.created}</p>
-          <p>{this.props.data.description}</p>
-          <div><PledgeList pledges={this.props.data.latest_pledges} /></div>
+          <div className="row">
+            <div className="col col-8">
+              <p>{this.props.data.description}</p>
+            </div>
+            <div className="col col-4">
+              <PledgeList pledges={this.props.data.latest_pledges} />
+            </div>
+
+          </div>
+
+          <div></div>
           <div><SolutionsList solutions={this.props.data.solutions} /></div>
           <div><TopicList topics={this.props.data.topics} /></div>
         </div>
