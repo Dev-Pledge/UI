@@ -25,6 +25,5 @@ export const createProblem = (data = {}) => {
  * @returns {AxiosPromise<any>}
  */
 export const updateProblem = (problemId, data = {}) => {
-
     return axios.patch(baseUrls.api + 'problem/' + problemId, data)
 }
