@@ -25,7 +25,7 @@ class Feed extends React.Component {
       feedData: []
     }
 
-    this.maxFeedItems = 3  // low for testing.
+    this.maxFeedItems = 10  // low for testing.
     this.clientUrl = 'ws://dev.feed.devpledge.com:9501'
     this.client = null
     this.defaultClientRefresh = 45000
@@ -52,31 +52,34 @@ class Feed extends React.Component {
     const initialEntities = [...this.state.feedData]  // make copy as not to mutate state
     // filter the old intialEntries and remove any ids which exist in the new array
 
+    // first we need to remove any duplicates from the newEntries... ouch
+    const newEntriesFiltered = newEntries.filter((ent, index, self) => {
+      const entKey = `${ent.entity.type}_id`
+      return self.findIndex(t => t.entity.data[entKey] === ent.entity.data[entKey]) === index
+    })
 
-    // todo if is parent_entity - similar check
-    // parent_id need to grab the parent from fetch
-    // post comment/problem_id POST BODY comment="my comment"
-
+    // now filter again, removing any old entries that have been updated
     const filteredOld = initialEntities.filter(iE =>
-      newEntries.some(nE => {
+      newEntriesFiltered.some(nE => {
         const ieKey = `${iE.entity.type}_id`
         const neKey = `${nE.entity.type}_id`
         return iE.entity.data[ieKey] !== nE.entity.data[neKey]
       })
     )
-    return filteredOld.concat(newEntries)  // concat the new items to the end of the list
+
+    return filteredOld.concat(newEntriesFiltered)  // concat the new items to the end of the list
   }
 
   onClientMessage = msg => {
     const data = JSON.parse(msg.data)
-    // console.log('message is here', msg, msg.data, data)
+    console.log('message is here', msg, data)
     if (data && data.hasOwnProperty('entities')) {  // opens with connection object
       this.setState({
         feed: this.state.feed.concat(data.entities)
       }, () => {
         // console.log(data, this.state.feed)
         getForFeed({entities: this.state.feed}).then(res => {
-          // console.log('here is the res in get for feed!!!!!!!', res)
+          console.log('here is the res in get for feed!!!!!!!', res)
           this.setState({
             feedData: this.sortFilterResult(res.data.entities)
           })
@@ -100,14 +103,14 @@ class Feed extends React.Component {
     }, this.defaultClientRefresh)
   }
 
-  mockPush () {
+  mockPush = () => {
     // return true
     if (this.state.feed.length) {
       const randomNumberInsideLengthOfArray = Math.floor(Math.random() * this.state.feed.length)
       const randomFeed = this.state.feed[randomNumberInsideLengthOfArray]
       console.log('here is a fandomFeed', randomFeed)
       const randomId = randomFeed.id
-      // this.testPushNew(randomId)
+      this.testPushNew(randomId)
       /*
       // test push(this.state.feed[randomNumberInsideLenghOfArray]].entity.data.problem_id)
       getForFeed({entities: [this.state.feed[randomNumberInsideLenghOfArray]]}).then(res => {
@@ -129,7 +132,7 @@ class Feed extends React.Component {
 
   mockPushTimer () {
     setInterval(() => {
-      this.mockPush()
+      // this.mockPush()
     }, 10000)
   }
 
@@ -188,6 +191,7 @@ class Feed extends React.Component {
             <div className="row">
               <div className="col col-sm-2">
                 panel 1
+                <button className="btn" onClick={this.mockPush}>Add a random comment</button>
               </div>
               <div className="col-sm">
                 <div className="feed-list">

@@ -64,7 +64,7 @@ class FeedItemProblem extends React.Component {
         <div className="inner-header is-light">
           <div className="row">
             <div className="col col-8">
-              <span className="title">Problem: {this.props.data.title}</span>
+              <span className="title">Problem: {this.props.data.title} <span className="text-xs text-muted">{this.props.data.problem_id}</span></span>
             </div>
             <div className="col col-4 has-text-right">
               Worth: £{this.props.data.pledges_value}
