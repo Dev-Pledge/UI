@@ -67,18 +67,20 @@ class Feed extends React.Component {
       })
     )
 
-    return filteredOld.concat(newEntriesFiltered)  // concat the new items to the end of the list
+    const newFiltered = filteredOld.concat(newEntriesFiltered)  // concat the new items to the end of the list
+    console.log(initialEntities, newEntriesFiltered, filteredOld, newFiltered)
+    return newFiltered
   }
 
   onClientMessage = msg => {
     const data = JSON.parse(msg.data)
-    console.log('message is here', msg, data)
+    console.log('RECEIVING UPDATE - message is here', msg, data)
     if (data && data.hasOwnProperty('entities')) {  // opens with connection object
       this.setState({
         feed: this.state.feed.concat(data.entities)
       }, () => {
         // console.log(data, this.state.feed)
-        getForFeed({entities: this.state.feed}).then(res => {
+        getForFeed(data).then(res => {
           console.log('here is the res in get for feed!!!!!!!', res)
           this.setState({
             feedData: this.sortFilterResult(res.data.entities)
