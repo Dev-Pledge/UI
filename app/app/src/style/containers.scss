@@ -76,17 +76,19 @@ section {
 }
 
 .absolute-feed-alert {
-  position: absolute;
+  position: fixed;
   bottom: 0;
-  height: 50px;
+  height: 30px;
   left: 0;
-  border: 1px solid $color-primary;
-  padding: 1rem;
+  color: white;
+  background: $color-primary;
+  opacity: 0.6;
+  padding: 0.25rem;
 }
 
 .feed-list {
   overflow: auto;
-  max-height: 80vh;
+  max-height: 75vh;
   ul {
     padding: 0;
     list-style: none;

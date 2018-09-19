@@ -2,7 +2,6 @@ import React from 'react';
 import Promise from 'bluebird'
 import {VelocityTransitionGroup} from 'velocity-react'
 import {connect} from 'react-redux'
-import axios from 'axios'
 
 import Navbar from '../../components/Navbar'
 import shouldFetchFeed from '../../actions/feed'
@@ -27,7 +26,7 @@ class Feed extends React.Component {
       feedData: []
     }
 
-    this.maxFeedItems = 5  // low for testing.
+    this.maxFeedItems = 100  // high for now.
     this.clientUrl = 'ws://dev.feed.devpledge.com:9501'
     this.client = null
     this.defaultClientRefresh = 45000
@@ -68,9 +67,10 @@ class Feed extends React.Component {
         return iE.entity.data[ieKey] !== nE.entity.data[neKey]
       })
     )
-
     const newFiltered = filteredOld.concat(newEntriesFiltered)  // concat the new items to the end of the list
-    console.log(initialEntities, newEntriesFiltered, filteredOld, newFiltered)
+    setTimeout(() => {
+      this.setState({ newFeedData: null })  // reset flash
+    }, 5000)
     return newFiltered
   }
 
@@ -81,18 +81,15 @@ class Feed extends React.Component {
       this.setState({
         feed: this.state.feed.concat(data.entities)
       }, () => {
-        getForFeed(data).then(res => {
-          console.log('GET FOR FEED: response', res)
-          this.setState({
-            newFeedData: 'New feed data',
-            feedData: this.sortFilterResult(res.data.entities)
-          })
-          setTimeout(() => {
+        data.entities.forEach(item => {
+          const entId = item.parent_id ? item.parent_id : item.id
+          getForFeed({entities: [{id: entId}]}).then(res => {
             this.setState({
-              newFeedData: null
+              newFeedData: 'New feed data: ' + item.id,  // set the flash message
+              feedData: this.sortFilterResult(res.data.entities)
             })
-          }, 3000)
-        }).catch(err => logRequestError(err))
+          }).catch(err => logRequestError(err))
+        })
       })
     }
   }
@@ -136,15 +133,13 @@ class Feed extends React.Component {
       console.log('here is a fandomFeed', randomFeed)
       const randomId = randomFeed.id
       this.testPushNew(randomId)
-      /*
-      // test push(this.state.feed[randomNumberInsideLenghOfArray]].entity.data.problem_id)
-      getForFeed({entities: [this.state.feed[randomNumberInsideLenghOfArray]]}).then(res => {
-        this.setState({
-          feedData: this.sortFilterResult(res.data.entities)
-        })
-      }).catch(err => logRequestError(err))
-      */
     }
+  }
+
+  renderFeedStats () {
+    return (
+      <div>the feed has {this.state.feedData.length} items</div>
+    )
   }
 
   testPushNew (id) {
@@ -175,7 +170,7 @@ class Feed extends React.Component {
       <FeedItemProblem
         key={`${data[idPropName]}`}
         data={data}
-        parent_entity={parent_entity}
+        child_entity={parent_entity}
       />
     )
   }
@@ -187,19 +182,17 @@ class Feed extends React.Component {
     // as user scrolls min and max values will be updated
     const lastMaxFeedItems = this.state.feedData.slice(0).slice(-this.maxFeedItems)
 
-    console.log(lastMaxFeedItems.length)
-
     // possible try catch this instead of multiple checks.
     return lastMaxFeedItems.map(item => {
       // console.log('here is the item', item)
       try {
-        const { entity } = item
+        const { entity } = item.parent_entity ? item.parent_entity : item
         const type = entity.type
         const renderFnName = `renderFeedType_${type}`
-        if (this[renderFnName] && this[renderFnName].constructor === Function) {
+        if (this[renderFnName] && typeof this[renderFnName] !== 'undefined') {
           return this[renderFnName](item)
         }
-        new Error(`type does not exist or cannot find function for ${type}`)
+        throw new Error(`type does not exist or cannot find function for ${type}`)
       } catch (e) {
         console.log(e)  // replace with log
         return this.renderFeedType_fail()
@@ -230,12 +223,13 @@ class Feed extends React.Component {
                 <div className="feed-list">
                   <ul>
                     {this.renderFeed()}
+                    {this.renderNewItemAlert()}
                   </ul>
                 </div>
               </div>
               <div className="col col-sm-2">
                 panel 2
-                {this.renderNewItemAlert()}
+                {this.renderFeedStats()}
               </div>
             </div>
           </div>
