@@ -11,6 +11,7 @@ export const attemptLogin = (username = '', password = '') => {
       return authLogin({
         username, password
       }).then(res => {
+        console.log('this is the login res', res)
         return dispatch(loginSuccess(res.data.token)).then(res => {
           return resolve()
         })

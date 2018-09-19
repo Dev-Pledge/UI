@@ -2,12 +2,14 @@ import React from 'react';
 import Promise from 'bluebird'
 import {VelocityTransitionGroup} from 'velocity-react'
 import {connect} from 'react-redux'
+import axios from 'axios'
 
 import Navbar from '../../components/Navbar'
 import shouldFetchFeed from '../../actions/feed'
 import { authUnlocked } from '../../actions/auth'
 import { getForFeed } from '../../api/feed'
 import { postComment } from '../../api/comment'
+import { createProblem } from '../../api/problem'
 import { logRequestError } from '../../api/utils'
 import FeedList from '../../components/FeedList';
 import CreateProblem from '../../components/Problem/createProblem'
@@ -25,7 +27,7 @@ class Feed extends React.Component {
       feedData: []
     }
 
-    this.maxFeedItems = 10  // low for testing.
+    this.maxFeedItems = 5  // low for testing.
     this.clientUrl = 'ws://dev.feed.devpledge.com:9501'
     this.client = null
     this.defaultClientRefresh = 45000
@@ -74,17 +76,22 @@ class Feed extends React.Component {
 
   onClientMessage = msg => {
     const data = JSON.parse(msg.data)
-    console.log('RECEIVING UPDATE - message is here', msg, data)
+    console.log('RECEIVING UPDATE: onClient Message', msg, data)
     if (data && data.hasOwnProperty('entities')) {  // opens with connection object
       this.setState({
         feed: this.state.feed.concat(data.entities)
       }, () => {
-        // console.log(data, this.state.feed)
         getForFeed(data).then(res => {
-          console.log('here is the res in get for feed!!!!!!!', res)
+          console.log('GET FOR FEED: response', res)
           this.setState({
+            newFeedData: 'New feed data',
             feedData: this.sortFilterResult(res.data.entities)
           })
+          setTimeout(() => {
+            this.setState({
+              newFeedData: null
+            })
+          }, 3000)
         }).catch(err => logRequestError(err))
       })
     }
@@ -103,6 +110,22 @@ class Feed extends React.Component {
         user_id: this.props.auth.user_id
       }))
     }, this.defaultClientRefresh)
+  }
+
+  mockPushCreateProblem () {
+    fetch('http://quotesondesign.com/wp-json/posts?filter[orderby]=rand')
+      .then(res => res.json())
+      .then(res => {
+        createProblem({
+          title: res[0].title,
+          description: res[0].content,
+          specification: res[0].link,
+          topics: ['PHP', 'JS']
+        }).then(res => {
+          console.log('CREATED MOCK PROBLEM', res)
+        }).catch(err => logRequestError(err))
+      }).catch(err => logRequestError(err))
+    // postCreateProblem()
   }
 
   mockPush = () => {
@@ -184,6 +207,14 @@ class Feed extends React.Component {
     })
   }
 
+  renderNewItemAlert () {
+    if (this.state.newFeedData) return (
+      <div className="absolute-feed-alert">
+        {this.state.newFeedData}
+      </div>
+    )
+  }
+
   render() {
     return (
       <div>
@@ -192,8 +223,8 @@ class Feed extends React.Component {
           <div className="container-fluid">
             <div className="row">
               <div className="col col-sm-2">
-                panel 1
-                <button className="btn" onClick={this.mockPush}>Add a random comment</button>
+                <button className="dp-button is-tertiary margin-bottom-15" onClick={this.mockPush}>Add random comment</button>
+                <button className="dp-button is-tertiary margin-bottom-15" onClick={this.mockPushCreateProblem}>make problem</button>
               </div>
               <div className="col-sm">
                 <div className="feed-list">
@@ -204,6 +235,7 @@ class Feed extends React.Component {
               </div>
               <div className="col col-sm-2">
                 panel 2
+                {this.renderNewItemAlert()}
               </div>
             </div>
           </div>
