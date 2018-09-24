@@ -25,6 +25,7 @@ services:
     volumes:
       - ./app/app/build:/var/www/html/build:cached
       - ./api:/var/www/html/api:cached
+      - ./vendor:/var/www/html/vendor:cached
     expose:
       - 80
     networks:
