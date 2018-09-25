@@ -8,15 +8,15 @@ $path   = $_SERVER['PATH_INFO'];
 session_start();
 @header( 'Content-Type: application/json;charset=utf-8' );
 
-$cache              = new \DevPledge\Cache();
 $sessionOriginToken = 0;
 if ( ( $method == 'POST' && $path == '/startSession' ) ) {
+	$cache              = new \DevPledge\Cache();
 	$sessionOriginToken = $_SESSION['origin_session_token'] = $cache->getOriginToken();
 } else {
 	if ( isset( $_SESSION['origin_session_token'] ) ) {
 		$sessionOriginToken = $_SESSION['origin_session_token'];
 	} else {
-		echo json_encode( [ 'error' => 'no ui api session detected!', 'end point' => 'POST /startSession' ] );
+		echo json_encode( [ 'error' => 'no ui api session detected!', 'end_point' => 'POST /startSession' ] );
 		die;
 	}
 }
