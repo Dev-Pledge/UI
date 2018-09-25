@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Raven from 'raven-js'
 import { connect } from 'react-redux'
-import { Editor, EditorState } from 'draft-js'
+import { Editor, EditorState, convertToRaw } from 'draft-js'
 // import { FaCheck } from 'react-icons/fa'
 // import { FaTimes } from 'react-icons/fa'
 

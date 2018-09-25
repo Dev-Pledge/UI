@@ -4,6 +4,7 @@ import Login from './Login';
 import Logout from './Logout';
 import Signup from './Signup';
 import CreateProblem from './CreateProblem'
+import Problem from './Problem'
 import Preferences from './Preferences'
 
-export { Home, Feed, Login, Logout, Signup, CreateProblem, Preferences };
+export { Home, Feed, Login, Logout, Signup, Problem, CreateProblem, Preferences };

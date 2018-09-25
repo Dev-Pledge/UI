@@ -84,6 +84,7 @@ class Feed extends React.Component {
         data.entities.forEach(item => {
           const entId = item.parent_id ? item.parent_id : item.id
           getForFeed({entities: [{id: entId}]}).then(res => {
+            console.log('ponce', entId, res.data.entities)
             this.setState({
               newFeedData: 'New feed data: ' + item.id,  // set the flash message
               feedData: this.sortFilterResult(res.data.entities)
@@ -128,6 +129,7 @@ class Feed extends React.Component {
   mockPush = () => {
     // return true
     if (this.state.feed.length) {
+      // todo only problems please
       const randomNumberInsideLengthOfArray = Math.floor(Math.random() * this.state.feed.length)
       const randomFeed = this.state.feed[randomNumberInsideLengthOfArray]
       console.log('here is a fandomFeed', randomFeed)
@@ -184,7 +186,6 @@ class Feed extends React.Component {
 
     // possible try catch this instead of multiple checks.
     return lastMaxFeedItems.map(item => {
-      // console.log('here is the item', item)
       try {
         const { entity } = item.parent_entity ? item.parent_entity : item
         const type = entity.type

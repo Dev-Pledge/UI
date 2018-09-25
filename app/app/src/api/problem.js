@@ -6,7 +6,7 @@ import baseUrls from './config'
  * @param problemId
  * @returns {AxiosPromise<any>}
  */
-export const getProblem = problemId => {
+export const fetchProblem = problemId => {
     return axios.get(baseUrls.api + 'problem/' + problemId)
 }
 /**

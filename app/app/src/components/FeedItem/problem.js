@@ -1,7 +1,9 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
 import PledgeList from '../PledgeList'
 import SolutionsList from '../SolutionsList'
+import CommentsList from '../CommentsList'
 import TopicList from '../TopicsList'
 
 class FeedItemProblem extends React.Component {
@@ -24,7 +26,9 @@ class FeedItemProblem extends React.Component {
           name: 'comment',
           visible: false
         }
-      ]
+      ],
+      showMoreComments: false,
+      comments: []
     }
   }
 
@@ -38,6 +42,30 @@ class FeedItemProblem extends React.Component {
     })
   }
 
+  getMoreComments = () => {
+    //
+    this.setState({
+      comments: this.props.data.last_five_comments,
+      showMoreComments: true
+    })
+  }
+
+  renderComments = () => {
+    if (! this.props.data.last_five_comments.length) return ''
+    if (! this.state.showMoreComments) return (
+      <div>
+        <div onClick={this.getMoreComments} className="text-sm text-center">Load more</div>
+        <CommentsList comments={this.props.data.last_five_comments} />
+      </div>
+    )
+    return (
+      <div>
+        <div className="text-sm">you would have all the comments now, if this were hooked up</div>
+        <CommentsList comments={this.state.comments} />
+      </div>
+    )
+  }
+
   renderTab () {
     const visibleTab = this.state.tabs.find(tab => tab.visible)
     if (! visibleTab) return 'we would retrun a default view'
@@ -49,7 +77,11 @@ class FeedItemProblem extends React.Component {
         return (<SolutionsList solutions={this.props.data.solutions} />)
       break;
       case 'comment':
-        return ('have not done comment yet')
+        return (
+          <div>
+            {this.renderComments()}
+          </div>
+        )
       break;
       default:
         return ('could not find component')
@@ -77,6 +109,7 @@ class FeedItemProblem extends React.Component {
               <p>{this.props.data.description} ...will limit length</p>
               <p>{this.props.data.specification} ...will limit length</p>
               <div className="margin-bottom-15"><TopicList topics={this.props.data.topics} /></div>
+              <Link to={`problem/${this.props.data.problem_id}`} >Link</Link>
             </div>
             <div className="col">
               {this.renderTab()}

@@ -20,3 +20,29 @@ ul.is-tabbed-list {
     }
   }
 }
+
+ul.stacked-tab{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-top: 1px solid $color-light;
+
+  li.stacked-tab-item {
+    width: 100%;
+    display: block;
+    border-bottom: 1px solid $color-light;
+    .tab-header {
+      padding: 15px;
+      background: lighten($color-light, 7%);
+      cursor: pointer;
+      border: none;
+      &.is-active {
+        color: $color-primary;
+      }
+    }
+    .tab-content {
+
+    }
+  }
+}
