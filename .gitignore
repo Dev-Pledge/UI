@@ -9,3 +9,4 @@
 /.stripe-env
 /.sentryenv
 node_modules
+vendor

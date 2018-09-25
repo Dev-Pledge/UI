@@ -1,0 +1,32 @@
+{
+  "name": "dev-pledge/ui-api",
+  "description": "Dev Pledge UI - API Service",
+  "keywords": [
+    "UI"
+  ],
+  "homepage": "https://github.com/Dev-Pledge/Ui",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "John Saunders",
+      "email": "john@yettimedia.co.uk"
+    }
+  ],
+  "require": {
+    "sentry/sentry": "^1.8",
+    "predis/predis": "^1.1"
+  },
+
+  "autoload": {
+    "psr-4": {
+      "DevPledge\\": "src/"
+    }
+  },
+  "config": {
+    "process-timeout": 0
+  },
+  "scripts": {
+    "start-docker": "docker-compose up",
+    "test": "phpunit"
+  }
+}

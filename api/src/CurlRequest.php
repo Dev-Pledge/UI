@@ -1,6 +1,6 @@
 <?php
 
-namespace DevPledge\Integrations\Curl;
+namespace DevPledge;
 
 /**
  * Class CurlRequest
