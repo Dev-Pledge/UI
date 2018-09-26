@@ -68,11 +68,19 @@ section {
 }
 
 .box {
+  position: relative;
   border: 1px solid $color-light;
   padding: 15px;
   &.is-light {
     background: lighten($color-light, 8%);
   }
+  &.is-strong {
+    border: 1px solid darken($color-light, 15%);
+  }
+}
+
+.has-shadow {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 
 .absolute-feed-alert {
@@ -153,8 +161,11 @@ ul.pledges-list {
 }
 
 .title-bar {
+  margin-top: -15px;
   padding: 15px 0;
-  border-bottom: 1px solid darken($color-light, 15%)
+  border-bottom: 1px solid $color-light;
+  background: lighten($color-light, 7%);
+  color: $color-dark;
 }
 .content-body {
   margin-top: 15px;
@@ -162,6 +173,10 @@ ul.pledges-list {
   p {
     padding-top: 5px;
     margin-bottom: 10px;
+  }
+  p.is-title {
+    font-size: 2rem;
+    /* padding: 10px 0; */
   }
   h1, h2, h3 {
     padding: 10px 0;

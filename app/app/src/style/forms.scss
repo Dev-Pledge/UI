@@ -50,7 +50,7 @@
   font-size: inherit;
   display: block;
   padding: 10px;
-  border: 1px solid lighten($color-dark, 30%)
+  border: 1px solid lighten($color-dark, 30%);
 }
 
 .dp-form {
@@ -58,4 +58,9 @@
     width: 100%;
     margin-bottom: 20px;
   }
+}
+
+.DraftEditor-root {
+  border: 1px solid lighten($color-dark, 30%);
+  padding: 10px;
 }
