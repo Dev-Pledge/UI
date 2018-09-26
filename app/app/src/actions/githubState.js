@@ -21,6 +21,17 @@ export const initState = () => {
     })
 }
 
+export const resetState = (stateString) => {
+  return dispatch =>
+    new Promise((resolve, reject) => {
+      dispatch({
+        type: 'INIT_STATE',
+        payload: stateString
+      })
+      return resolve()
+    })
+}
+
 export const clearState = () => {
   return dispatch => {
     removeToken('githubState')
