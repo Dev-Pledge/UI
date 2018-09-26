@@ -64,10 +64,18 @@ class Problem extends Component {
     if (! this.state.problem) return ('')
     return (
       <div className="content-body">
-        <p>
-          <TopicList topics={this.state.problem.topics} />
-        </p>
-        <h1>{this.state.problem.title}</h1>
+
+        <div className="row">
+          <div className="col-md-9">
+            <p className="is-title">{this.state.problem.title}</p>
+          </div>
+          <div className="col-md-3">
+            <p className="has-text-right">
+              <TopicList topics={this.state.problem.topics} />
+            </p>
+          </div>
+        </div>
+        <div className="margin-bottom-15">&nbsp;</div>
         <p className="sub">Description</p>
         <div className="margin-bottom-15" dangerouslySetInnerHTML={this.renderHTML(this.state.problem.description)} />
         <p className="sub">Specification</p>
@@ -81,7 +89,7 @@ class Problem extends Component {
     return (
       <div className="row title-bar">
         <div className="col-md-8">
-          <FaUser className="text-muted text-sm" /> &nbsp;{this.state.problem.user.username}
+          <FaUser className="text-sm text-muted" /> &nbsp;{this.state.problem.user.username}
         </div>
         <div className="col-md-4">
           <em className="pull-right text-muted text-sm">

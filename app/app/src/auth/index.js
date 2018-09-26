@@ -4,10 +4,10 @@ const parseToken = token => {
   return JSON.parse(window.atob(base64));
 };
 
-const storeLocalStorage = token => {
+export const storeLocalStorage = (token, tokenName = 'dp_token') => {
     /* todo fallbacks for localStorate */
     // poss store storage type in redux
-    window.localStorage.setItem('dp_token', token);
+    window.localStorage.setItem(tokenName, token);
 };
 
 export const setToken = token => {
@@ -15,12 +15,12 @@ export const setToken = token => {
   return parseToken(token); // use in redux
 };
 
-export const getToken = () => {
-  return window.localStorage.getItem('dp_token');
+export const getToken = (tokenName = 'dp_token') => {
+  return window.localStorage.getItem(tokenName);
 };
 
-export const removeToken = () => {
+export const removeToken = (tokenName = 'dp_token') => {
   if (typeof window !== 'undefined') {
-    window.localStorage.removeItem('dp_token');
+    window.localStorage.removeItem(tokenName);
   }
 };

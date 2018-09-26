@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Raven from 'raven-js'
 import { connect } from 'react-redux'
-import { Editor, EditorState, convertToRaw } from 'draft-js'
+import Editor from 'draft-js-plugins-editor';
+import createMarkdownShortcutsPlugin from 'draft-js-markdown-shortcuts-plugin';
+import { EditorState, convertToRaw } from 'draft-js'
 // import { FaCheck } from 'react-icons/fa'
 // import { FaTimes } from 'react-icons/fa'
 
@@ -12,6 +14,10 @@ import { createProblem as postCreateProblem } from '../../api/problem'
 import { fetchTopics } from '../../api/topics'
 import Loading from '../../components/Loading'
 
+const plugins = [
+  createMarkdownShortcutsPlugin()
+]
+
 class CreateProblem extends Component {
 
   // todo make this just a page wrapper and have a component handle createProblem.  Can call from anywhere then
@@ -21,7 +27,7 @@ class CreateProblem extends Component {
     this.state = {
       title: '',
       description: '',
-      specification: '', // EditorState.createEmpty(),
+      specification: EditorState.createEmpty(),
       topics: [],
       topicsSelected: []
     }
@@ -144,17 +150,18 @@ class CreateProblem extends Component {
                     onChange={e => this.handleDescriptionChange(e.target.value)}
                   />
                   <p>Problem specification (draft-js on hold)</p>
-                  {/*<Editor
+                  {<Editor
                     editorState={this.state.specification}
                     onChange={this.handleSpecificationChange}
-                  />*/}
-                  <input
+                    plugins={plugins}
+                  />}
+                  {/*<input
                     type="text"
                     className="dp-input"
                     placeholder="spec"
                     value={this.state.specification}
                     onChange={e => this.handleSpecificationChange(e.target.value)}
-                  />
+                  />*/}
 
                   <p>Select relevant topics to your problem</p>
                   <div className="margin-bottom-15 tags">

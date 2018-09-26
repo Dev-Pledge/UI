@@ -22,3 +22,29 @@
 .margin-right {
   margin-right: 15px;
 }
+
+
+/** decoration **/
+.has-line-container {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  .has-line {
+    z-index: 1;
+    // needs work.  prob relative container and content white to hide break
+    left: 0;
+    right: 0;
+    height: 50px;
+    bottom: 10px;
+    position: absolute;
+    border-bottom: 1px solid $color-light;
+  }
+  .has-line-text {
+    z-index: 2;
+    position: relative;
+    display: inline;
+    background: white;
+    padding: 10px;
+  }
+
+}

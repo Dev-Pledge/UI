@@ -1,5 +1,5 @@
 import App from './App';
-import { Home, Feed, Login, Logout, Signup, Problem, CreateProblem, Preferences } from './containers';
+import { Home, Feed, Login, Logout, Signup, Problem, CreateProblem, Preferences, GithubAuth } from './containers';
 
 export default {
   component: App,
@@ -47,6 +47,11 @@ export default {
       path: '/preferences',
       exact: true,
       component: Preferences // Add your route here
+    },
+    {
+      path: '/auth/github',
+      exact: true,
+      component: GithubAuth
     }
   ]
 };
