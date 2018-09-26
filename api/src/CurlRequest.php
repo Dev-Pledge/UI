@@ -211,8 +211,6 @@ class CurlRequest {
 			$name = strtolower( trim( $header[0] ) );
 			if ( ! array_key_exists( $name, $receivedHeaders ) ) {
 				$receivedHeaders[ $name ] = trim( $header[1] ) ;
-			} else {
-				$receivedHeaders[ $name ][] = trim( $header[1] );
 			}
 
 			return $len;
