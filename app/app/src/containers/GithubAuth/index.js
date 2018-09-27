@@ -29,9 +29,7 @@ class GithubAuth extends React.Component {
       }
     })
   }
-
-
-
+  
   render () {
     return (
       <div>

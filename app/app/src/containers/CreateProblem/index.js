@@ -27,7 +27,7 @@ class CreateProblem extends Component {
     this.state = {
       title: '',
       description: '',
-      specification: EditorState.createEmpty(),
+      specification: '', //EditorState.createEmpty(),
       topics: [],
       topicsSelected: []
     }
@@ -150,18 +150,18 @@ class CreateProblem extends Component {
                     onChange={e => this.handleDescriptionChange(e.target.value)}
                   />
                   <p>Problem specification (draft-js on hold)</p>
-                  {<Editor
+                  {/*<Editor
                     editorState={this.state.specification}
                     onChange={this.handleSpecificationChange}
                     plugins={plugins}
-                  />}
-                  {/*<input
+                  />*/}
+                  {<input
                     type="text"
                     className="dp-input"
                     placeholder="spec"
                     value={this.state.specification}
                     onChange={e => this.handleSpecificationChange(e.target.value)}
-                  />*/}
+                  />}
 
                   <p>Select relevant topics to your problem</p>
                   <div className="margin-bottom-15 tags">
