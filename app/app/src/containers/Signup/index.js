@@ -151,7 +151,7 @@ class Signup extends Component {
     })
   }
 
-  renderGithubLogin () {
+  renderGithubSignup () {
     if (this.state.isGithubSignup) return (
       <div>
         <form className="dp-form">
@@ -170,11 +170,53 @@ class Signup extends Component {
     )
   }
 
+  renderEmailSignup () {
+    if (! this.state.isGithubSignup) return (
+      <div>
+        <form className="dp-form">
+          <p>Your email {this.renderLooksValidEmail()}</p>
+          <input
+            type="text"
+            className="dp-input"
+            placeholder="email"
+            value={this.state.email}
+            onBlur={e => this.turnValidationOn('email')}
+            onChange={e => this.handleEmailChange(e.target.value)}
+          />
+          <p>Your chosen username  {this.renderIsUserNameAvailable()}</p>
+          <input
+            type="text"
+            className="dp-input"
+            placeholder="username"
+            value={this.state.userName}
+            onBlur={e => this.turnValidationOn('userName')}
+            onChange={e => this.handleUserNameChange(e.target.value)}
+          />
+          <p>Your chosen password</p>
+          <input
+            type="password"
+            className="dp-input"
+            placeholder="password"
+            value={this.state.password}
+            onChange={e => this.handlePasswordChange(e.target.value)}
+          />
+          {this.renderIsPasswordAcceptable()}
+          <button
+            className="dp-button is-primary is-block"
+            onClick={this.handleSubmit}
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+    )
+  }
+
   signupButtonText () {
     if (this.state.isGithubSignup) return (
-      <span>Signup by email</span>
+      <span>Or signup by email</span>
     )
-    return (<span>Signup with github <FaGithub /></span>)
+    return (<span>Or signup with github <FaGithub /></span>)
   }
 
   render () {
@@ -193,47 +235,8 @@ class Signup extends Component {
                     {this.signupButtonText()}
                   </button>
 
-                  {this.renderGithubLogin()}
-
-                  <p className="has-text-center text-muted has-line-container">
-                    <span className="has-line">&nbsp;</span>
-                    <span className="has-line-text">or via {this.state.isGithubSignup ? 'email' : 'github'}</span>
-                  </p>
-                  <p>Your email {this.renderLooksValidEmail()}</p>
-                  <form className="dp-form">
-                    <input
-                      type="text"
-                      className="dp-input"
-                      placeholder="email"
-                      value={this.state.email}
-                      onBlur={e => this.turnValidationOn('email')}
-                      onChange={e => this.handleEmailChange(e.target.value)}
-                    />
-                    <p>Your chosen username  {this.renderIsUserNameAvailable()}</p>
-                    <input
-                      type="text"
-                      className="dp-input"
-                      placeholder="username"
-                      value={this.state.userName}
-                      onBlur={e => this.turnValidationOn('userName')}
-                      onChange={e => this.handleUserNameChange(e.target.value)}
-                    />
-                    <p>Your chosen password</p>
-                    <input
-                      type="password"
-                      className="dp-input"
-                      placeholder="password"
-                      value={this.state.password}
-                      onChange={e => this.handlePasswordChange(e.target.value)}
-                    />
-                    {this.renderIsPasswordAcceptable()}
-                    <button
-                      className="dp-button is-primary is-block"
-                      onClick={this.handleSubmit}
-                    >
-                      Submit
-                    </button>
-                  </form>
+                  {this.renderGithubSignup()}
+                  {this.renderEmailSignup()}
                 </div>
               </div>
             </div>
