@@ -5,6 +5,7 @@ import { FaCheck, FaTimes, FaGithub } from 'react-icons/fa'
 
 import Navbar from '../../components/Navbar'
 import { loginSuccess } from '../../actions/auth'
+import { getGithubUrl } from '../../api/githubApi'
 import { logRequestError } from '../../api/utils'
 import { initState } from '../../actions/githubState'
 import { checkUserNameAvailable, submitSignup } from '../../api/signup'
@@ -20,7 +21,7 @@ class Signup extends Component {
       userNameAvailable: true,
       emailValidationOn: false,
       userNameValidationOn: false,
-      gitHubState: Math.random() + Math.random() + 'foo' + Math.random()  // needs to be set to redux
+      isGithubSignup: false
     }
   }
 
@@ -134,13 +135,46 @@ class Signup extends Component {
     if (this.state.email.length) return <span className="text-sm text-warning">Your email does not look right <FaTimes className="text-danger" /></span>
   }
 
-  githubRedirect = () => {
-    const client_id = "06575840b579f8823caf"
-    const redirect_uri = "http://localhost:3000/auth/github"
-    this.props.dispatch(initState()).then(githubState => {
-      const githubQuery = `client_id=${client_id}&redirect_uri=${redirect_uri}&state=${githubState}`
-      window.location.href = 'https://github.com/login/oauth/authorize?' + githubQuery
+  githubRedirect = (e) => {
+    e.preventDefault()
+    if (! this.state.userNameAvailable) return false
+    this.props.dispatch(initState(this.state.userName)).then(githubState => {
+      getGithubUrl(githubState).then(res => {
+        window.location.href = res.data.url
+      }).catch(err => logRequestError())
     })
+  }
+
+  toggleSignupType = () => {
+    this.setState({
+      isGithubSignup: ! this.state.isGithubSignup
+    })
+  }
+
+  renderGithubLogin () {
+    if (this.state.isGithubSignup) return (
+      <div>
+        <form className="dp-form">
+          <p>Your chosen username  {this.renderIsUserNameAvailable()}</p>
+          <input
+            type="text"
+            className="dp-input"
+            placeholder="username"
+            value={this.state.userName}
+            onBlur={e => this.turnValidationOn('userName')}
+            onChange={e => this.handleUserNameChange(e.target.value)}
+          />
+          <button onClick={this.githubRedirect} className="dp-button is-primary is-block margin-bottom-15">Authorise with github <FaGithub /></button>
+        </form>
+      </div>
+    )
+  }
+
+  signupButtonText () {
+    if (this.state.isGithubSignup) return (
+      <span>Signup by email</span>
+    )
+    return (<span>Signup with github <FaGithub /></span>)
   }
 
   render () {
@@ -152,10 +186,18 @@ class Signup extends Component {
             <div className="row">
               <div className="col-md-4 offset-md-4">
                 <div className="box is-strong has-shadow">
-                  <button onClick={this.githubRedirect} className="dp-button is-block margin-bottom-15">Signup with github <FaGithub /></button>
+                  <button
+                    onClick={this.toggleSignupType}
+                    className="dp-button is-block margin-bottom-15"
+                  >
+                    {this.signupButtonText()}
+                  </button>
+
+                  {this.renderGithubLogin()}
+
                   <p className="has-text-center text-muted has-line-container">
                     <span className="has-line">&nbsp;</span>
-                    <span className="has-line-text">or by email</span>
+                    <span className="has-line-text">or via {this.state.isGithubSignup ? 'email' : 'github'}</span>
                   </p>
                   <p>Your email {this.renderLooksValidEmail()}</p>
                   <form className="dp-form">

@@ -1,5 +1,6 @@
 const initialState = () => ({
-  state: ""
+  state: '',
+  userName: ''
 })
 
 const githubState = (state = initialState(), action) => {
@@ -7,11 +8,13 @@ const githubState = (state = initialState(), action) => {
   switch (action.type) {
     case 'INIT_STATE':
       return Object.assign({}, state, {
-        state: action.payload
+        state: action.payload.stateString,
+        userName: action.payload.userName
       });
     case 'CLEAR_STATE':
       return Object.assign({}, state, {
-        state: ''
+        state: '',
+        userName: ''
       });
     default:
       return state;

@@ -49,7 +49,7 @@ export default {
       component: Preferences // Add your route here
     },
     {
-      path: '/auth/github',
+      path: '/github/verify',
       exact: true,
       component: GithubAuth
     }

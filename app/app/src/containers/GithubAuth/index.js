@@ -4,30 +4,53 @@ import * as qs from 'query-string'
 
 import { getToken } from '../../auth'
 import { resetState } from '../../actions/githubState'
+import { postGithubCredentials } from '../../api/githubApi'
+import { logRequestError } from '../../api/utils'
 
 class GithubAuth extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      qs: null,
+      githubState: null,
+      userName: null
     };
   }
 
   componentDidMount () {
-    const queryParams = qs.parse(this.props.location.search)
-    const gitHubState = getToken('githubState')
-    if (! gitHubState) {
-      alert('you did not have the githubstate in local storage.  Goodby')
-      return ''
-    }
-    this.props.dispatch(resetState(gitHubState)).then(() => {
+    this.setState({
+      queryParams: qs.parse(this.props.location.search),
+      githubState: getToken('githubState'),
+      userName: getToken('githubUserName')
+    }, this.firstStageAuth)
+  }
+
+  firstStageAuth () {
+    const { githubState, queryParams, userName } = this.state
+    this.props.dispatch(resetState(githubState)).then(() => {
       // cannot use hasOwnProperty on query-string objects
-      if (typeof queryParams.state === 'undefined' || queryParams.state !== gitHubState) {
-        alert('we are redirecting you as state ' + queryParams.state + ' \n\n ' + gitHubState + ' \n\ndid not match')
+      if (! queryParams.state
+        || queryParams.state !== githubState
+        || ! queryParams.code
+        || ! userName
+      ) {
+        alert('we are redirecting you as state ' + queryParams.state + ' \n\n ' + githubState + ' \n\ndid not match')
       } else {
-        alert('matching params so you would be authorised - we have the code and will send to the UI bff for final auth')
+        this.requestFinalAuth()
       }
     })
+  }
+
+  requestFinalAuth () {
+    postGithubCredentials({
+      code: this.state.queryParams.code,
+      state: this.state.githubState,
+      username: this.state.userName
+    }).then(res => {
+      console.log(res)
+      alert('woop woop, looks like you were validated')
+    }).catch(err => logRequestError(err))
   }
   
   render () {
@@ -37,7 +60,7 @@ class GithubAuth extends React.Component {
           <div className="container-fluid">
             <div className="row">
               <div className="col-md-6 offset-md-3">
-                <p className="has-text-center"></p>Authorising
+                <p className="has-text-center">Authorising</p>
               </div>
             </div>
           </div>
