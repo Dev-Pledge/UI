@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "draft-js-markdown-shortcuts-plugin": "^0.5.0",
-    "draft-js-plugins-editor": "^2.1.1"
-  }
-}
