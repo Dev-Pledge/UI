@@ -40,12 +40,14 @@ export const resetState = (stateString, userName) => {
 }
 
 export const clearState = () => {
-  return dispatch => {
-    removeToken('githubState')
-    removeToken('githubUserName')
-    dispatch({
-      type: 'CLEAR_STATE'
+  return dispatch =>
+    new Promise((resolve, reject) => {
+      removeToken('githubState')
+      removeToken('githubUserName')
+      dispatch({
+        type: 'CLEAR_STATE'
+      })
+      return resolve()
     })
-  }
 }
 

@@ -3,9 +3,10 @@ import { connect } from 'react-redux'
 import * as qs from 'query-string'
 
 import { getToken } from '../../auth'
-import { resetState } from '../../actions/githubState'
+import { resetState, clearState } from '../../actions/githubState'
 import { postGithubCredentials } from '../../api/githubApi'
 import { logRequestError } from '../../api/utils'
+import { loginSuccess } from '../../actions/auth'
 
 class GithubAuth extends React.Component {
   constructor(props) {
@@ -48,8 +49,12 @@ class GithubAuth extends React.Component {
       state: this.state.githubState,
       username: this.state.userName
     }).then(res => {
-      console.log(res)
-      alert('woop woop, looks like you were validated')
+      this.props.dispatch(loginSuccess(res.data.token))
+        .then(res => {
+          this.props.dispatch(clearState()).then(res => {
+            this.props.history.push('/feed')
+          }) // no catch required
+        }).catch(err => logRequestError(err))
     }).catch(err => logRequestError(err))
   }
   
