@@ -69,6 +69,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "postbuild": "node scripts/postBuild.js",
     "test": "node scripts/test.js --env=jsdom"
   },
   "devDependencies": {
