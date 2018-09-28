@@ -4,7 +4,7 @@ import * as qs from 'query-string'
 
 import { getToken } from '../../auth'
 import { resetState, clearState } from '../../actions/githubState'
-import { postGithubCredentials } from '../../api/githubApi'
+import { postGithubCredentials, postGithubCredentialsLogin } from '../../api/githubApi'
 import { logRequestError } from '../../api/utils'
 import { loginSuccess } from '../../actions/auth'
 
@@ -23,7 +23,7 @@ class GithubAuth extends React.Component {
     this.setState({
       queryParams: qs.parse(this.props.location.search),
       githubState: getToken('githubState'),
-      userName: getToken('githubUserName')
+      userName: getToken('githubUserName') || ''
     }, this.firstStageAuth)
   }
 
@@ -34,16 +34,33 @@ class GithubAuth extends React.Component {
       if (! queryParams.state
         || queryParams.state !== githubState
         || ! queryParams.code
-        || ! userName
       ) {
         alert('we are redirecting you as state ' + queryParams.state + ' \n\n ' + githubState + ' \n\ndid not match')
       } else {
-        this.requestFinalAuth()
+        if (this.state.userName) {
+          this.requestFinalAuthSignup()
+        } else {
+          this.requestFinalAuthLogin()
+        }
       }
     })
   }
 
-  requestFinalAuth () {
+  requestFinalAuthLogin () {
+    postGithubCredentialsLogin({
+      code: this.state.queryParams.code,
+      state: this.state.githubState
+    }).then(res => {
+      this.props.dispatch(loginSuccess(res.data.token))
+        .then(res => {
+          this.props.dispatch(clearState()).then(res => {
+            this.props.history.push('/feed')
+          }) // no catch required
+        }).catch(err => logRequestError(err))
+    }).catch(err => logRequestError(err))
+  }
+
+  requestFinalAuthSignup () {
     postGithubCredentials({
       code: this.state.queryParams.code,
       state: this.state.githubState,

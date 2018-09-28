@@ -2,7 +2,11 @@ import React from 'react';
 // import shouldFetchFeed from '../../actions/feed';
 import { attemptLogin } from '../../actions/auth'
 import { connect } from 'react-redux'
+import { FaGithub } from 'react-icons/fa'
 
+import { getGithubUrl } from '../../api/githubApi'
+import { logRequestError } from '../../api/utils'
+import { initState } from '../../actions/githubState'
 import Navbar from '../../components/Navbar'
 
 class Login extends React.Component {
@@ -52,7 +56,16 @@ class Login extends React.Component {
     if (this.state.error) {
       return <p className="text-danger has-text-center">{this.state.error}</p>
     }
-  };
+  }
+
+  githubRedirect = (e) => {
+    e.preventDefault()
+    this.props.dispatch(initState()).then(githubState => {
+      getGithubUrl(githubState).then(res => {
+        window.location.href = res.data.url
+      }).catch(err => logRequestError())
+    })
+  }
 
   render () {
     return (
@@ -61,27 +74,40 @@ class Login extends React.Component {
         <div className="content-wrapper">
           <div className="container-fluid">
             <div className="row">
-              <div className="col-md-6 offset-md-3">
-                <form className="dp-form">
-                  <p>Your username</p>
-                  <input
-                    className="dp-input"
-                    type="text"
-                    placeholder="username"
-                    value={this.state.email}
-                    onChange={e => this.handleEmailChange(e.target.value)}
-                  />
-                  <p>Your password</p>
-                  <input
-                    className="dp-input"
-                    type="password"
-                    placeholder="password"
-                    value={this.state.password}
-                    onChange={e => this.handlePassChange(e.target.value)}
-                  />
-                  <button className="dp-button is-primary is-block" onClick={this.attemptLoginHandler}>Login</button>
-                  {this.renderError()}
-                </form>
+              <div className="col-md-4 offset-md-4">
+                <div className="box is-strong has-shadow">
+
+                  <button onClick={this.githubRedirect} className="dp-button is-block margin-bottom-15">
+                    or login with Github <FaGithub />
+                  </button>
+
+                  <p className="has-text-center text-muted has-line-container">
+                    <span className="has-line">&nbsp;</span>
+                    <span className="has-line-text">or by email</span>
+                    <span className="has-line">&nbsp;</span>
+                  </p>
+
+                  <form className="dp-form">
+                    <p>Your username</p>
+                    <input
+                      className="dp-input"
+                      type="text"
+                      placeholder="username"
+                      value={this.state.email}
+                      onChange={e => this.handleEmailChange(e.target.value)}
+                    />
+                    <p>Your password</p>
+                    <input
+                      className="dp-input"
+                      type="password"
+                      placeholder="password"
+                      value={this.state.password}
+                      onChange={e => this.handlePassChange(e.target.value)}
+                    />
+                    <button className="dp-button is-primary is-block" onClick={this.attemptLoginHandler}>Login</button>
+                    {this.renderError()}
+                  </form>
+                </div>
               </div>
             </div>
           </div>
