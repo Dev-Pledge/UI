@@ -3,6 +3,7 @@ version: "3.5"
 services:
 
   node:
+    container_name: devpledge_building_ui
     image: kkarczmarczyk/node-yarn:latest
     volumes:
     - ./app/app:/workspace
@@ -13,3 +14,7 @@ services:
       && [ -d build ] || mkdir build
       && yarn
       && yarn build"
+
+networks:
+  default:
+    name: devpledge_ui_build
