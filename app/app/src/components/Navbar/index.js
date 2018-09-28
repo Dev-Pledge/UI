@@ -42,12 +42,12 @@ class Navbar extends React.Component {
                     <Link to="/">Explore</Link>
                   </li>
                   <li>
-                    <NavLink activeClassName="active" to="/create-problem">Present a problem</NavLink>
+                    <NavLink activeClassName="active" to="/create-problem">Present a Problem</NavLink>
                   </li>
                 </ul>
               </div>
               <div className="col-sm has-text-center">
-                <h1 className="text-white">Devpledge</h1>
+                <h1 className="text-white">DevPledge</h1>
               </div>
               <div className="col-sm has-text-right">
                 <ul>
