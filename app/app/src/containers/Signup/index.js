@@ -81,7 +81,7 @@ class Signup extends Component {
     if (! this.state.userName.length) return ''
     if (! this.state.userNameAvailable && this.state.userName.length > 4) return (
       <span className="text-danger text-sm">
-        User name is not available <FaTimes className="text-danger" />
+        Username is not available <FaTimes className="text-danger" />
       </span>
     )
     if (this.state.userName.length < 5) return (
@@ -155,7 +155,7 @@ class Signup extends Component {
     if (this.state.isGithubSignup) return (
       <div>
         <form className="dp-form">
-          <p>Your chosen username  {this.renderIsUserNameAvailable()}</p>
+          <p>Your chosen Username  {this.renderIsUserNameAvailable()}</p>
           <input
             type="text"
             className="dp-input"
@@ -164,7 +164,7 @@ class Signup extends Component {
             onBlur={e => this.turnValidationOn('userName')}
             onChange={e => this.handleUserNameChange(e.target.value)}
           />
-          <button onClick={this.githubRedirect} className="dp-button is-primary is-block margin-bottom-15">Authorise with github <FaGithub /></button>
+          <button onClick={this.githubRedirect} className="dp-button is-primary is-block margin-bottom-15">Authorise with Github <FaGithub /></button>
         </form>
       </div>
     )
@@ -174,29 +174,29 @@ class Signup extends Component {
     if (! this.state.isGithubSignup) return (
       <div>
         <form className="dp-form">
-          <p>Your email {this.renderLooksValidEmail()}</p>
+          <p>Your Email {this.renderLooksValidEmail()}</p>
           <input
             type="text"
             className="dp-input"
-            placeholder="email"
+            placeholder="Email"
             value={this.state.email}
             onBlur={e => this.turnValidationOn('email')}
             onChange={e => this.handleEmailChange(e.target.value)}
           />
-          <p>Your chosen username  {this.renderIsUserNameAvailable()}</p>
+          <p>Your chosen Username  {this.renderIsUserNameAvailable()}</p>
           <input
             type="text"
             className="dp-input"
-            placeholder="username"
+            placeholder="Username"
             value={this.state.userName}
             onBlur={e => this.turnValidationOn('userName')}
             onChange={e => this.handleUserNameChange(e.target.value)}
           />
-          <p>Your chosen password</p>
+          <p>Your chosen Password</p>
           <input
             type="password"
             className="dp-input"
-            placeholder="password"
+            placeholder="Password"
             value={this.state.password}
             onChange={e => this.handlePasswordChange(e.target.value)}
           />
@@ -214,9 +214,9 @@ class Signup extends Component {
 
   signupButtonText () {
     if (this.state.isGithubSignup) return (
-      <span>Or signup by email</span>
+      <span>Signup by email</span>
     )
-    return (<span>Or signup with github <FaGithub /></span>)
+    return (<span>Signup with Github <FaGithub /></span>)
   }
 
   render () {

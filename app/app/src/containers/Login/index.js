@@ -78,29 +78,29 @@ class Login extends React.Component {
                 <div className="box is-strong has-shadow">
 
                   <button onClick={this.githubRedirect} className="dp-button is-block margin-bottom-15">
-                    or login with Github <FaGithub />
+                    Login with Github <FaGithub />
                   </button>
 
                   <p className="has-text-center text-muted has-line-container">
                     <span className="has-line">&nbsp;</span>
-                    <span className="has-line-text">or by email</span>
+                    <span className="has-line-text">or Username/Password</span>
                     <span className="has-line">&nbsp;</span>
                   </p>
 
                   <form className="dp-form">
-                    <p>Your username</p>
+                    <p>Your Username</p>
                     <input
                       className="dp-input"
                       type="text"
-                      placeholder="username"
+                      placeholder="Username"
                       value={this.state.email}
                       onChange={e => this.handleEmailChange(e.target.value)}
                     />
-                    <p>Your password</p>
+                    <p>Your Password</p>
                     <input
                       className="dp-input"
                       type="password"
-                      placeholder="password"
+                      placeholder="Password"
                       value={this.state.password}
                       onChange={e => this.handlePassChange(e.target.value)}
                     />
