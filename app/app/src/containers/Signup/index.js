@@ -159,7 +159,7 @@ class Signup extends Component {
           <input
             type="text"
             className="dp-input"
-            placeholder="username"
+            placeholder="Username"
             value={this.state.userName}
             onBlur={e => this.turnValidationOn('userName')}
             onChange={e => this.handleUserNameChange(e.target.value)}
