@@ -1,0 +1,15 @@
+version: "3.5"
+
+services:
+
+  node:
+    image: kkarczmarczyk/node-yarn:latest
+    volumes:
+    - ./app/app:/workspace
+    - ./app/app/docker_node_modules:/workspace/node_modules
+    - ./app/app/node_modules:/workspace/external_node_modules
+    command: >
+      bash -c "cd /workspace
+      && [ -d build ] || mkdir build
+      && yarn
+      && yarn build"
