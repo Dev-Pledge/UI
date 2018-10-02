@@ -12,6 +12,7 @@ import TopicList from '../../components/TopicsList'
 import PledgeList from '../../components/PledgeList'
 import CommentsList from '../../components/CommentsList'
 import SolutionsList from '../../components/SolutionsList'
+import AddSolution from '../../components/AddSolution'
 import { fetchTopics } from '../../api/topics'
 import Loading from '../../components/Loading'
 
@@ -22,7 +23,8 @@ class Problem extends Component {
     this.state = {
       problem: null,
       problem_id: '',
-      showingTab: 'comments'
+      showingTab: 'comments',
+      showAddSolution: false
     }
   }
 
@@ -45,10 +47,8 @@ class Problem extends Component {
 
   getProblem () {
     fetchProblem(this.state.problem_id).then(res => {
-      console.log(res)
-      this.setState({
-        problem: res.data
-      })
+      console.log('problem', res)
+      this.setState({ problem: res.data })
     }).catch(err => {
       // redirect
       logRequestError(err)
@@ -60,11 +60,16 @@ class Problem extends Component {
     return {__html: string};
   }
 
+  renderAddSolution () {
+    if (this.state.showAddSolution) return (
+      <AddSolution problem_id={this.state.problem_id} />
+    )
+  }
+
   renderProblem () {
     if (! this.state.problem) return ('')
     return (
       <div className="content-body">
-
         <div className="row">
           <div className="col-md-9">
             <p className="is-title">{this.state.problem.title}</p>
@@ -76,10 +81,16 @@ class Problem extends Component {
           </div>
         </div>
         <div className="margin-bottom-15">&nbsp;</div>
+        <p className="sub">Active since</p>
+        <div>{moment.utc(this.state.problem.active_datetime).local().format('lll')}</div>
         <p className="sub">Description</p>
         <div className="margin-bottom-15" dangerouslySetInnerHTML={this.renderHTML(this.state.problem.description)} />
         <p className="sub">Specification</p>
         <div className="margin-bottom-15" dangerouslySetInnerHTML={this.renderHTML(this.state.problem.specification)} />
+        <button className="dp-button is-secondary" onClick={() => this.setState({showAddSolution: ! this.state.showAddSolution})} >
+          {this.state.showAddSolution ? 'don\'t add solution' : '+ solution'}
+        </button>
+        {this.renderAddSolution()}
       </div>
     )
   }

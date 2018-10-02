@@ -4,6 +4,9 @@ import { connect } from 'react-redux'
 import Editor from 'draft-js-plugins-editor';
 import createMarkdownShortcutsPlugin from 'draft-js-markdown-shortcuts-plugin';
 import { EditorState, convertToRaw } from 'draft-js'
+import { Redirect } from 'react-router'
+import 'flatpickr/dist/themes/light.css'
+import Flatpickr from 'react-flatpickr'
 // import { FaCheck } from 'react-icons/fa'
 // import { FaTimes } from 'react-icons/fa'
 
@@ -13,6 +16,7 @@ import { logRequestError } from '../../api/utils'
 import { createProblem as postCreateProblem } from '../../api/problem'
 import { fetchTopics } from '../../api/topics'
 import Loading from '../../components/Loading'
+import moment from 'moment'
 
 const plugins = [
   createMarkdownShortcutsPlugin()
@@ -29,9 +33,11 @@ class CreateProblem extends Component {
       description: '',
       specification: '', //EditorState.createEmpty(),
       topics: [],
-      topicsSelected: []
+      topicsSelected: [],
+      activeDateTime: moment().format()
     }
     this.authOnly = true
+    this.redirect = false
   }
 
   /* example of catching raven error on component error */
@@ -44,8 +50,10 @@ class CreateProblem extends Component {
       .then(() => {
         this.getTopics()
       }).catch(err => {
-        alert('you are not authorised for this.  Should really redirect you to signup. after setting some flash alert')
-        this.props.history.push('/signup')
+        this.props.history.push({
+          pathname:"/login",
+          state: 'You need to be logged in to do that'
+        })
       })
   }
 
@@ -62,6 +70,10 @@ class CreateProblem extends Component {
   handleSpecificationChange = (specification) => {
     // todo soft validate.
     this.setState({ specification })
+  }
+
+  handleActiveDateTime = valueArr => {
+    this.setState({ activeDateTime: valueArr[0] })
   }
 
   handleSubmit = e =>  {
@@ -86,6 +98,7 @@ class CreateProblem extends Component {
       title: this.state.title,
       description: this.state.description,
       specification: this.state.specification,
+      active_datetime: moment.utc(this.state.activeDateTime).format('YYYY-MM-DD HH:mm:ss'),
       topics: this.state.topicsSelected
     }).then(res => {
       alert('success!!!! may be redirect to feed, or this finalised problem to review')
@@ -162,6 +175,13 @@ class CreateProblem extends Component {
                     value={this.state.specification}
                     onChange={e => this.handleSpecificationChange(e.target.value)}
                   />}
+                  <p>When would you like this problem to go live?</p>
+                  <Flatpickr className="dp-input" value={this.state.activeDateTime} options={{
+                    enableTime: true,
+                    altInput: true,
+                    altFormat: "F j, Y H:m"
+                  }} onChange={val => this.handleActiveDateTime(val)} />
+
 
                   <p>Select relevant topics to your problem</p>
                   <div className="margin-bottom-15 tags">

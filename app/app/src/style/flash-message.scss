@@ -1,0 +1,12 @@
+.flash-message {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 50px; // very very very rough :)
+  border: 1px solid $color-warning;
+  background: lighten($color-warning, 40%);
+  color: $color-warning;
+  padding: 15px;
+  text-align: center;
+}

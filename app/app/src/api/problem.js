@@ -27,3 +27,8 @@ export const createProblem = (data = {}) => {
 export const updateProblem = (problemId, data = {}) => {
     return axios.patch(baseUrls.api + 'problem/' + problemId, data)
 }
+
+
+export const addSolution = (problemId, data = {}) => {
+  return axios.post(`${baseUrls.api}problem/${problemId}/solution`, data)
+}

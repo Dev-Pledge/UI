@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Raven from 'raven-js'
 import { connect } from 'react-redux'
 import { Editor, EditorState } from 'draft-js'
+import { Redirect } from 'react-router'
 
 import Navbar from '../../components/Navbar'
 import { authUnlocked } from '../../actions/auth'
@@ -36,8 +37,10 @@ class Preferences extends Component {
       .then(() => {
         this.getTopics()
       }).catch(err => {
-        alert('you are not authorised for this.  Should really redirect you to signup. after setting some flash alert')
-        this.props.history.push('/signup')
+        this.props.history.push({
+          pathname:"/login",
+          state: 'You need to be logged in to do that'
+        })
       })
   }
 

@@ -8,6 +8,7 @@ import { getGithubUrl } from '../../api/githubApi'
 import { logRequestError } from '../../api/utils'
 import { initState } from '../../actions/githubState'
 import Navbar from '../../components/Navbar'
+import Flash from '../../components/Flash'
 
 class Login extends React.Component {
   constructor(props) {
@@ -68,9 +69,11 @@ class Login extends React.Component {
   }
 
   render () {
+    console.log(this.props)
     return (
       <div>
         <Navbar />
+        <Flash errorMessage={this.props.location.state} />
         <div className="content-wrapper">
           <div className="container-fluid">
             <div className="row">
