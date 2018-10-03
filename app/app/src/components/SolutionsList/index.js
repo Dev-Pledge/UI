@@ -1,6 +1,8 @@
-import React from 'react';
+import React from 'react'
+import moment from 'moment'
 
-const PledgeList = (props) => {
+const SolutionsList = (props) => {
+
   if (! props.hasOwnProperty('solutions')) return ''
   if (! props.solutions.constructor === Array) {
     console.error('solutions were not an array')
@@ -10,11 +12,11 @@ const PledgeList = (props) => {
   if (props.solutions.length) return (
     <ul className="pledges-list">
       {props.solutions.map(solution => (
-        <li key={solution.id}>
+        <li key={solution.solution_id}>
           <div className="row">
             <div className="col-12">
-              {/*<span className="text-xs text-muted">{pledge.date}</span>*/}
-              <p>{solution.author}</p>
+              <a href={solution.open_source_location} target="_blank">{solution.name}</a>
+              <div className="text-muted text-sm">{solution.user.username} @ {moment.utc(solution.created).local().format('lll')}</div>
             </div>
           </div>
         </li>
@@ -35,4 +37,4 @@ const PledgeList = (props) => {
   )
 }
 
-export default PledgeList;
+export default SolutionsList;

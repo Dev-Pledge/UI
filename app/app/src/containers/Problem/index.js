@@ -55,6 +55,13 @@ class Problem extends Component {
     })
   }
 
+  solutionAdded = () => {
+    this.getProblem()
+    this.setState({
+      showAddSolution: false
+    })
+  }
+
   renderHTML (string) {
     // todo don't want HTML back.  Use draft js to set the markup
     return {__html: string};
@@ -62,7 +69,7 @@ class Problem extends Component {
 
   renderAddSolution () {
     if (this.state.showAddSolution) return (
-      <AddSolution problem_id={this.state.problem_id} />
+      <AddSolution problem_id={this.state.problem_id} onSuccess={this.solutionAdded} />
     )
   }
 

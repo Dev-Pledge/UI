@@ -55,8 +55,13 @@ class AddSolution extends Component {
         name: this.state.name,
         open_source_location: this.state.repoLink
       }).then(res => {
-        console.log('here is the res', res)
-        alert('success')
+        if (this.props.onSuccess) {
+          this.props.onSuccess()
+          this.setState({
+            name: '',
+            repoLink: '',
+          })
+        }
       }).catch(err => logRequestError(err))
   }
 
