@@ -52,7 +52,18 @@
       }
     }
   }
-
+  .logo-100 {
+    background-image: url(/logo100x100.png);
+    min-width: 37px;
+    min-height: 37px;
+    background-position: center;
+    background-size: contain;
+    display: inline-block;
+    background-repeat: no-repeat;
+    vertical-align: bottom;
+    margin-bottom: 5px;
+    margin-right: 10px;
+  }
 
 }
 
