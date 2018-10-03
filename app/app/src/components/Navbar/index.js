@@ -42,7 +42,7 @@ class Navbar extends React.Component {
                     <Link to="/">Explore</Link>
                   </li>
                   <li>
-                    <NavLink activeClassName="active" to="/create-problem">Present a Problem</NavLink>
+                    <NavLink activeClassName="active" to="/create-problem">Suggest a Problem</NavLink>
                   </li>
                 </ul>
               </div>
