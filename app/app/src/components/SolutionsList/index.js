@@ -4,7 +4,7 @@ import moment from 'moment'
 const SolutionsList = (props) => {
 
   if (! props.hasOwnProperty('solutions')) return ''
-  if (! props.solutions.constructor === Array) {
+  if (props.solutions.constructor !== Array) {
     console.error('solutions were not an array')
     return ''
   }
