@@ -3,6 +3,7 @@ import Raven from 'raven-js'
 import { connect } from 'react-redux'
 import Editor from 'draft-js-plugins-editor';
 import createMarkdownShortcutsPlugin from 'draft-js-markdown-shortcuts-plugin';
+import draftToMarkdown from 'draftjs-to-markdown';
 import { EditorState, convertToRaw } from 'draft-js'
 import { Redirect } from 'react-router'
 import 'flatpickr/dist/themes/light.css'
@@ -31,7 +32,7 @@ class CreateProblem extends Component {
     this.state = {
       title: '',
       description: '',
-      specification: '', //EditorState.createEmpty(),
+      specification: EditorState.createEmpty(),
       topics: [],
       topicsSelected: [],
       activeDateTime: moment().format()
@@ -78,10 +79,6 @@ class CreateProblem extends Component {
 
   handleSubmit = e =>  {
     e.preventDefault()
-    if (! this.state.topicsSelected.length) {
-      alert('validation coming.  You must select at least 1 topic')
-      return;
-    }
     if (! this.state.description.length) {
       alert('validation coming.  Needs description')
       return;
@@ -90,14 +87,17 @@ class CreateProblem extends Component {
       alert('validation coming.  Needs title')
       return;
     }
-    if (! this.state.specification.length) {
-      alert('validation coming.  Needs title')
+
+    const rawContentState = convertToRaw(this.state.specification.getCurrentContent());
+    const rawMarkup = draftToMarkdown(rawContentState);
+    if (! rawMarkup.length) {
+      alert('validation coming.  Needs specification')
       return;
     }
     postCreateProblem({
       title: this.state.title,
       description: this.state.description,
-      specification: this.state.specification,
+      specification: rawMarkup,
       active_datetime: moment.utc(this.state.activeDateTime).format('YYYY-MM-DD HH:mm:ss'),
       topics: this.state.topicsSelected
     }).then(res => {
@@ -162,19 +162,19 @@ class CreateProblem extends Component {
                     value={this.state.description}
                     onChange={e => this.handleDescriptionChange(e.target.value)}
                   />
-                  <p>Problem specification (draft-js on hold)</p>
-                  {/*<Editor
+                  <p>Problem specification</p>
+                  {<Editor
                     editorState={this.state.specification}
                     onChange={this.handleSpecificationChange}
                     plugins={plugins}
-                  />*/}
-                  {<input
+                  />}
+                  {/*<input
                     type="text"
                     className="dp-input"
                     placeholder="spec"
                     value={this.state.specification}
                     onChange={e => this.handleSpecificationChange(e.target.value)}
-                  />}
+                  />*/}
                   <p>When would you like this problem to go live?</p>
                   <Flatpickr className="dp-input" value={this.state.activeDateTime} options={{
                     enableTime: true,

@@ -5,3 +5,7 @@ export const propOrDefault = (obj, propertyName, defaultsTo = null) => {
 export const hasProp = (obj, propertyName) => {
   return obj.hasOwnProperty(propertyName)
 }
+
+export const limitLength = (str = '', limit = 50, etcString = '...') => {
+  return str.length <= limit ? str : str.substr(0, limit) + etcString
+}

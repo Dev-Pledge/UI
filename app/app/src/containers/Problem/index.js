@@ -3,6 +3,7 @@ import Raven from 'raven-js'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { FaUser } from 'react-icons/fa'
+import ReactMarkdown from 'react-markdown'
 
 import Navbar from '../../components/Navbar'
 import { authUnlocked } from '../../actions/auth'
@@ -82,9 +83,9 @@ class Problem extends Component {
             <p className="is-title">{this.state.problem.title}</p>
           </div>
           <div className="col-md-3">
-            <p className="has-text-right">
+            <div className="has-text-right">
               <TopicList topics={this.state.problem.topics} />
-            </p>
+            </div>
           </div>
         </div>
         <div className="margin-bottom-15">&nbsp;</div>
@@ -93,7 +94,7 @@ class Problem extends Component {
         <p className="sub">Description</p>
         <div className="margin-bottom-15" dangerouslySetInnerHTML={this.renderHTML(this.state.problem.description)} />
         <p className="sub">Specification</p>
-        <div className="margin-bottom-15" dangerouslySetInnerHTML={this.renderHTML(this.state.problem.specification)} />
+        <ReactMarkdown source={this.state.problem.specification} />
         <button className="dp-button is-secondary" onClick={() => this.setState({showAddSolution: ! this.state.showAddSolution})} >
           {this.state.showAddSolution ? 'don\'t add solution' : '+ solution'}
         </button>

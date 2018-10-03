@@ -5,6 +5,8 @@ import PledgeList from '../PledgeList'
 import SolutionsList from '../SolutionsList'
 import CommentsList from '../CommentsList'
 import TopicList from '../TopicsList'
+import { limitLength } from '../../utils'
+import { TiPuzzle } from 'react-icons/ti'
 
 class FeedItemProblem extends React.Component {
 
@@ -96,7 +98,7 @@ class FeedItemProblem extends React.Component {
         <div className="inner-header is-light">
           <div className="row">
             <div className="col col-8">
-              <span className="title">Problem: {this.props.data.title} <span className="text-xs text-muted">{this.props.data.problem_id}</span></span>
+              <span className="title"><TiPuzzle className="text-muted text-xl" /> {limitLength(this.props.data.title)}</span>
             </div>
             <div className="col col-4 has-text-right">
               Worth: £{this.props.data.pledges_value}
@@ -106,10 +108,9 @@ class FeedItemProblem extends React.Component {
         <div className="inner">
           <div className="row">
             <div className="col">
-              <p>{this.props.data.description} ...will limit length</p>
-              <p>{this.props.data.specification} ...will limit length</p>
+              <p>{limitLength(this.props.data.description)}</p>
               <div className="margin-bottom-15"><TopicList topics={this.props.data.topics} /></div>
-              <Link to={`problem/${this.props.data.problem_id}`} >Link</Link>
+              <Link to={`problem/${this.props.data.problem_id}`} >{this.props.data.problem_id}</Link>
             </div>
             <div className="col">
               {this.renderTab()}
