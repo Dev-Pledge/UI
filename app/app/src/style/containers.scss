@@ -104,7 +104,7 @@ section {
     li {
       margin-bottom: 10px;
       border-radius: $feed-border-radius;
-      border: 1px solid darken($color-light, 15%);
+      border: 1px solid $feed-item-header-bgcolor;
       padding: 0;
 
       .row {
