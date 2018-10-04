@@ -3,6 +3,7 @@
     background: lighten($color-primary, 5%);
     padding-top: 5px;
     padding-bottom: 5px;
+    color: darken($color-white,5%);
     h1 {
       font-weight: 200;
     }
@@ -17,7 +18,7 @@
       padding: 1px 15px 1px 0;
 
       a {
-        color: $color-dark;
+        color: lighten($color-pre-white,2%);
         text-decoration: none;
         &.active {
           color: $color-white;
@@ -31,6 +32,7 @@
   .nav-bar {
     color: darken($color-light, 30%);
     border-bottom: 1px solid lighten($color-primary, 20%);
+
     /* border-top: 1px solid lighten($color-primary, 20%); */
     /* background: $color-primary; */
     ul {
@@ -53,7 +55,7 @@
     }
   }
   .logo-100 {
-    background-image: url(/logo100x100.png);
+    background-image: url($logo-white-round);
     min-width: 37px;
     min-height: 37px;
     background-position: center;
