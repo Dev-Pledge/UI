@@ -1,4 +1,6 @@
 .dp-button {
+  position: relative;
+  z-index: 2;
   font-size: inherit;
   display: block;
   border-radius: 0;

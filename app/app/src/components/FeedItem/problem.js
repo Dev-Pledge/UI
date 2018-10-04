@@ -100,8 +100,8 @@ class FeedItemProblem extends React.Component {
             <div className="col col-8">
               <span className="title"><TiPuzzle className="text-muted text-xl" /> {limitLength(this.props.data.title)}</span>
             </div>
-            <div className="col col-4 has-text-right">
-              Worth: £{this.props.data.pledges_value}
+            <div className="col col-4 has-text-right dp-info">
+              Pledged: £{this.props.data.pledges_value}
             </div>
           </div>
         </div>
