@@ -145,7 +145,7 @@ class CreateProblem extends Component {
                     <div className="container-fluid">
                         <div className="row">
                             <div className="col-md-6 offset-md-3">
-                                <h2>Suggest a Problem</h2>
+                                <h2>Suggest a Problem or Request</h2>
                                 <br/>
                                 <form className="dp-form">
                                     <label>Title</label>
@@ -156,7 +156,7 @@ class CreateProblem extends Component {
                                         value={this.state.title}
                                         onChange={e => this.handleTitleChange(e.target.value)}
                                     />
-                                    <label>Description</label>
+                                    <label>Description <small><i>Give an overview of Problem or Request</i></small></label>
                                     <input
                                         type="text"
                                         className="dp-input"
@@ -177,7 +177,8 @@ class CreateProblem extends Component {
                     value={this.state.specification}
                     onChange={e => this.handleSpecificationChange(e.target.value)}
                   />*/}
-                                    <p>When would you like this problem to go live?</p>
+                                    <br />
+                                    <label>When would you like this problem to go live?</label>
                                     <Flatpickr className="dp-input" value={this.state.activeDateTime} options={{
                                         enableTime: true,
                                         altInput: true,
