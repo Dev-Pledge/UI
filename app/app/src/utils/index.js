@@ -6,6 +6,6 @@ export const hasProp = (obj, propertyName) => {
   return obj.hasOwnProperty(propertyName)
 }
 
-export const limitLength = (str = '', limit = 50, etcString = '...') => {
+export const limitLength = (str = '', limit = 400, etcString = '...') => {
   return str.length <= limit ? str : str.substr(0, limit) + etcString
 }

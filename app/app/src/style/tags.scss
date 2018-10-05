@@ -9,7 +9,7 @@
   span {
     margin-right: 5px;
     padding: 3px;
-    border: 1px solid $color-light;
+    border: 1px solid darken($color-light,20%);
 
     &.is-primary {
       border: 1px solid $color-primary;
@@ -47,4 +47,5 @@
       margin-right: 5px;
     }
   }
+
 }
