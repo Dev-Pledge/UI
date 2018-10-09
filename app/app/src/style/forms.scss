@@ -56,7 +56,11 @@
 }
 
 .dp-form {
-  .dp-input {
+  label {
+    display: inline-block;
+    margin-bottom: 5px;
+  }
+  .dp-input, .DraftEditor-root {
     width: 100%;
     margin-bottom: 20px;
   }

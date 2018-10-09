@@ -1,9 +1,19 @@
 import Raven from 'raven-js'
 import { propOrDefault } from '../utils'
 
-export const logRequestError = (err, reference, config = {}) => {
+export const logRequestError = (err, reference = '', config = {}) => {
   const excludeStatus = propOrDefault(config, 'excludeStatus', [])  // todo laters replace default with [401, 403, 404]
   const extraContext = propOrDefault(config, 'extraContext', {})
+  if (! err) {
+    console.log('no err object.  No response from server', err, reference, config)
+    return
+  }
+  if (! err.hasOwnProperty('response') || ! err.hasOwnProperty('request')) {
+    // something went really, really bad
+    Raven.captureException(err,  Object.assign({}, { message: err.message, reference }, extraContext));
+    console.log(Object.assign({}, { response: err.message, reference }, extraContext))
+    return
+  }
   if (err.response) {
     // that falls out of the range of 2xx Basically 400s.  500s caught below
     // many exceptions are legitimate - IE 404 and 401 may be expected.  Don't flood sentry :)

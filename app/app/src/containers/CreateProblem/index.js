@@ -166,19 +166,12 @@ class CreateProblem extends Component {
                                         onChange={e => this.handleDescriptionChange(e.target.value)}
                                     />
                                     <label>Detailed Spec <small><i>use MarkDown</i></small></label>
-                                    {<Editor
+                                    <Editor
                                         editorState={this.state.specification}
                                         onChange={this.handleSpecificationChange}
                                         plugins={plugins}
-                                    />}
-                                    {/*<input
-                    type="text"
-                    className="dp-input"
-                    placeholder="spec"
-                    value={this.state.specification}
-                    onChange={e => this.handleSpecificationChange(e.target.value)}
-                  />*/}
-                                    <br />
+                                    />
+
                                     <label>When would you like this problem to go live?</label>
                                     <Flatpickr className="dp-input" value={this.state.activeDateTime} options={{
                                         enableTime: true,
@@ -187,8 +180,8 @@ class CreateProblem extends Component {
                                     }} onChange={val => this.handleActiveDateTime(val)}/>
 
 
-                                    <p>Select relevant topics to your problem</p>
-                                    <div className="margin-bottom-15 tags">
+                                    <label>Select relevant topics to your problem</label>
+                                    <div className="margin-bottom-15 tags with-tags-first">
                                         {this.renderTopics()}
                                     </div>
 
