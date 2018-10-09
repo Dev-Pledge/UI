@@ -126,12 +126,13 @@ class CreateProblem extends Component {
         if (!this.state.topics.length) return <Loading/>
         return this.state.topics.map(topic => {
             const hasTopic = this.state.topicsSelected.includes(topic.name)
+            if(topic.parent_name!==null)
             return (
                 <span
                     key={topic.topic_id}
                     className={hasTopic ? 'tag is-primary with-fill has-cursor-pointer' : 'tag has-cursor-pointer'}
                     onClick={() => this.topicClick(topic.name, hasTopic)}
-                >{topic.name}
+                > {topic.name}
         </span>
             )
         })
