@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 const paths = require('../config/paths');
 
 function makeDirAndCopyPrebuild() {
-    fs.remove(paths.appPostBuild+'/*').then(
+    fs.remove(paths.appPostBuild + '/static').then(
         () => {
             fs.ensureDir(paths.appPostBuild)
                 .then(() => {
