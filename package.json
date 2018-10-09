@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "draftjs-to-markdown": "^0.5.1",
-    "react-markdown": "^4.0.1"
-  }
-}
