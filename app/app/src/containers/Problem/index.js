@@ -14,6 +14,7 @@ import PledgeList from '../../components/PledgeList'
 import CommentsList from '../../components/CommentsList'
 import SolutionsList from '../../components/SolutionsList'
 import AddSolution from '../../components/AddSolution'
+import AddComment from '../../components/AddComment'
 import { fetchTopics } from '../../api/topics'
 import Loading from '../../components/Loading'
 
@@ -46,7 +47,7 @@ class Problem extends Component {
       })
   }
 
-  getProblem () {
+  getProblem = () => {
     fetchProblem(this.state.problem_id).then(res => {
       console.log('problem', res)
       this.setState({ problem: res.data })
@@ -158,6 +159,9 @@ class Problem extends Component {
         </div>
         {this.state.showingTab === 'comments' ?
           (<div className="tab-body">
+            <div className="pad-5">
+              <AddComment parentId={this.state.problem_id} onSuccess={this.getProblem} />{/* todo: maybe not fetch the whole problem again!! */}
+            </div>
             <CommentsList comments={this.state.problem.last_five_comments} />
           </div>) : ''
         }

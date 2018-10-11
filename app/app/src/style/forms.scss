@@ -64,6 +64,17 @@
     width: 100%;
     margin-bottom: 20px;
   }
+  span.input-group {
+    display: flex; /* or inline-flex */
+    margin-bottom: 10px;
+    .dp-input {
+      align-self: flex-start;
+      margin-bottom: 0;
+    }
+    .btn-addon {
+      align-self: flex-end;
+    }
+  }
 }
 
 .DraftEditor-root {
