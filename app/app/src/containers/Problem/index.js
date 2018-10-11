@@ -159,9 +159,7 @@ class Problem extends Component {
         </div>
         {this.state.showingTab === 'comments' ?
           (<div className="tab-body">
-            <div className="pad-5">
-              <AddComment parentId={this.state.problem_id} onSuccess={this.getProblem} />{/* todo: maybe not fetch the whole problem again!! */}
-            </div>
+            <AddComment parentId={this.state.problem_id} onSuccess={this.getProblem} />{/* todo: maybe not fetch the whole problem again!! */}
             <CommentsList comments={this.state.problem.last_five_comments} />
           </div>) : ''
         }
