@@ -1,12 +1,14 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import { TiPuzzle } from 'react-icons/ti'
 
 import PledgeList from '../PledgeList'
 import SolutionsList from '../SolutionsList'
 import CommentsList from '../CommentsList'
+import AddComment from '../AddComment'
 import TopicList from '../TopicsList'
 import { limitLength } from '../../utils'
-import { TiPuzzle } from 'react-icons/ti'
+import { fetchComments } from '../../api/comment'
 
 class FeedItemProblem extends React.Component {
 
@@ -34,6 +36,26 @@ class FeedItemProblem extends React.Component {
     }
   }
 
+  componentDidMount () {
+    this.setInitialState()
+  }
+
+  setInitialState () {
+    this.setState({
+      problem_id: this.props.data.problem_id,
+      data: this.props.data,
+      comments: this.props.data.last_five_comments
+    })
+  }
+
+  componentWillReceiveProps (nextProps) {
+    console.log(nextProps)
+    if (nextProps.data.problem_id !== this.props.data.problem_id) {
+      // set initial state
+      this.setInitialState()
+    }
+  }
+
   showTab = (tabName) => {
     this.setState({
       tabs: this.state.tabs.map(tab => {
@@ -45,24 +67,26 @@ class FeedItemProblem extends React.Component {
   }
 
   getMoreComments = () => {
-    //
-    this.setState({
-      comments: this.props.data.last_five_comments,
-      showMoreComments: true
+    fetchComments(this.props.data.problem_id).then(res => {
+      this.setState({
+        comments: res.data.comments,
+        showMoreComments: true
+      })
+    }).catch(err => {
+      console.log(err)
     })
   }
 
   renderComments = () => {
-    if (! this.props.data.last_five_comments.length) return ''
+    if (! this.state.comments.length) return ''
     if (! this.state.showMoreComments) return (
       <div>
         <div onClick={this.getMoreComments} className="text-sm text-center">Load more</div>
-        <CommentsList comments={this.props.data.last_five_comments} />
+        <CommentsList comments={this.state.comments} />
       </div>
     )
     return (
       <div>
-        <div className="text-sm">you would have all the comments now, if this were hooked up</div>
         <CommentsList comments={this.state.comments} />
       </div>
     )
@@ -81,6 +105,7 @@ class FeedItemProblem extends React.Component {
       case 'comment':
         return (
           <div>
+            <AddComment parentId={this.props.data.problem_id} onSuccess={this.getMoreComments} />
             {this.renderComments()}
           </div>
         )
@@ -92,25 +117,25 @@ class FeedItemProblem extends React.Component {
 
   render () {
     // todo assign to state
-    if (! this.props.data) return ''
+    if (! this.state.data) return ''
     return (
       <li>
         <div className="inner-header is-light">
           <div className="row">
             <div className="col col-8">
-              <span className="title"><TiPuzzle className="text-muted text-xl" /> {limitLength(this.props.data.title)}</span>
+              <span className="title"><TiPuzzle className="text-muted text-xl" /> {limitLength(this.state.data.title)}</span>
             </div>
             <div className="col col-4 has-text-right dp-info">
-              Pledged: ${this.props.data.pledges_value}
+              Pledged: ${this.state.data.pledges_value}
             </div>
           </div>
         </div>
         <div className="inner">
           <div className="row">
             <div className="col">
-              <p>{limitLength(this.props.data.description)}</p>
-              <div className="margin-bottom-15"><TopicList topics={this.props.data.topics} /></div>
-              <Link to={`problem/${this.props.data.problem_id}`} >{this.props.data.problem_id}</Link>
+              <p>{limitLength(this.state.data.description)}</p>
+              <div className="margin-bottom-15"><TopicList topics={this.state.data.topics} /></div>
+              <Link to={`problem/${this.state.data.problem_id}`} >{this.state.data.problem_id}</Link>
             </div>
             <div className="col">
               {this.renderTab()}
@@ -123,15 +148,15 @@ class FeedItemProblem extends React.Component {
               <li
                 className={this.state.selected === 'pledge' ? 'is-active' : ''}
                 onClick={() => this.showTab('pledge')}
-              >pledges ({this.props.data.pledges_count})</li>
+              >pledges ({this.state.data.pledges_count})</li>
               <li
                 className={this.state.selected === 'solution' ? 'is-active' : ''}
                 onClick={() => this.showTab('solution')}
-              >solutions ({this.props.data.solutions.length})</li>
+              >solutions ({this.state.data.solutions.length})</li>
               <li
                 className={this.state.selected === 'comment' ? 'is-active' : ''}
                 onClick={() => this.showTab('comment')}
-              >comments ({this.props.data.total_comments})</li>
+              >comments ({this.state.data.total_comments})</li>
             </ul>
 
         </div>
