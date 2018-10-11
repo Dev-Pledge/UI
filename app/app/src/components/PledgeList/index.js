@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const PledgeList = (props) => {
   if (! props.hasOwnProperty('pledges')) return ''

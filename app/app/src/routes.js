@@ -1,5 +1,5 @@
 import App from './App';
-import { Home, Feed, Login, Logout, Signup, Problem, CreateProblem, Preferences, GithubAuth } from './containers';
+import { Home, Feed, Login, Logout, Signup, Problem, CreateProblem, Preferences, Pledge, GithubAuth } from './containers';
 
 export default {
   component: App,
@@ -47,6 +47,11 @@ export default {
       path: '/preferences',
       exact: true,
       component: Preferences // Add your route here
+    },
+    {
+      path: '/pledge-payment',
+      exact: true,
+      component: Pledge // Add your route here
     },
     {
       path: '/github/verify',

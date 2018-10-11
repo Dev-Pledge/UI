@@ -6,6 +6,7 @@ import Signup from './Signup';
 import CreateProblem from './CreateProblem'
 import Problem from './Problem'
 import Preferences from './Preferences'
+import Pledge from './Pledge'
 import GithubAuth from './GithubAuth'
 
-export { Home, Feed, Login, Logout, Signup, Problem, CreateProblem, Preferences, GithubAuth };
+export { Home, Feed, Login, Logout, Signup, Problem, CreateProblem, Preferences, Pledge, GithubAuth };

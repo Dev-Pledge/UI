@@ -17,7 +17,9 @@ const store = configureStore()
 console.log('here is the process', process)
 
 ReactDOM.render(
-  <Provider store={store}><App /></Provider>,
+    <Provider store={store}>
+      <App />
+    </Provider>,
   document.getElementById('root')
 );
 if (process.env.NODE_ENV !== 'production') {
