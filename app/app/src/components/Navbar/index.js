@@ -48,7 +48,7 @@ class Navbar extends React.Component {
               </div>
               <div className="col-sm has-text-center">
                 <h1 className="text-white">
-                    <div className="logo-100"></div>DevPledge</h1>
+                    <div className="logo-100"></div><span class="dev-color">Dev</span>Pledge</h1>
               </div>
               <div className="col-sm has-text-right">
                 <ul>

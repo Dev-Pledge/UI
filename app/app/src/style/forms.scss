@@ -3,19 +3,19 @@
   z-index: 2;
   font-size: inherit;
   display: block;
-  border-radius: 0;
+  border-radius: 0px;
   padding: 10px 15px;
   cursor: pointer;
   color: $color-dark;
-  border: 1px solid $color-light;
+  border: 1px solid darken($color-light,15%);
   background: lighten($color-light, 10%);
   background: linear-gradient(to bottom, lighten($color-light, 10%) 0%,lighten($color-light, 20%) 50%,lighten($color-light, 15%) 51%,lighten($color-light, 5%) 100%);
   // box-shadow: 3px 3px 0 0 rgba(117,117,117,0.2);
 
   &.is-primary {
-    border: 1px solid $color-primary;
-    background: lighten($color-primary, 20%);
-    background: linear-gradient(to bottom, lighten($color-primary, 20%) 0%,lighten($color-primary, 25%) 50%,lighten($color-primary, 20%) 51%,lighten($color-primary, 15%) 100%);
+    border: 1px solid darken($color-primary,10%);
+    background: darken($color-primary, 20%);
+    background: linear-gradient(to bottom, lighten($color-primary, 10%) 0%,lighten($color-primary, 15%) 50%,lighten($color-primary, 10%) 51%,lighten($color-primary, 5%) 100%);
     color: $color-white;
   }
 
