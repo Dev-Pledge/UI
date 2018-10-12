@@ -126,7 +126,7 @@ class FeedItemProblem extends React.Component {
               <span className="title"><TiPuzzle className="text-muted text-xl" /> {limitLength(this.state.data.title)}</span>
             </div>
             <div className="col col-4 has-text-right dp-info">
-              Pledged: ${this.state.data.pledges_value}
+              Pledges  ${this.state.data.pledges_value}
             </div>
           </div>
         </div>
@@ -148,15 +148,15 @@ class FeedItemProblem extends React.Component {
               <li
                 className={this.state.selected === 'pledge' ? 'is-active' : ''}
                 onClick={() => this.showTab('pledge')}
-              >pledges ({this.state.data.pledges_count})</li>
+              >Pledges ({this.state.data.pledges_count})</li>
               <li
                 className={this.state.selected === 'solution' ? 'is-active' : ''}
                 onClick={() => this.showTab('solution')}
-              >solutions ({this.state.data.solutions.length})</li>
+              >Solutions ({this.state.data.solutions.length})</li>
               <li
                 className={this.state.selected === 'comment' ? 'is-active' : ''}
                 onClick={() => this.showTab('comment')}
-              >comments ({this.state.data.total_comments})</li>
+              >Comments ({this.state.data.total_comments})</li>
             </ul>
 
         </div>
