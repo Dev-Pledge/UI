@@ -16,7 +16,7 @@ class Pledge extends Component {
   makePledge (token) {
     postPledge('prb-5af2740a-17ce-4e20-b5f0-163e10f0db6a', {
       comment: "A Solution for this problem will be greatly appreciated!",
-      value: 2.50,
+      value: this.state.value,
       currency: "USD"
     }).then(res => {
       console.log('res pledge', res)
