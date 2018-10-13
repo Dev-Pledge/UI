@@ -2,6 +2,6 @@
 body {
   .dev-color {
     font-weight: 700;
-    color: $color-super-dark;
+    color: darken($color-secondary, 10%);
   }
 }

@@ -24,6 +24,7 @@ class Pledge extends Component {
       console.log('here is the token', token)
       postPayment(pledgeId, token).then(res => {
         console.log(res)
+        alert('success')
       })
     }).catch(err => {
       logRequestError(err)

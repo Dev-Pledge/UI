@@ -218,7 +218,7 @@ class Feed extends React.Component {
             <div className="row">
               <div className="col col-sm-2">
                 <button className="dp-button is-tertiary margin-bottom-15" onClick={this.mockPush}>Add random comment</button>
-                <button className="dp-button is-tertiary margin-bottom-15" onClick={this.mockPushCreateProblem}>make problem</button>
+                <button className="dp-button is-quaternary margin-bottom-15" onClick={this.mockPushCreateProblem}>make problem</button>
               </div>
               <div className="col-sm">
                 <div className="feed-list">

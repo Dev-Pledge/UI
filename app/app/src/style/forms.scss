@@ -14,22 +14,28 @@
 
   &.is-primary {
     border: 1px solid darken($color-primary,10%);
-    background: darken($color-primary, 20%);
-    background: linear-gradient(to bottom, lighten($color-primary, 10%) 0%,lighten($color-primary, 15%) 50%,lighten($color-primary, 10%) 51%,lighten($color-primary, 5%) 100%);
+    background: $color-primary;
+    background: linear-gradient(to bottom, $color-primary 0%,darken($color-primary, 7%) 50%,darken($color-primary, 7%) 51%,$color-primary 100%);
     color: $color-white;
   }
 
   &.is-secondary {
-    border: 1px solid $color-secondary;
-    background: lighten($color-secondary, 10%);
-    color: white;
-    background: linear-gradient(to bottom, lighten($color-secondary, 10%) 0%,lighten($color-secondary, 20%) 50%,lighten($color-secondary, 15%) 51%,lighten($color-secondary, 5%) 100%);
+    border: 1px solid darken($color-secondary, 5%);
+    background: $color-secondary;
+    color: $color-quaternary;
+    background: linear-gradient(to bottom, darken($color-secondary, 4%) 0%, $color-secondary 15%, $color-secondary 90%, darken($color-secondary, 3%) 100%);
   }
 
   &.is-tertiary {
     border: 1px solid $color-tertiary;
-    background: lighten($color-tertiary, 10%);
-    color: white;
+    background: lighten($color-tertiary, 5%);
+    color: $color-secondary;
+  }
+
+  &.is-quaternary {
+    border: 1px solid $color-quaternary;
+    background: lighten($color-quaternary, 10%);
+    color: $color-secondary;
   }
 
   &.is-inline {

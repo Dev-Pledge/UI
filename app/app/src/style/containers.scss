@@ -120,7 +120,8 @@ section {
       .inner-header {
         padding: 0 10px;
         vertical-align: middle;
-        line-height: 18px;
+        line-height: 35px;
+        border-bottom: 1px solid $feed-item-header-bgcolor;
         .title {
           font-size: 0.9em;
           color: lighten($color-super-dark, 15%);
@@ -134,11 +135,10 @@ section {
           }
         }
         &.is-light {
-          line-height: 35px;
-          background-color: $feed-item-header-bgcolor;
-          color: $feed-item-header-color;
+          background-color: $color-white;
+          color: $feed-item-header-bgcolor;
           .title {
-            color: $feed-item-header-color;
+            color: darken($feed-item-header-bgcolor, 10%);
             font-weight: normal;
           }
           .dp-info{

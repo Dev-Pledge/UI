@@ -117,7 +117,7 @@ body {
     color: $color-white;
   }
   .text-muted {
-    color: lighten($color-dark, 30%);
+    opacity: 0.6;
   }
   .text-primary {
     color: $color-primary;

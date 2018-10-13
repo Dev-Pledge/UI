@@ -95,7 +95,7 @@ class Preferences extends Component {
                 </div>
 
                 <button
-                  className="dp-button is-primary is-block"
+                  className="dp-button is-primary"
                   onClick={this.handleSubmit}
                 >
                   Watch those badboys

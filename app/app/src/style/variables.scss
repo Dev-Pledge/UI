@@ -2,14 +2,16 @@
 $logo-white-round: '/logo100x100.png';
 // colors taken from Phase1UI
 $color-primary: #47cb9c;
-$color-secondary: #30819a;
-$color-tertiary: #4d547d;
+$color-secondary: #19647E;
+$color-tertiary: #E9D2F4;
+$color-quaternary: #E1CA96;
 $color-splash: #5c5c5e;
+
 
 
 $color-super-dark: #151316;
 $color-light: #e4e4e4;
-$color-dark: #26292a;
+$color-dark: #39393A;
 $color-white: #ffffff;
 
 // todo pick some nice colors
@@ -23,5 +25,5 @@ $min-footer-height: 100px;
 $feed-border-radius: 2px;
 
 //$feed-item-header-bgcolor: change_color($color-primary,$blue: 150);
-$feed-item-header-bgcolor: lighten($color-primary,20%);
-$feed-item-header-color:  lighten($color-dark,10%);
+$feed-item-header-bgcolor: darken($color-primary, 10%);
+$feed-item-header-color:  $color-secondary;
