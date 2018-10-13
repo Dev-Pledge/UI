@@ -1,24 +1,27 @@
 
 $logo-white-round: '/logo100x100.png';
 // colors taken from Phase1UI
-$color-primary: #43913c;
-$color-secondary: #675e9a;
-$color-tertiary: #6c757d;
+$color-primary: #47cb9c;
+$color-secondary: #30819a;
+$color-tertiary: #4d547d;
+$color-splash: #5c5c5e;
 
-$color-super-dark: #2a302b;
+
+$color-super-dark: #151316;
 $color-light: #e4e4e4;
-$color-dark: #515151;
+$color-dark: #26292a;
 $color-white: #ffffff;
 
 // todo pick some nice colors
 $color-danger: red;
-$color-warning: orange;
-$color-success: green;
+$color-warning: #ff6519;
+$color-success: #32a90c;
 
 
 $min-nav-height: 60px;
 $min-footer-height: 100px;
 $feed-border-radius: 2px;
 
-$feed-item-header-bgcolor: #4f4e4f;
-$feed-item-header-color:  white;
+//$feed-item-header-bgcolor: change_color($color-primary,$blue: 150);
+$feed-item-header-bgcolor: lighten($color-primary,20%);
+$feed-item-header-color:  lighten($color-dark,10%);
