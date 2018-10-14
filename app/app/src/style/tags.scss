@@ -1,6 +1,7 @@
 .tags {
   font-size: 0.8em;
   color: darken($color-light, 15%);
+  display: inline-block;
 
   &.is-right {
     float: right;
@@ -15,6 +16,13 @@
     border: 1px solid darken($color-light,20%);
     display: inline-block;
 
+    &.is-small {
+      font-size: 0.75rem;
+      margin-top: 5px;
+      padding: 0 3px;
+      line-height: 1rem;
+    }
+
     &.is-primary {
       border: 1px solid $color-primary;
 
@@ -22,10 +30,28 @@
         background: lighten($color-primary, 20%);
         color: $color-white;
       }
+    }
 
-      &.is-borderless {
-        border: none;
+    &.is-tertiary {
+      border: 1px solid $color-tertiary;
+
+      &.with-fill {
+        background: lighten($color-tertiary, 20%);
+        color: darken($color-tertiary, 10%);
       }
+    }
+
+    &.is-quaternary {
+      border: 1px solid $color-quaternary;
+
+      &.with-fill {
+        background: lighten($color-quaternary, 20%);
+        color: darken($color-quaternary, 10%);
+      }
+    }
+
+    &.is-borderless {
+      border: none;
     }
 
     &.is-text-white {

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import { TiPuzzle } from 'react-icons/ti'
+import { TiPuzzleOutline } from 'react-icons/ti'
+import { TiUserOutline } from 'react-icons/ti'
+import moment from 'moment'
 
 import PledgeList from '../PledgeList'
 import SolutionsList from '../SolutionsList'
@@ -16,11 +18,15 @@ class FeedItemProblem extends React.Component {
     super()
     this.state = {
       //...
-      selected: 'pledge',
+      selected: 'problem',
       tabs: [
         {
-          name: 'pledge',
+          name: 'problem',
           visible: true
+        },
+        {
+          name: 'pledge',
+          visible: false
         },
         {
           name: 'solution',
@@ -93,6 +99,7 @@ class FeedItemProblem extends React.Component {
   }
 
   renderTab () {
+    console.log(this.state.data)
     const visibleTab = this.state.tabs.find(tab => tab.visible)
     if (! visibleTab) return 'we would retrun a default view'
     switch (visibleTab.name) {
@@ -109,6 +116,20 @@ class FeedItemProblem extends React.Component {
             {this.renderComments()}
           </div>
         )
+      case 'problem':
+        return (
+          <div className="problem-content">
+            <p>
+              <TiPuzzleOutline className="text-muted text-xl inline-icon " />
+              &nbsp;{this.state.data.description}</p>
+            <p className="text-xs no-bottom">
+              <TiUserOutline className="text-muted text-xl inline-icon " />
+              &nbsp;<span className="text-quaternary">{this.state.data.user.username}</span>
+              &nbsp;<span className="text-muted">@</span>
+              &nbsp;<span className="">{moment.utc(this.state.data.created).local().format('lll')}</span>
+            </p>
+          </div>
+        )
       break;
       default:
         return ('could not find component')
@@ -119,11 +140,16 @@ class FeedItemProblem extends React.Component {
     // todo assign to state
     if (! this.state.data) return ''
     return (
-      <li>
+      <li className="feed-item">
         <div className="inner-header is-light">
           <div className="row">
             <div className="col col-8">
-              <span className="title"><TiPuzzle className="text-muted text-xl" /> {limitLength(this.state.data.title)}</span>
+                <span>
+                  <TopicList topics={this.state.data.topics} extraTagClases="is-small is-tertiary text-primary" />
+                </span>
+                <span className="title">
+                  &nbsp; &nbsp;{limitLength(this.state.data.title)}
+                </span>
             </div>
             <div className="col col-4 has-text-right dp-info">
               Pledges  ${this.state.data.pledges_value}
@@ -133,32 +159,40 @@ class FeedItemProblem extends React.Component {
         <div className="inner">
           <div className="row">
             <div className="col">
-              <p>{limitLength(this.state.data.description)}</p>
-              <div className="margin-bottom-15"><TopicList topics={this.state.data.topics} /></div>
-              <Link to={`problem/${this.state.data.problem_id}`} >{this.state.data.problem_id}</Link>
-            </div>
-            <div className="col">
-              {this.renderTab()}
+              <div className="scrollable tabbed-content">
+                {this.renderTab()}
+              </div>
             </div>
           </div>
         </div>
-        <div className="tabFooter">{/* offset this to component */}
-
-            <ul className="is-tabbed-list is-small has-text-right">
-              <li
-                className={this.state.selected === 'pledge' ? 'is-active' : ''}
-                onClick={() => this.showTab('pledge')}
-              >Pledges ({this.state.data.pledges_count})</li>
-              <li
-                className={this.state.selected === 'solution' ? 'is-active' : ''}
-                onClick={() => this.showTab('solution')}
-              >Solutions ({this.state.data.solutions.length})</li>
-              <li
-                className={this.state.selected === 'comment' ? 'is-active' : ''}
-                onClick={() => this.showTab('comment')}
-              >Comments ({this.state.data.total_comments})</li>
-            </ul>
-
+        <div className="inner-footer">{/* offset this to component */}
+          <div className="row">
+            <div className="col">
+              <ul className="is-tabbed-list is-small has-text-right">
+                <li>
+                  <Link to={`problem/${this.state.data.problem_id}`}>
+                    View More
+                  </Link>
+                </li>
+                <li
+                  className={this.state.selected === 'problem' ? 'is-active' : ''}
+                  onClick={() => this.showTab('problem')}
+                >Problem</li>
+                <li
+                  className={this.state.selected === 'pledge' ? 'is-active' : ''}
+                  onClick={() => this.showTab('pledge')}
+                >Pledges ({this.state.data.pledges_count})</li>
+                <li
+                  className={this.state.selected === 'solution' ? 'is-active' : ''}
+                  onClick={() => this.showTab('solution')}
+                >Solutions ({this.state.data.solutions.length})</li>
+                <li
+                  className={this.state.selected === 'comment' ? 'is-active' : ''}
+                  onClick={() => this.showTab('comment')}
+                >Comments ({this.state.data.total_comments})</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </li>
     )

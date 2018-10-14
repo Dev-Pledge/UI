@@ -92,6 +92,9 @@ body {
   p {
     padding: 0;
     margin: 5px 0;
+    &.no-bottom {
+      margin-bottom: 0;
+    }
   }
   .text-xl {
     font-size: 1.2em;
@@ -107,7 +110,7 @@ body {
   }
 
   a {
-    color: $color-tertiary;
+    color: $color-quaternary;
     text-decoration: none;
     font-weight: 600;
   }
@@ -127,6 +130,9 @@ body {
   }
   .text-tertiary {
     color: $color-tertiary;
+  }
+  .text-quaternary {
+    color: $color-quaternary;
   }
   .text-danger {
     color: $color-danger;

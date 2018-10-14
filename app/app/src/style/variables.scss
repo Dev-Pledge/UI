@@ -10,8 +10,11 @@ $color-splash: #5c5c5e;
 
 
 $color-super-dark: #151316;
-$color-light: #e4e4e4;
 $color-dark: #39393A;
+$color-medium: lighten($color-dark, 30%);
+$color-light: #e4e4e4;
+$color-very-light: lighten($color-light, 8%);
+
 $color-white: #ffffff;
 
 // todo pick some nice colors
@@ -22,7 +25,7 @@ $color-success: #32a90c;
 
 $min-nav-height: 60px;
 $min-footer-height: 100px;
-$feed-border-radius: 2px;
+$feed-border-radius: 5px;
 
 //$feed-item-header-bgcolor: change_color($color-primary,$blue: 150);
 $feed-item-header-bgcolor: darken($color-primary, 10%);

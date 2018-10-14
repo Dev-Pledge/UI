@@ -7,10 +7,12 @@ const TopicsList = (props) => {
     return ''
   }
 
+  const extraClassList = props.extraTagClases ? props.extraTagClases : ''
+
   if (props.topics.length) return (
-    <div className="tags">
+    <div className="tags with-tags-first">
       {props.topics.map(topic => (
-        <span key={topic} className="tag">
+        <span key={topic} className={`tag ${extraClassList}`}>
           {topic}
         </span>
       ))}

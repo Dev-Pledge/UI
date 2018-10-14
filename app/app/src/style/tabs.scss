@@ -1,10 +1,9 @@
 ul.is-tabbed-list {
   list-style: none;
-  padding:  0;
+  padding: 0 0 5px 0;
   margin: 0;
   border: none;
-  border-top: 1px solid $color-light;
-  background: lighten($color-light, 7%);
+  // background: lighten($color-light, 7%);
 
   &.is-small {
     font-size: 0.75rem;
@@ -13,9 +12,16 @@ ul.is-tabbed-list {
     cursor: pointer;
     display: inline-block;
     border: none;
-    padding: 3px 15px;
-    border-right: 1px solid $color-light;
+    padding: 5px 15px;
+    color: $color-medium;
+    // border-right: 1px solid $color-light;
+    &:first-child {
+      // border-left: 1px solid $color-light;
+    }
     &.is-active {
+      // margin-top: -2px;
+      // border-top: 2px solid $color-white;
+      // background: $color-white;
       color: $color-primary;
     }
   }

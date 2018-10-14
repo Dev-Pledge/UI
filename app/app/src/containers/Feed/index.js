@@ -217,8 +217,8 @@ class Feed extends React.Component {
           <div className="container-fluid">
             <div className="row">
               <div className="col col-sm-2">
-                <button className="dp-button is-tertiary margin-bottom-15" onClick={this.mockPush}>Add random comment</button>
-                <button className="dp-button is-quaternary margin-bottom-15" onClick={this.mockPushCreateProblem}>make problem</button>
+                {/*<button className="dp-button is-tertiary margin-bottom-15" onClick={this.mockPush}>Add random comment</button>
+                <button className="dp-button is-quaternary margin-bottom-15" onClick={this.mockPushCreateProblem}>make problem</button>*/}
               </div>
               <div className="col-sm">
                 <div className="feed-list">
@@ -229,8 +229,8 @@ class Feed extends React.Component {
                 </div>
               </div>
               <div className="col col-sm-2">
-                panel 2
-                {this.renderFeedStats()}
+                {/*panel 2
+                {this.renderFeedStats()}*/}
               </div>
             </div>
           </div>
