@@ -87,7 +87,7 @@ class FeedItemProblem extends React.Component {
     if (! this.state.comments.length) return ''
     if (! this.state.showMoreComments) return (
       <div>
-        <div onClick={this.getMoreComments} className="text-sm text-center">Load more</div>
+        {/*<div onClick={this.getMoreComments} className="text-sm text-center">Load more</div>*/}
         <CommentsList comments={this.state.comments} />
       </div>
     )
@@ -99,12 +99,11 @@ class FeedItemProblem extends React.Component {
   }
 
   renderTab () {
-    console.log(this.state.data)
     const visibleTab = this.state.tabs.find(tab => tab.visible)
-    if (! visibleTab) return 'we would retrun a default view'
+    if (! visibleTab) return 'we would return a default view'
     switch (visibleTab.name) {
       case 'pledge':
-        return (<PledgeList pledges={this.props.data.latest_pledges} />)
+        return (<PledgeList problem_id={this.props.data.problem_id} pledges={this.props.data.latest_pledges} />)
       break;
       case 'solution':
         return (<SolutionsList solutions={this.props.data.solutions} />)
@@ -124,7 +123,11 @@ class FeedItemProblem extends React.Component {
               &nbsp;{this.state.data.description}</p>
             <p className="text-xs no-bottom">
               <TiUserOutline className="text-muted text-xl inline-icon " />
-              &nbsp;<span className="text-quaternary">{this.state.data.user.username}</span>
+              &nbsp;<span className="text-quaternary">
+                <Link to={`user/${this.state.data.user.username}`}>
+                  {this.state.data.user.username}
+                </Link>
+              </span>
               &nbsp;<span className="text-muted">@</span>
               &nbsp;<span className="">{moment.utc(this.state.data.created).local().format('lll')}</span>
             </p>
@@ -145,10 +148,10 @@ class FeedItemProblem extends React.Component {
           <div className="row">
             <div className="col col-8">
                 <span>
-                  <TopicList topics={this.state.data.topics} extraTagClases="is-small is-tertiary text-primary" />
+                  <TopicList topics={this.state.data.topics} extraTagClases="is-small is-secondary with-fill" />
                 </span>
                 <span className="title">
-                  &nbsp; &nbsp;{limitLength(this.state.data.title)}
+                  &nbsp;{limitLength(this.state.data.title)}
                 </span>
             </div>
             <div className="col col-4 has-text-right dp-info">

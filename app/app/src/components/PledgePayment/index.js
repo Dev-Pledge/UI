@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { withRouter } from 'react-router';
 import { CardElement, injectStripe, PostalCodeElement } from 'react-stripe-elements';
 import { postPledge } from '../../api/pledge'
 import { postPayment } from '../../api/stripe'
@@ -14,7 +15,7 @@ class Pledge extends Component {
   }
 
   makePledge (token) {
-    postPledge('prb-5af2740a-17ce-4e20-b5f0-163e10f0db6a', {
+    postPledge(this.props.problem_id, {
       comment: "A Solution for this problem will be greatly appreciated!",
       value: this.state.value,
       currency: "USD"
@@ -24,7 +25,10 @@ class Pledge extends Component {
       console.log('here is the token', token)
       postPayment(pledgeId, token).then(res => {
         console.log(res)
-        alert('success')
+        this.props.history.push({
+          pathname: `/problem/${this.props.problem_id}`,
+          state: 'SUCCESSSSSSSSS!!!!!!'
+        })
       })
     }).catch(err => {
       logRequestError(err)
@@ -52,8 +56,6 @@ class Pledge extends Component {
   render () {
     return (
       <form className="dp-form">
-        <p>Make that pledge?</p>
-        <p>My emotion are ... ¯\_(ツ)_/¯</p>
         <label>How much would you like to pledge</label>
         <input className="dp-input" value={this.state.value} onChange={e => this.handleValueChange(e.target.value)} />
         <br/>
@@ -65,4 +67,4 @@ class Pledge extends Component {
   }
 }
 
-export default injectStripe(Pledge);
+export default withRouter(injectStripe(Pledge));

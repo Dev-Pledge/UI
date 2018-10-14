@@ -77,9 +77,6 @@ class Navbar extends React.Component {
                   <li>
                     {this.renderRouteLink('/preferences', 'Preferences')}
                   </li>
-                  <li>
-                    {this.renderRouteLink('/pledge-payment', 'Kind of pledge')}
-                  </li>
                 </ul>
               </div>
               <div className="col-sm">

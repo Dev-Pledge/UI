@@ -62,13 +62,13 @@ class AddComment extends Component {
           <span className="input-group">
             <input
               type="text"
-              className="dp-input"
-              placeholder="Add a comment here"
+              className="dp-input is-ghost"
+              placeholder="Add your new comment here"
               value={this.state.comment}
               onChange={e => this.handleCommentChange(e.target.value)}
             />
             <button
-              className="dp-button is-primary btn-addon"
+              className="dp-button is-primary is-ghost btn-addon"
               onClick={this.handleSubmit}
             >+</button>
           </span>

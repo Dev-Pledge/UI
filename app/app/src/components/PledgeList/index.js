@@ -1,4 +1,16 @@
 import React from 'react'
+import { Link } from "react-router-dom";
+import moment from 'moment'
+
+const renderPledge = (props) => {
+  if (props.problem_id) return (
+    <div>
+      <Link to={`pledge/${props.problem_id}`}>
+        Pledge Here
+      </Link>
+    </div>
+  )
+}
 
 const PledgeList = (props) => {
   if (! props.hasOwnProperty('pledges')) return ''
@@ -7,24 +19,22 @@ const PledgeList = (props) => {
     return ''
   }
 
+  console.log('pledges', props.pledges)
+
   if (props.pledges.length) return (
-    <ul className="pledges-list">
-      {props.pledges.map(pledge => (
-        <li key={pledge.id}>
-          <div className="row">
-            <div className="col-9">
-              {/*<span className="text-xs text-muted">{pledge.date}</span>*/}
-              <p>{pledge.name}</p>
+    <div>
+      {renderPledge(props)}
+      <ul className="pledges-list">
+        {props.pledges.map(pledge => (
+          <li key={pledge.pledge_id}>
+            <div className="text-muted text-sm">
+              <Link to={`user/${pledge.user.username}`} >{pledge.user.username}</Link> @ {moment.utc(pledge.date).local().format('lll')}
             </div>
-            <div className="col-3">
-              <div className="has-text-right">
-                <p>{pledge.value}</p>
-              </div>
-            </div>
-          </div>
-        </li>
-      ))}
-    </ul>
+            <div>value: {pledge.value}</div>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 
   return (
@@ -32,7 +42,8 @@ const PledgeList = (props) => {
       <li>
         <div className="row">
           <div className="col">
-            Currently no pledges
+            Be this first to pledge!
+            {renderPledge(props)}
           </div>
         </div>
       </li>

@@ -110,9 +110,12 @@ body {
   }
 
   a {
-    color: $color-quaternary;
+    color: darken($color-quaternary, 20%);
     text-decoration: none;
-    font-weight: 600;
+    // font-weight: 600;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   /** text color helpers **/

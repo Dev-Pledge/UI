@@ -32,6 +32,15 @@
       }
     }
 
+    &.is-secondary {
+      border: 1px solid $color-secondary;
+
+      &.with-fill {
+        background: lighten($color-secondary, 10%);
+        color: $color-white;
+      }
+    }
+
     &.is-tertiary {
       border: 1px solid $color-tertiary;
 

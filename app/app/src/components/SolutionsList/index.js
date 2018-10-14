@@ -1,5 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import moment from 'moment'
+import { limitLength } from '../../utils'
 
 const SolutionsList = (props) => {
 
@@ -13,12 +15,17 @@ const SolutionsList = (props) => {
     <ul className="pledges-list">
       {props.solutions.map(solution => (
         <li key={solution.solution_id}>
-          <div className="row">
-            <div className="col-12">
-              <a href={solution.open_source_location} target="_blank">{solution.name}</a>
-              <div className="text-muted text-sm">{solution.user.username} @ {moment.utc(solution.created).local().format('lll')}</div>
+            <span>
+              <Link to={`/solution/${solution.solution_id}`}>{solution.name}</Link>
+            </span>
+
+            <span>
+              &nbsp;<span className="text-muted">External repo:</span>&nbsp;
+              <a href={solution.open_source_location} className="text-secondary" target="_blank">{limitLength(solution.open_source_location, 20)}</a>
+            </span>
+            <div className="text-muted text-sm">
+              <Link to={`/user/${solution.user.username}`}>{solution.user.username}</Link> @ {moment.utc(solution.created).local().format('lll')}
             </div>
-          </div>
         </li>
       ))}
     </ul>
