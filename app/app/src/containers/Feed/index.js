@@ -4,6 +4,7 @@ import {VelocityTransitionGroup} from 'velocity-react'
 import {connect} from 'react-redux'
 
 import Navbar from '../../components/Navbar'
+import Loading from '../../components/Loading'
 import shouldFetchFeed from '../../actions/feed'
 import { authUnlocked } from '../../actions/auth'
 import { getForFeed } from '../../api/feed'
@@ -23,13 +24,15 @@ class Feed extends React.Component {
       showCreate: false,
       createButtonText: 'Create Problem',
       feed: [],
-      feedData: []
+      feedData: [],
+      initiallyLoaded: false
     }
 
     this.maxFeedItems = 100  // high for now.
     this.clientUrl = 'ws://dev.feed.devpledge.com:9501'
     this.client = null
     this.defaultClientRefresh = 45000
+    this.messagesEnd = null
   }
 
   componentDidMount() {
@@ -78,6 +81,20 @@ class Feed extends React.Component {
     const data = JSON.parse(msg.data)
     console.log('RECEIVING UPDATE: onClient Message', msg, data)
     if (data && data.hasOwnProperty('entities')) {  // opens with connection object
+      /*
+      if (! this.state.initiallyLoaded) {
+        getForFeed(data).then(res => {
+          this.setState({
+            // newFeedData: 'New feed data: ' + item.id,  // set the flash message
+            feedData: this.sortFilterResult(res.data.entities)
+          },() => {
+            this.showAndScroll()
+          })
+        }).catch(err => logRequestError(err))
+
+        return
+      }
+      */
       this.setState({
         feed: this.state.feed.concat(data.entities)
       }, () => {
@@ -88,10 +105,23 @@ class Feed extends React.Component {
             this.setState({
               newFeedData: 'New feed data: ' + item.id,  // set the flash message
               feedData: this.sortFilterResult(res.data.entities)
+            }, () => {
+              this.showAndScroll()
             })
           }).catch(err => logRequestError(err))
         })
       })
+    }
+  }
+
+  showAndScroll () {
+    if (! this.state.initiallyLoaded) {
+      this.setState({
+        initiallyLoaded: true
+      })
+      setTimeout(() => {
+        this.messagesEnd.scrollIntoView({ behavior: "smooth" })
+      }, 3000)
     }
   }
 
@@ -110,6 +140,7 @@ class Feed extends React.Component {
     }, this.defaultClientRefresh)
   }
 
+  /*
   mockPushCreateProblem () {
     fetch('http://quotesondesign.com/wp-json/posts?filter[orderby]=rand')
       .then(res => res.json())
@@ -138,6 +169,7 @@ class Feed extends React.Component {
     }
   }
 
+
   renderFeedStats () {
     return (
       <div>the feed has {this.state.feedData.length} items</div>
@@ -157,6 +189,7 @@ class Feed extends React.Component {
       // this.mockPush()
     }, 10000)
   }
+  */
 
   renderFeedType_fail () {
     // not expected.  prop won't render anything at all
@@ -178,7 +211,7 @@ class Feed extends React.Component {
   }
 
   renderFeed () {
-    if (! this.state.feedData.length) return 'loading'
+    if (! this.state.feedData.length || ! this.state.initiallyLoaded) return (<Loading />)
     // as demo we will only render the last 3 items on the list.
     // todo this will be updated to rendering more but keep the feed to the bottom of the page
     // as user scrolls min and max values will be updated
@@ -221,10 +254,11 @@ class Feed extends React.Component {
                 <button className="dp-button is-quaternary margin-bottom-15" onClick={this.mockPushCreateProblem}>make problem</button>*/}
               </div>
               <div className="col-sm">
-                <div className="feed-list">
+                <div className="feed-list" id="feedList">
                   <ul>
                     {this.renderFeed()}
                     {this.renderNewItemAlert()}
+                    <li id="feedListBottom" ref={(el) => { this.messagesEnd = el; }}>&nbsp;</li>
                   </ul>
                 </div>
               </div>
