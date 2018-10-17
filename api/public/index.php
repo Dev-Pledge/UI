@@ -8,19 +8,31 @@ $path   = $_SERVER['PATH_INFO'];
 session_start();
 @header( 'Content-Type: application/json;charset=utf-8' );
 
-$sessionOriginToken = 0;
+$sessionOriginToken       = 0;
+$_SESSION['token_create'] = $_SESSION['token_create'] ?? 0;
+$cache                    = new \DevPledge\Cache();
 if ( ( $method == 'POST' && $path == '/startSession' ) ) {
-	$cache              = new \DevPledge\Cache();
-	$sessionOriginToken = $_SESSION['origin_session_token'] = $cache->getOriginToken();
+	if ( $_SESSION['token_create'] > 3 && isset( $_SESSION['origin_session_token'] ) ) {
+		echo \json_encode( [ 'session' => 'started already' ] );
+		die;
+	}
+
+	$sessionOriginToken = $_SESSION['origin_session_token'] = uniqid( 'ogtkn:' );
+	$cache->continueOriginToken( $sessionOriginToken );
+	$_SESSION['token_create'] ++;
+
+	echo \json_encode( [ 'session' => 'started' ] );
+	die;
 } else {
 	if ( isset( $_SESSION['origin_session_token'] ) ) {
 		$sessionOriginToken = $_SESSION['origin_session_token'];
+		$cache->continueOriginToken( $sessionOriginToken );
 	} else {
+		http_response_code( 403 );
 		echo json_encode( [ 'error' => 'no ui api session detected!', 'end_point' => 'POST /startSession' ] );
 		die;
 	}
 }
-
 
 $body    = file_get_contents( 'php://input' );
 $headers = getallheaders();
