@@ -78,6 +78,18 @@
     margin-bottom: 5px;
     margin-right: 10px;
   }
+  .logo-500 {
+    background-image: url($logo-white-round);
+    min-width: 500px;
+    min-height: 54px;
+    background-position: center;
+    background-size: contain;
+    display: inline-block;
+    background-repeat: no-repeat;
+    vertical-align: bottom;
+    margin-bottom: 5px;
+    margin-right: 10px;
+  }
 
 }
 
