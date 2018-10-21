@@ -14,6 +14,8 @@ import { logRequestError } from '../../api/utils'
 import FeedList from '../../components/FeedList';
 import CreateProblem from '../../components/Problem/createProblem'
 import FeedItemProblem from '../../components/FeedItem/problem'
+import throttle from 'lodash/throttle'
+import uniqBy from 'lodash/uniqBy'
 
 
 class Feed extends React.Component {
@@ -23,27 +25,29 @@ class Feed extends React.Component {
     this.state = {
       showCreate: false,
       createButtonText: 'Create Problem',
+      feedHistoric: [],
       feed: [],
+      feedPending: [],
       feedData: [],
-      initiallyLoaded: false
+      initialLoad: true,
+      initiallyLoaded: false,
+      heightFromBottom: '-need to scroll'
     }
-
+    this.maxFeedRender = 6
     this.maxFeedItems = 100  // high for now.
     this.clientUrl = 'ws://dev.feed.devpledge.com:9501'
     this.client = null
     this.defaultClientRefresh = 45000
-    this.messagesEnd = null
+    this.pixelsFromFeedBottom = 350
   }
 
   componentDidMount() {
     Promise.all([
-      // pre actions
       this.props.dispatch(authUnlocked())
     ]).then(() => {
       this.props.dispatch(shouldFetchFeed())
       this.connectToFeed()
       this.persistFeed()
-      this.mockPushTimer()
     })
   }
 
@@ -52,76 +56,90 @@ class Feed extends React.Component {
   }
 
   sortFilterResult (newEntries) {
-    // this is brutal.  This would be easier if the id field was always id and not [type_id]
     const initialEntities = [...this.state.feedData]  // make copy as not to mutate state
-    // filter the old intialEntries and remove any ids which exist in the new array
-
-    // first we need to remove any duplicates from the newEntries... ouch
-    const newEntriesFiltered = newEntries.filter((ent, index, self) => {
-      const entKey = `${ent.entity.type}_id`
-      return self.findIndex(t => t.entity.data[entKey] === ent.entity.data[entKey]) === index
-    })
-
-    // now filter again, removing any old entries that have been updated
     const filteredOld = initialEntities.filter(iE =>
-      newEntriesFiltered.some(nE => {
+      newEntries.some(nE => {
         const ieKey = `${iE.entity.type}_id`
         const neKey = `${nE.entity.type}_id`
         return iE.entity.data[ieKey] !== nE.entity.data[neKey]
       })
     )
-    const newFiltered = filteredOld.concat(newEntriesFiltered)  // concat the new items to the end of the list
+    const newFiltered = filteredOld.concat(newEntries)  // concat the new items to the end of the list
     setTimeout(() => {
       this.setState({ newFeedData: null })  // reset flash
     }, 5000)
     return newFiltered
   }
 
+  promiseAllEntities () {
+    Promise.map(this.state.feed, (entity) => {
+      return getForFeed({entities: [{id: entity.parent_id}]}).then(res => {
+        if (this.state.includeAlert) {
+          // don't know what it is though.  Don't think this feature will last
+          // only works for problems, probably.  Could have set action type if we have more descriptive function name - `created-entity` is not enough when we are fetching parents
+          // todo: talk to john about it
+          this.setState({
+            newFeedData: 'New alert: ' + res.data.entities[0].entity.data.title
+          })
+        }
+        return res.data.entities[0]
+      }).catch(err => {
+        logRequestError(err)
+      })
+    }).then(res => {
+      const newFeedList = this.sortFilterResult(res)
+      this.setState({
+        includeAlert: false,
+        initiallyLoaded: true,
+        feedData: newFeedList
+      })
+    })
+  }
+
+  initialLoadHandler (entitiesRaw) {
+    const entities = uniqBy(entitiesRaw, 'parent_id')  // dedupe
+    const initialFeedEntities = [...entities.slice(0, this.maxFeedRender)]
+    const endIndex = entities.length - 1
+    const pendingFeedEntities = endIndex >= this.maxFeedRender
+      ? [...entities.slice(this.maxFeedRender, endIndex)]
+      : []
+    this.setState({
+      initialLoad: false,
+      feed: initialFeedEntities,
+      feedPending: pendingFeedEntities
+    }, () => {
+      this.promiseAllEntities()
+    })
+  }
+
+  liveMessageHandler (entitiesSanitized) {
+    // make sure our pending is unique.  Make sure liveMessages go to the top of the feed
+    const newPending = uniqBy(entitiesSanitized.concat(this.state.feedPending), 'parent_id')
+    this.setState({
+      feedPending: newPending,
+      includeAlert: true // turn on alert notification for this next run
+    }, () => {
+      // if we are passed the threshold to fetch more scroll wise, then get next
+      if (this.state.heightFromBottom < this.pixelsFromFeedBottom) {
+        this.getNextFeedItems()
+      }
+    })
+  }
+
+  // just make the parent_id always exist to avoid gymnastics
+  sanitizeFeed = feed =>
+    feed.map(f => Object.assign(f, { parent_id: f.parent_id ? f.parent_id : f.id }))
+
   onClientMessage = msg => {
     const data = JSON.parse(msg.data)
     console.log('RECEIVING UPDATE: onClient Message', msg, data)
     if (data && data.hasOwnProperty('entities')) {  // opens with connection object
-      /*
-      if (! this.state.initiallyLoaded) {
-        getForFeed(data).then(res => {
-          this.setState({
-            // newFeedData: 'New feed data: ' + item.id,  // set the flash message
-            feedData: this.sortFilterResult(res.data.entities)
-          },() => {
-            this.showAndScroll()
-          })
-        }).catch(err => logRequestError(err))
-
+      const entitiesSanitized = this.sanitizeFeed(data.entities)
+      if (this.state.initialLoad) {
+        this.initialLoadHandler(entitiesSanitized)
         return
       }
-      */
-      this.setState({
-        feed: this.state.feed.concat(data.entities)
-      }, () => {
-        data.entities.forEach(item => {
-          const entId = item.parent_id ? item.parent_id : item.id
-          getForFeed({entities: [{id: entId}]}).then(res => {
-            console.log('ponce', entId, res.data.entities)
-            this.setState({
-              newFeedData: 'New feed data: ' + item.id,  // set the flash message
-              feedData: this.sortFilterResult(res.data.entities)
-            }, () => {
-              this.showAndScroll()
-            })
-          }).catch(err => logRequestError(err))
-        })
-      })
-    }
-  }
-
-  showAndScroll () {
-    if (! this.state.initiallyLoaded) {
-      this.setState({
-        initiallyLoaded: true
-      })
-      setTimeout(() => {
-        this.messagesEnd.scrollIntoView({ behavior: "smooth" })
-      }, 3000)
+      this.liveMessageHandler(entitiesSanitized)
     }
   }
 
@@ -140,56 +158,22 @@ class Feed extends React.Component {
     }, this.defaultClientRefresh)
   }
 
-  /*
-  mockPushCreateProblem () {
-    fetch('http://quotesondesign.com/wp-json/posts?filter[orderby]=rand')
-      .then(res => res.json())
-      .then(res => {
-        createProblem({
-          title: res[0].title,
-          description: res[0].content,
-          specification: res[0].link,
-          topics: ['PHP', 'JS']
-        }).then(res => {
-          console.log('CREATED MOCK PROBLEM', res)
-        }).catch(err => logRequestError(err))
-      }).catch(err => logRequestError(err))
-    // postCreateProblem()
+  getNextFeedItems = () => {
+    if (! this.state.initiallyLoaded) return
+    if (! this.state.feedPending.length) return
+    const nextFeedEntities = [...this.state.feedPending.slice(0, this.maxFeedRender)]
+    const endIndex = this.state.feedPending.length - 1
+    const pendingFeedEntities = endIndex >= this.maxFeedRender
+      ? [...this.state.feedPending.slice(this.maxFeedRender, endIndex)]
+      : []
+    this.setState({
+      feedHistoric: this.state.feedHistoric.concat(this.state.feed), // push old feed items into historic
+      feed: nextFeedEntities,
+      feedPending: pendingFeedEntities
+    }, () => {
+      this.promiseAllEntities()
+    })
   }
-
-  mockPush = () => {
-    // return true
-    if (this.state.feed.length) {
-      // todo only problems please
-      const randomNumberInsideLengthOfArray = Math.floor(Math.random() * this.state.feed.length)
-      const randomFeed = this.state.feed[randomNumberInsideLengthOfArray]
-      console.log('here is a fandomFeed', randomFeed)
-      const randomId = randomFeed.id
-      this.testPushNew(randomId)
-    }
-  }
-
-
-  renderFeedStats () {
-    return (
-      <div>the feed has {this.state.feedData.length} items</div>
-    )
-  }
-
-  testPushNew (id) {
-    postComment(id, {
-      comment: "this is my comment: " + Math.random()
-    }).then(res => {
-      console.log(res)
-    }).catch(err => logRequestError(err))
-  }
-
-  mockPushTimer () {
-    setInterval(() => {
-      // this.mockPush()
-    }, 10000)
-  }
-  */
 
   renderFeedType_fail () {
     // not expected.  prop won't render anything at all
@@ -210,15 +194,35 @@ class Feed extends React.Component {
     )
   }
 
-  renderFeed () {
-    if (! this.state.feedData.length || ! this.state.initiallyLoaded) return (<Loading />)
-    // as demo we will only render the last 3 items on the list.
-    // todo this will be updated to rendering more but keep the feed to the bottom of the page
-    // as user scrolls min and max values will be updated
-    const lastMaxFeedItems = this.state.feedData.slice(0).slice(-this.maxFeedItems)
+  handleFeedScroll = throttle(e => {
+    const topOffset = this.feedContainer.offsetHeight // top of feed container offset
+    const scrolledTo = this.feedContainer.scrollTop // scrolled in feed container
+    const containerHeight = this.feedContainer.scrollHeight // height of feed container
+    const heightFromBottom = containerHeight - topOffset - scrolledTo
+    this.setState({ heightFromBottom })
+    if (heightFromBottom < this.pixelsFromFeedBottom) {
+      this.getNextFeedItems()
+    }
+  }, 150)
 
+  renderFeedContainer () {
+    if (! this.state.feedData.length || ! this.state.initiallyLoaded) return (<Loading />)
+    return (
+      <div
+        className="feed-list"
+        onScroll={this.handleFeedScroll}
+        ref={ref => this.feedContainer = ref}
+      >
+        <ul>
+          {this.renderFeed()}
+        </ul>
+      </div>
+    )
+  }
+
+  renderFeed () {
     // possible try catch this instead of multiple checks.
-    return lastMaxFeedItems.map(item => {
+    return this.state.feedData.map(item => {
       try {
         const { entity } = item.parent_entity ? item.parent_entity : item
         const type = entity.type
@@ -236,10 +240,47 @@ class Feed extends React.Component {
 
   renderNewItemAlert () {
     if (this.state.newFeedData) return (
-      <div className="absolute-feed-alert">
-        {this.state.newFeedData}
-      </div>
+      <div className="feed-footer-alert">{this.state.newFeedData}</div>
     )
+  }
+
+  // for tests
+  addComment (type) {
+    switch (type) {
+      case 'feed':
+        if (! this.state.feed.length) {
+          console.log('THERE WERE NO FEED ITEMS TO ADD A COMMENT TO')
+          return
+        }
+        let randIndex = Math.floor(Math.random() * this.state.feed.length)
+        let item = this.state.feed[randIndex]
+        postComment(item.parent_id, { comment: 'random comment ' + Math.random() })
+          .then(res => console.log(res)).catch(err => logRequestError(err))
+        break
+      case 'pending':
+        if (! this.state.feedPending.length) {
+          console.log('THERE WERE NO PENDING ITEMS TO ADD A COMMENT TO')
+          return
+        }
+        let randIndex1 = Math.floor(Math.random() * this.state.feedPending.length)
+        let item1 = this.state.feedPending[randIndex1]
+        postComment(item1.parent_id, { comment: 'random comment ' + Math.random() })
+          .then(res => console.log(res)).catch(err => logRequestError(err))
+        break
+      case 'historic':
+        if (! this.state.feedHistoric.length) {
+          console.log('THERE WERE NO Historic ITEMS TO ADD A COMMENT TO')
+          return
+        }
+        let randIndex2 = Math.floor(Math.random() * this.state.feedHistoric.length)
+        let item2 = this.state.feedHistoric[randIndex2]
+        postComment(item2.parent_id, { comment: 'random comment ' + Math.random() })
+          .then(res => console.log(res)).catch(err => logRequestError(err))
+        break
+      default:
+        return
+        break
+    }
   }
 
   render() {
@@ -249,23 +290,26 @@ class Feed extends React.Component {
         <div className="content-wrapper">
           <div className="container-fluid">
             <div className="row">
-              <div className="col col-sm-2">
-                {/*<button className="dp-button is-tertiary margin-bottom-15" onClick={this.mockPush}>Add random comment</button>
-                <button className="dp-button is-quaternary margin-bottom-15" onClick={this.mockPushCreateProblem}>make problem</button>*/}
+              <div className="col col-sm-3">
+                <button onClick={() => this.addComment('feed')}>Add a comment to feed problem</button>
+                <button onClick={() => this.addComment('historic')}>Add a comment to historic feed item</button>
+                <button onClick={() => this.addComment('pending')}>Add a comment to pending feed item</button>
               </div>
               <div className="col-sm">
-                <div className="feed-list" id="feedList">
-                  <ul>
-                    {this.renderFeed()}
-                    {this.renderNewItemAlert()}
-                    <li id="feedListBottom" ref={(el) => { this.messagesEnd = el; }}>&nbsp;</li>
-                  </ul>
-                </div>
+                {this.renderFeedContainer()}
               </div>
-              <div className="col col-sm-2">
-                {/*panel 2
-                {this.renderFeedStats()}*/}
+              <div className="col col-sm-3">
+                <p>Historic feed: {this.state.feedHistoric.length}</p>
+                <p>in feed: {this.state.feed.length}</p>
+                <p>in pending feed: {this.state.feedPending.length}</p>
+                <p>Fetched feed: {this.state.feedData.length}</p>
+                <p>Height from bottom: {this.state.heightFromBottom}</p>
               </div>
+            </div>
+          </div>
+          <div className="feed-footer">
+            <div className="">
+              {this.renderNewItemAlert()}
             </div>
           </div>
         </div>

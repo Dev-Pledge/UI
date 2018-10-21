@@ -55,7 +55,6 @@ class FeedItemProblem extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log(nextProps)
     if (nextProps.data.problem_id !== this.props.data.problem_id) {
       // set initial state
       this.setInitialState()
@@ -131,6 +130,7 @@ class FeedItemProblem extends React.Component {
               &nbsp;<span className="text-muted">@</span>
               &nbsp;<span className="">{moment.utc(this.state.data.created).local().format('lll')}</span>
             </p>
+            <p className="text-xs no-bottom text-faded">For debug: {this.state.data.problem_id}</p>
           </div>
         )
       break;

@@ -96,7 +96,7 @@ section {
 
 .feed-list {
   overflow: auto;
-  max-height: 75vh;
+  max-height: 80vh;
   ul {
     padding: 0;
     padding-left: 10px;
@@ -194,6 +194,18 @@ section {
         // border-top: 1px solid $color-light;
       }
     }
+  }
+}
+
+.feed-footer {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  height: 40px;
+  background: $color-dark;
+  .feed-footer-alert {
+    padding-top: 5px;
+    text-align: center;
+    color: $color-primary;
   }
 }
 
