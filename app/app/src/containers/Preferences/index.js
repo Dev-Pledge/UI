@@ -6,7 +6,7 @@ import { Redirect } from 'react-router'
 
 import Navbar from '../../components/Navbar'
 import { authUnlocked } from '../../actions/auth'
-import { postFollow } from '../../api/follow'
+import { postFollow, deleteFollow, fetchFollows } from '../../api/follow'
 import { logRequestError } from '../../api/utils'
 import { fetchTopics } from '../../api/topics'
 import Loading from '../../components/Loading'
@@ -22,6 +22,7 @@ class Preferences extends Component {
       description: '',
       specification: '', // EditorState.createEmpty(),
       topics: [],
+      followsTopics: [],
       topicsSelected: []
     }
     this.authOnly = true
@@ -36,6 +37,7 @@ class Preferences extends Component {
     this.props.dispatch(authUnlocked(this.authOnly))
       .then(() => {
         this.getTopics()
+        this.getFollows()
       }).catch(err => {
         this.props.history.push({
           pathname:"/login",
@@ -49,18 +51,38 @@ class Preferences extends Component {
       this.setState({
         topics: res.data.topics
       })
+      console.log('topics', res.data.topics)
+    }).catch(err => logRequestError(err))
+  }
+
+  getFollows () {
+    fetchFollows(this.props.auth.user_id).then(res => {
+      const followsTopics = res.data.follows.filter(f => f.entity === 'topic')
+      this.setState({
+        topicsSelected: followsTopics.map(t => t.entity_id)
+      })
     }).catch(err => logRequestError(err))
   }
 
   topicClick = (topic_id, isRemove) => {
-    postFollow(topic_id).then(res => {
-      console.log(res)
-    }).catch(err => logRequestError(err))
     this.setState({
       topicsSelected: isRemove
         ? this.state.topicsSelected.filter(item => item !== topic_id)
         : this.state.topicsSelected.concat(topic_id)
     })
+    if (isRemove) {
+      deleteFollow(topic_id).then(res => {
+      }).catch(err => {
+        this.getFollows()
+        logRequestError(err)
+      })
+    } else {
+      postFollow(topic_id).then(res => {
+      }).catch(err => {
+        this.getFollows()
+        logRequestError(err)
+      })
+    }
   }
 
   renderTopics () {
@@ -88,18 +110,11 @@ class Preferences extends Component {
               <div className="col-md-6 offset-md-3">
                 <p>Preferences</p>
 
-
-                <p>Select relevant topics to your problem</p>
-                <div className="margin-bottom-15 tags">
+                <p>Select topics you would like to follow</p>
+                <div className="margin-bottom-15 tags with-tags-first">
                   {this.renderTopics()}
                 </div>
 
-                <button
-                  className="dp-button is-primary"
-                  onClick={this.handleSubmit}
-                >
-                  Watch those badboys
-                </button>
               </div>
             </div>
           </div>
