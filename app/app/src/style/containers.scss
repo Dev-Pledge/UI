@@ -94,6 +94,27 @@ section {
   padding: 0.25rem;
 }
 
+.pledge-container {
+  border-top: 2px solid $color-primary;
+  .pledged {
+    font-size: 1.5rem;
+    color: darken($color-primary, 15%);
+  }
+  .backers {
+    font-size: 1.5rem;
+  }
+}
+
+.spec-container {
+  border-top: 2px solid $color-light;
+  .is-descriptor {
+    color: $color-secondary;
+    padding: 10px 0;
+    border-bottom: 1px solid $color-light;
+    margin-bottom: 15px;
+  }
+}
+
 .feed-list {
   overflow: auto;
   max-height: 80vh;

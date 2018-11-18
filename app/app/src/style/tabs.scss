@@ -1,7 +1,7 @@
 ul.is-tabbed-list {
   @include noselect;
   list-style: none;
-  padding: 0 0 5px 0;
+  padding: 0 0 0 0;
   margin: 0;
   border: none;
   // background: lighten($color-light, 7%);
@@ -23,7 +23,12 @@ ul.is-tabbed-list {
       // margin-top: -2px;
       // border-top: 2px solid $color-white;
       // background: $color-white;
-      color: $color-primary;
+      color: darken($color-primary, 15%);
+      border-bottom: 1px solid darken($color-primary, 15%);
+    }
+    &.is-active.is-top-active {
+      border-bottom: none;
+      border-top: 1px solid darken($color-primary, 15%);
     }
   }
 }

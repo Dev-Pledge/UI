@@ -94,6 +94,7 @@ export const authUnlocked = (authOnly = false) => {
         })
       }).catch(err => {
         axios.defaults.headers.common['Authorization'] = '';
+        console.error('auth not authorised - setting unauthorised')
         logRequestError(err, 'auth-payload')
         setAuth({
           type: 'AUTH_UNAUTHORISED'

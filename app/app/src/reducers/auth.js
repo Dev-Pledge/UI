@@ -23,6 +23,8 @@ const feed = (state = initialState(), action) => {
       return Object.assign({}, state, {
         readyStatus: 'AUTH_FAILURE',
         err: action.payload.err,
+        email: null,
+        user_id: null,
         isLoggedIn: false,
         username: '',
         ttr: null,
@@ -51,6 +53,8 @@ const feed = (state = initialState(), action) => {
     case 'AUTH_UNAUTHORISED':
       return Object.assign({}, state, {
         readyStatus: 'AUTH_UNAUTHORISED',
+        email: null,
+        user_id: null,
         isLoggedIn: false,
         username: '',
         ttr: null,
@@ -58,7 +62,8 @@ const feed = (state = initialState(), action) => {
         name: '',
         perms: null,
         token: '',
-        decodedToken: null
+        decodedToken: null,
+        err: null
       });
     default:
       return state;

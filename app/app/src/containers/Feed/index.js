@@ -35,7 +35,7 @@ class Feed extends React.Component {
     }
     this.maxFeedRender = 6
     this.maxFeedItems = 100  // high for now.
-    this.clientUrl = 'ws://dev.feed.devpledge.com:9501'
+    this.clientUrl = 'wss://dev.feed.devpledge.com:9501'
     this.client = null
     this.defaultClientRefresh = 45000
     this.pixelsFromFeedBottom = 350

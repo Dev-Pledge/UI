@@ -86,7 +86,6 @@ class User extends Component {
     })
   }
 
-
   renderTab () {
     if (! this.state.user) return ('')
     const visibleTab = this.state.tabs.find(tab => tab.visible)

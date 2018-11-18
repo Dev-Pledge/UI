@@ -178,19 +178,19 @@ class FeedItemProblem extends React.Component {
                   </Link>
                 </li>
                 <li
-                  className={this.state.selected === 'problem' ? 'is-active' : ''}
+                  className={this.state.selected === 'problem' ? 'is-active is-top-active' : ''}
                   onClick={() => this.showTab('problem')}
                 >Problem</li>
                 <li
-                  className={this.state.selected === 'pledge' ? 'is-active' : ''}
+                  className={this.state.selected === 'pledge' ? 'is-active is-top-active' : ''}
                   onClick={() => this.showTab('pledge')}
                 >Pledges ({this.state.data.pledges_count})</li>
                 <li
-                  className={this.state.selected === 'solution' ? 'is-active' : ''}
+                  className={this.state.selected === 'solution' ? 'is-active is-top-active' : ''}
                   onClick={() => this.showTab('solution')}
                 >Solutions ({this.state.data.solutions.length})</li>
                 <li
-                  className={this.state.selected === 'comment' ? 'is-active' : ''}
+                  className={this.state.selected === 'comment' ? 'is-active is-top-active' : ''}
                   onClick={() => this.showTab('comment')}
                 >Comments ({this.state.data.total_comments})</li>
               </ul>

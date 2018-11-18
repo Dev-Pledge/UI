@@ -3,19 +3,17 @@ import Raven from 'raven-js'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { FaUser } from 'react-icons/fa'
-import ReactMarkdown from 'react-markdown'
 
 import Navbar from '../../components/Navbar'
 import { authUnlocked } from '../../actions/auth'
 import { logRequestError } from '../../api/utils'
 import { fetchProblem } from '../../api/problem'
-import TopicList from '../../components/TopicsList'
+import RenderProblem from '../../components/Problem'
 import PledgeList from '../../components/PledgeList'
 import CommentsList from '../../components/CommentsList'
 import SolutionsList from '../../components/SolutionsList'
 import AddSolution from '../../components/AddSolution'
 import AddComment from '../../components/AddComment'
-import { fetchTopics } from '../../api/topics'
 import Loading from '../../components/Loading'
 
 class Problem extends Component {
@@ -23,10 +21,18 @@ class Problem extends Component {
   constructor () {
     super()
     this.state = {
+      tabs: [
+        {name: 'problem', visible: true},
+        {name: 'solutions', visible: false},
+        {name: 'pledges', visible: false},
+        {name: 'comments', visible: false}
+      ],
+      selected: 'problem',
       problem: null,
       problem_id: '',
       showingTab: 'comments',
-      showAddSolution: false
+      showAddSolution: false,
+      currencySymbol: '$'
     }
   }
 
@@ -43,7 +49,6 @@ class Problem extends Component {
           // redirect to home page
         }
         this.setState({ problem_id }, this.getProblem)
-        // this.getTopics()
       })
   }
 
@@ -64,43 +69,9 @@ class Problem extends Component {
     })
   }
 
-  renderHTML (string) {
-    // todo don't want HTML back.  Use draft js to set the markup
-    return {__html: string};
-  }
-
   renderAddSolution () {
     if (this.state.showAddSolution) return (
       <AddSolution problem_id={this.state.problem_id} onSuccess={this.solutionAdded} />
-    )
-  }
-
-  renderProblem () {
-    if (! this.state.problem) return ('')
-    return (
-      <div className="content-body">
-        <div className="row">
-          <div className="col-md-9">
-            <p className="is-title">{this.state.problem.title}</p>
-          </div>
-          <div className="col-md-3">
-            <div className="has-text-right">
-              <TopicList topics={this.state.problem.topics} />
-            </div>
-          </div>
-        </div>
-        <div className="margin-bottom-15">&nbsp;</div>
-        <p className="sub">Active since</p>
-        <div>{moment.utc(this.state.problem.active_datetime).local().format('lll')}</div>
-        <p className="sub">Description</p>
-        <div className="margin-bottom-15" dangerouslySetInnerHTML={this.renderHTML(this.state.problem.description)} />
-        <p className="sub">Specification</p>
-        <ReactMarkdown source={this.state.problem.specification} />
-        <button className="dp-button is-secondary" onClick={() => this.setState({showAddSolution: ! this.state.showAddSolution})} >
-          {this.state.showAddSolution ? 'don\'t add solution' : '+ solution'}
-        </button>
-        {this.renderAddSolution()}
-      </div>
     )
   }
 
@@ -121,60 +92,103 @@ class Problem extends Component {
     )
   }
 
-  renderPledges () {
-    return (
-      <div>
-        <div className="tab-header" onClick={() => this.setState({ showingTab: 'pledges'})}>
-          Pledges <em className="text-muted">{this.state.problem.pledges_count}</em> worth {this.state.problem.pledges_value}
-        </div>
-        {this.state.showingTab === 'pledges' ?
-          (<div className="tab-body">
-            <PledgeList pledges={this.state.problem.latest_pledges} />
-          </div>) : ''
-        }
-      </div>
-    )
+  showTab = (tabName) => {
+    this.setState({
+      tabs: this.state.tabs.map(tab => {
+        tab.visible = tab.name === tabName
+        return tab
+      }),
+      selected: tabName
+    })
   }
 
-  renderSolutions () {
-    return (
-      <div>
-        <div className="tab-header" onClick={() => this.setState({ showingTab: 'solutions'})}>
-          Solutions <em className="text-muted">{this.state.problem.solutions.length}</em>
-        </div>
-        {this.state.showingTab === 'solutions' ?
-          (<div className="tab-body">
+  renderTab () {
+    if (! this.state.problem) return ('')
+    const visibleTab = this.state.tabs.find(tab => tab.visible)
+    if (! visibleTab) return 'we would return a default view'
+    switch (visibleTab.name) {
+      case 'problem':
+        return (
+          <RenderProblem problem={this.state.problem} />
+        )
+        break;
+      case 'pledges':
+        return (
+          <div>
+            <PledgeList problem_id={this.state.problem_id} pledges={this.state.problem.latest_pledges} />
+          </div>
+        )
+        break;
+      case 'solutions':
+        return (
+          <div>
             <SolutionsList solutions={this.state.problem.solutions} />
-          </div>) : ''
-        }
-      </div>
-    )
-  }
-
-  renderComments () {
-    return (
-      <div>
-        <div className="tab-header" onClick={() => this.setState({ showingTab: 'comments'})}>
-          Comments <em className="text-muted">{this.state.problem.total_comments}</em>
-        </div>
-        {this.state.showingTab === 'comments' ?
-          (<div className="tab-body">
-            <AddComment parentId={this.state.problem_id} onSuccess={this.getProblem} />{/* todo: maybe not fetch the whole problem again!! */}
+            <button className="dp-button is-secondary" onClick={() => this.setState({showAddSolution: ! this.state.showAddSolution})} >
+              {this.state.showAddSolution ? 'don\'t add solution' : '+ solution'}
+            </button>
+            {this.renderAddSolution()}
+          </div>
+        )
+        break;
+      case 'comments':
+        return (
+          <div>
+            <AddComment parentId={this.state.problem_id} onSuccess={this.getProblem} />
             <CommentsList comments={this.state.problem.last_five_comments} />
-          </div>) : ''
-        }
-      </div>
-    )
+          </div>
+        )
+        break
+      default:
+        return ('could not find component')
+    }
   }
 
-  renderTabs () {
-    if (! this.state.problem) return (<Loading />)
+  renderTabExtraInfo (name) {
+    switch (name) {
+      case 'pledges':
+        return (
+          <span>
+            <em className="text-muted">
+              ({this.state.problem.pledges_count} worth {this.state.currencySymbol}{this.state.problem.pledges_value})
+            </em>
+          </span>
+        )
+        break;
+      case 'solutions':
+        return (
+          <span>
+            <em className="text-muted">({this.state.problem.solutions.length})</em>
+          </span>
+        )
+        break;
+      case 'comments':
+        return (
+          <span>
+            <em className="text-muted">({this.state.problem.total_comments})</em>
+          </span>
+        )
+        break
+      default:
+        return ''
+    }
+  }
+
+  renderTabBar () {
+    if (! this.state.problem) return ''
     return (
-      <div>
-        <ul className="stacked-tab">
-          <li className="stacked-tab-item">{this.renderPledges()}</li>
-          <li className="stacked-tab-item">{this.renderSolutions()}</li>
-          <li className="stacked-tab-item">{this.renderComments()}</li>
+      <div className="row tab-bar">
+        <ul className="is-tabbed-list is-small has-text-right">
+          {
+            this.state.tabs.map(tab => {
+              return (
+                <li
+                  key={tab.name}
+                  className={tab.visible ? 'is-active' : ''}
+                  onClick={() => this.showTab(tab.name)}
+                >{tab.name} {this.renderTabExtraInfo(tab.name)}</li>
+              )
+            })
+          }
         </ul>
       </div>
     )
@@ -187,12 +201,10 @@ class Problem extends Component {
         <div className="content-wrapper">
           <div className="container-fluid">
             {this.renderTitleBar()}
+            {this.renderTabBar()}
             <div className="row">
-              <div className="col-md-8">
-                {this.renderProblem()}
-              </div>
-              <div className="col-md-4">
-                {this.renderTabs()}
+              <div className="col">
+                {this.renderTab()}
               </div>
             </div>
           </div>
